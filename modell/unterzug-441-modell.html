@@ -327,6 +327,27 @@ for(const sx of[-1,1])for(const sz of[-1,0,1])add(1,XG12+sx*0.08,-3.05,sz*0.19);
 yTies(16,-1.08,-2.96).forEach(y=>add(5,XG12,y,0));
 yTies(15,-1.12,-2.92).forEach(y=>add(6,XG12,y,0));
 
+// Übergreifungsstöße der Längsbewehrung (oben und unten) nebeneinander (Kontaktstoß) statt in derselben Achse:
+// Stäbe von links nach rechts; überlappt ein Stab einen bereits gesetzten derselben Lage, rückt er um das
+// kleinste nötige Maß zur Seite (bevorzugt nach innen), höchstens bis an den Bügel.
+(function stoesseNebeneinander(){
+  const bars=[];
+  for(const o of Object.values(P)){if(o.g!=='oben'&&o.g!=='unten')continue;const d=o.d/1000;
+    const xs=shapePts(o.shape,d).filter(p=>Math.abs(p.y)<1e-6&&Math.abs(p.z)<1e-6).map(p=>p.x);if(xs.length<2)continue;
+    const a=Math.min(...xs),b=Math.max(...xs);
+    for(const q of o.inst)bars.push({q,d,x0:q.x+a,x1:q.x+b})}
+  bars.sort((u,v)=>u.x0-v.x0);
+  const done=[];
+  for(const u of bars){
+    const near=done.filter(v=>Math.min(u.x1,v.x1)-Math.max(u.x0,v.x0)>0.02&&Math.abs(u.q.y-v.q.y)<0.012);
+    const frei=z=>near.every(v=>Math.abs(z-v.q.z)>=(u.d+v.d)/2+0.002);
+    const lim=0.21-0.010-u.d/2,sg=Math.sign(u.q.z)||1;
+    if(!frei(u.q.z)){let best=null;
+      for(let s=0.001;s<=0.08&&best===null;s+=0.001)for(const z of[u.q.z-s*sg,u.q.z+s*sg])if(best===null&&Math.abs(z)<=lim&&frei(z))best=z;
+      if(best!==null)u.q.z=best}
+    done.push(u)}
+})();
+
 /* ---------- Biegeformen als Punktfolgen (lokal) ---------- */
 function rectPts(w,hh,d,mapF,q0){
   const hk=Math.max(10*d,0.05),k=0.7071;
@@ -600,7 +621,7 @@ function renderPanel(){
     for(const o of rows)h+=`<button class="row" data-p="${o.p}"><span class="pc" style="color:${DCOL[o.d]}">${o.lab||o.p}</span><span class="rmain">${o.n} Ø${o.d}${o.est?' <span class="est">Lage ca.</span>':''}</span><span class="rlg">${o.lgTxt||fmt(o.lg)} m</span></button>`;
     h+=`</div>`;
   }
-  h+=`<p class="foot">Abgelesen aus dem Foto eines Bewehrungsplans. Anzahl, Durchmesser, Schnittlängen und Biegemaße stammen aus Stahlliste und Biegeformen. Querschnitt 50 × 100 cm (Endbereich 60 cm) aus den Bügelmaßen abgeleitet. Positionen mit „Lage ca.“ sind im Modell plausibel angeordnet, ihre genaue Lage war im Foto nicht eindeutig. Bügel Pos. 44–47 in Abschnitten nach der Ansicht; Anpassung an die Feldlänge je Feld: ${fitTxt.map(v=>(v>0?'+':'')+v+' %').join(' · ')}. Aussparung 50 × 40 cm bei G/12 eingetragen.</p>`;
+  h+=`<p class="foot">Abgelesen aus dem Foto eines Bewehrungsplans. Anzahl, Durchmesser, Schnittlängen und Biegemaße stammen aus Stahlliste und Biegeformen. Querschnitt 50 × 100 cm (Endbereich 60 cm) aus den Bügelmaßen abgeleitet. Positionen mit „Lage ca.“ sind im Modell plausibel angeordnet, ihre genaue Lage war im Foto nicht eindeutig. Übergreifungsstöße der Längsbewehrung im Modell nebeneinander angeordnet. Bügel Pos. 44–47 in Abschnitten nach der Ansicht; Anpassung an die Feldlänge je Feld: ${fitTxt.map(v=>(v>0?'+':'')+v+' %').join(' · ')}. Aussparung 50 × 40 cm bei G/12 eingetragen.</p>`;
   pin.innerHTML=h;
   pin.querySelectorAll('.row').forEach(b=>b.onclick=()=>select(+b.dataset.p,true));
   pin.querySelectorAll('.eye').forEach(b=>b.onclick=()=>{const g=b.dataset.g;hidden.has(g)?hidden.delete(g):hidden.add(g);applyLook();renderPanel()});
