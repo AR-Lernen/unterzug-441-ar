@@ -116,6 +116,8 @@ h1 span{color:var(--accent)}
       </div>
     </div>
     <p class="hint3d" id="hint3d" hidden></p>
+    <p class="hint3d" id="tabtip" hidden>Android-Tablet? Startet AR nicht in der Google-Ansicht: Chrome ⋮ → Einstellungen → Website-Einstellungen → Desktopwebsite ausschalten und neu laden.</p>
+    <p class="hint3d" id="diag" hidden style="font-family:var(--f-mono);font-size:11px;word-break:break-all"></p>
     <div class="fld"><span>Positionen antippen (Browser, VR-/MR-Brille)</span>
       <div class="seg" id="segP" role="group" aria-label="Positionsmarken">
         <button data-g="" aria-pressed="true">Aus</button><button data-g="oben" aria-pressed="false">Längs oben</button><button data-g="unten" aria-pressed="false">Längs unten</button><button data-g="buegel" aria-pressed="false">Bügel</button><button data-g="stuetze" aria-pressed="false">Stützen</button><button data-g="sonst" aria-pressed="false">Sonstige</button>
@@ -176,7 +178,16 @@ h1 span{color:var(--accent)}
   // model-viewer bietet dann keinen Scene Viewer an. Solche Geräte öffnen den Scene Viewer hier selbst
   // (gleiche Parameter wie model-viewer). Fehlt er, kehrt Android mit #…-svfehlt zurück, dann gilt wieder Chrome-AR.
   const ua=navigator.userAgent;
-  const tabletDesktop=/Linux/i.test(ua)&&!/Android|OculusBrowser|Quest|Pico/i.test(ua)&&navigator.maxTouchPoints>1&&!location.hash.includes('svfehlt');
+  // Touch-Merkmale: im Desktop-Modus meldet Chrome teils maxTouchPoints = 0, daher mehrere Anzeichen prüfen
+  const touchy=navigator.maxTouchPoints>0||'ontouchstart' in window||matchMedia('(any-pointer: coarse)').matches;
+  const linuxNoAndroid=/Linux/i.test(ua)&&!/Android|OculusBrowser|Quest|Pico|CrOS/i.test(ua);
+  const tabletDesktop=linuxNoAndroid&&touchy&&!location.hash.includes('svfehlt');
+  // Hinweis, falls die Erkennung trotzdem nicht greift (Linux-Kennung ohne Android = vermutlich Tablet im Desktop-Modus)
+  if(linuxNoAndroid&&!location.hash.includes('svfehlt'))$('tabtip').hidden=false;
+  // Diagnose: #geraet zeigt, was das Gerät meldet
+  if(location.hash.includes('geraet')){const d=$('diag');d.hidden=false;
+    d.textContent=`UA: ${ua} · maxTouchPoints: ${navigator.maxTouchPoints} · ontouchstart: ${'ontouchstart' in window} · coarse: ${matchMedia('(any-pointer: coarse)').matches} · Tablet-Desktop erkannt: ${tabletDesktop}`;
+    customElements.whenDefined('model-viewer').then(()=>setTimeout(()=>{d.textContent+=` · AR-Modus möglich: ${mv.canActivateAR}`},2500))}
   mv.addEventListener('click',e=>{
     if(!tabletDesktop||!cur||!e.target.closest('#arbtn'))return;
     e.preventDefault();e.stopPropagation();setTour(false);
