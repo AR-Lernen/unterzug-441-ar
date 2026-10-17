@@ -65,7 +65,18 @@ h1 span{color:var(--accent)}
 .tbtn{font:600 13.5px/1 var(--f-body);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:9px 12px;cursor:pointer;white-space:nowrap}
 .tbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
 .hint3d{margin:0;flex:1 1 220px;font-size:12.5px;line-height:1.4;color:var(--muted)}
-@media (max-width:640px){h1{font-size:24px}.bar{gap:10px 14px}.seg button{padding:8px 9px;font-size:13px}}
+/* Positionsmarken und Infofenster liegen im model-viewer, damit sie auch in WebXR-AR sichtbar sind */
+.pmark{font:600 11px/1 var(--f-mono);min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--panel);color:var(--ink);border:2px solid var(--line);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.pmark:not([data-visible]){opacity:.45}
+.pmark[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.pinfo{position:absolute;left:12px;bottom:12px;width:min(330px,calc(100% - 24px));max-height:calc(100% - 24px);overflow-y:auto;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px 12px;font:13px/1.45 var(--f-body);box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:3}
+.pinfo h3{margin:0 28px 2px 0;font:700 20px/1.1 var(--f-display)}
+.pinfo .pmeta{font:500 13px var(--f-mono);font-variant-numeric:tabular-nums}
+.pinfo p{margin:6px 0 0}
+.pinfo .pest{display:inline-block;margin-top:6px;font:600 11px var(--f-body);letter-spacing:.04em;text-transform:uppercase;color:var(--panel);background:var(--hl);border-radius:3px;padding:2px 6px}
+.pinfo .pnote{color:var(--muted);font-size:12.5px}
+.pinfo .px{position:absolute;right:6px;top:6px;width:30px;height:30px;border:0;border-radius:15px;background:transparent;color:var(--muted);font:600 18px/1 var(--f-body);cursor:pointer}
+@media (max-width:640px){.bar{max-height:42vh;overflow-y:auto}h1{font-size:24px}.bar{gap:10px 14px}.seg button{padding:8px 9px;font-size:13px}}
 </style>
 </head>
 <body>
@@ -79,6 +90,7 @@ h1 span{color:var(--accent)}
       <button slot="hotspot-L" class="dim" id="hL" data-position="0 0 0" data-normal="0 1 0"></button>
       <button slot="hotspot-H" class="dim" id="hH" data-position="0 0 0" data-normal="1 0 0"></button>
       <button slot="hotspot-B" class="dim" id="hB" data-position="0 0 0" data-normal="0 0 1"></button>
+      <div class="pinfo" id="pinfo" hidden role="dialog" aria-label="Position"><button class="px" id="pinfoX" aria-label="Schließen">×</button><div id="pinfoBody"></div></div>
     </model-viewer>
     <div class="titlecard">
       <div class="eyebrow">Bewehrungsmodell · AR-Ansicht</div>
@@ -104,6 +116,11 @@ h1 span{color:var(--accent)}
       </div>
     </div>
     <p class="hint3d" id="hint3d" hidden></p>
+    <div class="fld"><span>Positionen antippen</span>
+      <div class="seg" id="segP" role="group" aria-label="Positionsmarken">
+        <button data-g="" aria-pressed="true">Aus</button><button data-g="oben" aria-pressed="false">Längs oben</button><button data-g="unten" aria-pressed="false">Längs unten</button><button data-g="buegel" aria-pressed="false">Bügel</button><button data-g="stuetze" aria-pressed="false">Stützen</button><button data-g="sonst" aria-pressed="false">Sonstige</button>
+      </div>
+    </div>
     <label class="chk" for="cDim"><input type="checkbox" id="cDim" checked> Maße zeigen</label>
     <div class="size" id="size">–</div>
     <div class="fld legend"><span>Farbe nach Ø</span><div class="sw" id="legend"></div></div>
@@ -129,27 +146,50 @@ h1 span{color:var(--accent)}
   function press(seg,btn){seg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn))}
   $('segV').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;press($('segV'),b);select(V[+b.dataset.i])});
   $('cDim').addEventListener('change',update);
-  function select(v){if(v===cur)return;cur=v;base=null;$('load').hidden=false;$('load').textContent='Modell wird geladen …';
+  function select(v){if(v===cur)return;cur=v;base=null;if(typeof renderMarks==='function')renderMarks();$('load').hidden=false;$('load').textContent='Modell wird geladen …';
     mv.cameraOrbit='-35deg 70deg auto';mv.cameraTarget='auto auto auto';mv.fieldOfView='auto';if(!tour.on)mv.maxCameraOrbit='auto';
     mv.setAttribute('ios-src','models/'+v.usdz);mv.src='models/'+v.glb;update()}
   function update(){if(!cur)return;
     const k=cur.massstab,[L,H,B]=cur.original,m=x=>k===1?len(x):len(x)+'<small>Modell '+len(x/k)+'</small>';
     $('size').innerHTML=`${len(L/k)} × ${len(H/k)} × ${len(B/k)}<small>${k===1?'Originalgröße':'Maßstab 1:'+k+' · Original '+len(L)+' lang'} · GLB ${mb(cur.glbBytes)} · USDZ ${mb(cur.usdzBytes)}</small>`;
     $('hL').innerHTML='Länge '+m(L);$('hH').innerHTML='Höhe '+m(H);$('hB').innerHTML='Breite '+m(B);
-    $('noar').hidden=!noAR||tour.on||stereo.on;$('gest').hidden=tour.on||!$('noar').hidden;
-    const show=$('cDim').checked&&!!base&&!tour.on&&!stereo.on;['hL','hH','hB'].forEach(i=>$(i).hidden=!show);
+    $('noar').hidden=!noAR||tour.on||stereo.on||!!posGroup;$('gest').hidden=tour.on||!$('noar').hidden||!!posGroup;
+    const show=$('cDim').checked&&!!base&&!tour.on&&!stereo.on&&!posGroup;['hL','hH','hB'].forEach(i=>$(i).hidden=!show);
     if(base){const{c,dm}=base,x1=c.x+dm.x/2,y0=c.y-dm.y/2,z1=c.z+dm.z/2;
       mv.updateHotspot({name:'hotspot-L',position:`${c.x}m ${y0}m ${z1}m`});
       mv.updateHotspot({name:'hotspot-H',position:`${x1}m ${c.y}m ${z1}m`});
       mv.updateHotspot({name:'hotspot-B',position:`${x1}m ${y0}m ${c.z}m`});}
   }
   mv.addEventListener('load',()=>{$('load').hidden=true;base={c:mv.getBoundingBoxCenter(),dm:mv.getDimensions()};
-    if(tour.on)tour.keys=tourKeys();
+    if(tour.on)tour.keys=tourKeys();renderMarks();
     if(stereo.on){stereo.load(mv.src);if(!tour.on)stereo.setCam(overviewCam())}
     update()});
   mv.addEventListener('error',()=>{$('load').hidden=false;$('load').textContent='Modell konnte nicht geladen werden.'});
   let noAR=false;
   customElements.whenDefined('model-viewer').then(()=>setTimeout(()=>{noAR=!mv.canActivateAR;update()},2500));
+
+  /* ---------- Positionsmarken: antippen zeigt Stückzahl, Ø, Länge und Lage ---------- */
+  // Marken je Variante aus varianten.json (Punkt auf einem Stab der Position); in WebXR-AR bleiben sie antippbar
+  const GRP={oben:'Obere Längsbewehrung',unten:'Untere Längsbewehrung',buegel:'Bügel',stuetze:'Stützen',sonst:'Platte, Steg, Zulagen, Abstandhalter'};
+  let POS={},FARBEN={},posGroup='';
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function hidePosInfo(){$('pinfo').hidden=true;mv.querySelectorAll('.pmark[aria-pressed="true"]').forEach(b=>b.setAttribute('aria-pressed','false'))}
+  function showPosInfo(p,btn){hidePosInfo();btn.setAttribute('aria-pressed','true');
+    const lg=typeof p.laenge==='number'?f(p.laenge)+' m':esc(p.laenge)+' m';
+    $('pinfoBody').innerHTML=`<h3 style="color:${FARBEN[p.durchmesser]||'inherit'}">Pos. ${esc(p.position)}</h3>
+      <div class="pmeta">${p.stueck} Ø${p.durchmesser} · lg = ${lg}</div>
+      <p>${esc(p.lage)}</p><p class="pnote">${GRP[p.gruppe]||''}${p.imModell!==p.stueck?' · im Modell '+p.imModell+' von '+p.stueck+' Stück':''}</p>
+      ${p.lageGeschaetzt?'<span class="pest">Lage geschätzt</span>':''}${p.hinweis?`<p class="pnote">${esc(p.hinweis)}</p>`:''}`;
+    $('pinfo').hidden=false}
+  $('pinfoX').addEventListener('click',e=>{e.stopPropagation();hidePosInfo()});
+  function renderMarks(){mv.querySelectorAll('.pmark').forEach(b=>b.remove());hidePosInfo();
+    if(!posGroup||!cur||!base)return;
+    (cur.marken||[]).forEach((m,i)=>{const p=POS[m.p];if(!p||p.gruppe!==posGroup)return;
+      const b=document.createElement('button');b.className='pmark';b.slot='hotspot-pos-'+i;
+      b.dataset.position=`${m.x}m ${m.y}m ${m.z}m`;b.dataset.normal='0m 1m 0m';b.textContent=m.p;b.setAttribute('aria-pressed','false');
+      b.setAttribute('aria-label','Position '+m.p);b.style.borderColor=FARBEN[p.durchmesser]||'';
+      b.addEventListener('click',e=>{e.stopPropagation();showPosInfo(p,b)});mv.appendChild(b)})}
+  $('segP').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;press($('segP'),b);posGroup=b.dataset.g;renderMarks();update()});
 
   /* ---------- Präsentation: Umfahrung, Durchfahrt, Rotation am Knoten ---------- */
   // Kamera wie bei model-viewer: Ziel (m), Azimut th und Polarwinkel ph (Grad), Abstand r (m)
@@ -300,8 +340,8 @@ h1 span{color:var(--accent)}
   const hash=location.hash.slice(1).toLowerCase().split('-'),saved=store.get();
   const wantTour=hash.includes('praesentation')||(!location.hash&&saved.tour===true);
   const wantMode=hash.includes('sbs')?'sbs':hash.includes('3d')?'ana':(!location.hash&&saved.mode)||'2d';
-  fetch('models/varianten.json').then(r=>r.json()).then(d=>{V=d.varianten;
-    // Variante per Link-Anker wählen: #m50, #m25, #achse17, #m10, #ganz (kombinierbar, z. B. #m10-praesentation)
+  fetch('models/varianten.json').then(r=>r.json()).then(d=>{V=d.varianten;FARBEN=d.farben;d.positionen.forEach(p=>POS[p.position]=p);
+    // Variante per Link-Anker wählen: #m50, #m25, #achse17, #m10, #m5, #ganz (kombinierbar, z. B. #m10-praesentation)
     const key=v=>v.id.replace(/^unterzug-441-?/,'')||'ganz',start=V.find(v=>hash.includes(key(v)))||V[0];
     $('segV').innerHTML=V.map((v,i)=>`<button data-i="${i}" aria-pressed="${v===start}">${v.titel}</button>`).join('');
     const used=[...new Set(d.positionen.map(p=>p.durchmesser))].sort((a,b)=>a-b);
