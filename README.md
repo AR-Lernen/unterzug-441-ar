@@ -9,7 +9,8 @@ Augmented Reality (Android: Scene Viewer/WebXR, iPhone/iPad: Quick Look).
 - `models/` – Modelle als GLB und USDZ
 
 Positionen lassen sich nach Gruppen einblenden und antippen (Browser und
-AR-Ansicht in Chrome auf Android).
+VR-/MR-Brillen). Auf Android-Handys startet AR im Scene Viewer (stabil, ohne
+Marken), auf iPhone/iPad in Quick Look.
 
 Direkt starten per Link-Anker, z. B. `#m10` (Maßstab 1:10 für den Boden), `#m5` (1:5), `#ganz` (1:1),
 `#praesentation` oder `#3d`.

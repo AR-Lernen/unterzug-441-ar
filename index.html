@@ -84,7 +84,7 @@ h1 span{color:var(--accent)}
   <div class="stage" id="stage">
     <model-viewer id="mv" alt="Bewehrungsmodell Unterzug Pos. 441"
       camera-controls touch-action="none" shadow-intensity="0.6" exposure="1.05"
-      ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor"
+      ar ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor"
       camera-orbit="-35deg 70deg auto" min-camera-orbit="auto auto 0m" interaction-prompt="none">
       <button slot="ar-button" class="arbtn" id="arbtn">In AR ansehen</button>
       <button slot="hotspot-L" class="dim" id="hL" data-position="0 0 0" data-normal="0 1 0"></button>
@@ -116,7 +116,7 @@ h1 span{color:var(--accent)}
       </div>
     </div>
     <p class="hint3d" id="hint3d" hidden></p>
-    <div class="fld"><span>Positionen antippen</span>
+    <div class="fld"><span>Positionen antippen (Browser, VR-/MR-Brille)</span>
       <div class="seg" id="segP" role="group" aria-label="Positionsmarken">
         <button data-g="" aria-pressed="true">Aus</button><button data-g="oben" aria-pressed="false">Längs oben</button><button data-g="unten" aria-pressed="false">Längs unten</button><button data-g="buegel" aria-pressed="false">Bügel</button><button data-g="stuetze" aria-pressed="false">Stützen</button><button data-g="sonst" aria-pressed="false">Sonstige</button>
       </div>
@@ -167,6 +167,11 @@ h1 span{color:var(--accent)}
   mv.addEventListener('error',()=>{$('load').hidden=false;$('load').textContent='Modell konnte nicht geladen werden.'});
   let noAR=false;
   customElements.whenDefined('model-viewer').then(()=>setTimeout(()=>{noAR=!mv.canActivateAR;update()},2500));
+
+  /* ---------- AR-Modus ---------- */
+  // Handy (Android): Scene Viewer, verankert das Modell stabiler im Raum, zeigt aber keine Positionsmarken.
+  // VR-/MR-Brillen (Quest, PICO): WebXR, dort bleiben Marken und Infofenster in AR bedienbar.
+  if(/OculusBrowser|Quest|Pico/i.test(navigator.userAgent))mv.setAttribute('ar-modes','webxr quick-look');
 
   /* ---------- Positionsmarken: antippen zeigt Stückzahl, Ø, Länge und Lage ---------- */
   // Marken je Variante aus varianten.json (Punkt auf einem Stab der Position); in WebXR-AR bleiben sie antippbar
