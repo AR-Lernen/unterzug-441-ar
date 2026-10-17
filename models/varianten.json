@@ -1,0 +1,796 @@
+{
+ "quelle": "unterzug-441-modell.html",
+ "varianten": [
+  {
+   "id": "unterzug-441-m50",
+   "titel": "Tischmodell 1:50",
+   "massstab": 50,
+   "original": [
+    33.6,
+    3.1,
+    1.4
+   ],
+   "glb": "unterzug-441-m50.glb",
+   "usdz": "unterzug-441-m50.usdz",
+   "glbBytes": 465848,
+   "usdzBytes": 1269158,
+   "achsen": [
+    {
+     "name": "18",
+     "x": -0.336,
+     "stuetze": false
+    },
+    {
+     "name": "17",
+     "x": -0.168,
+     "stuetze": true
+    },
+    {
+     "name": "16",
+     "x": -0.084,
+     "stuetze": false
+    },
+    {
+     "name": "15",
+     "x": 0,
+     "stuetze": true
+    },
+    {
+     "name": "14",
+     "x": 0.084,
+     "stuetze": false
+    },
+    {
+     "name": "13",
+     "x": 0.168,
+     "stuetze": true
+    },
+    {
+     "name": "12",
+     "x": 0.252,
+     "stuetze": false
+    },
+    {
+     "name": "G/12",
+     "x": 0.284,
+     "stuetze": true
+    },
+    {
+     "name": "11",
+     "x": 0.336,
+     "stuetze": false
+    }
+   ]
+  },
+  {
+   "id": "unterzug-441-m25",
+   "titel": "Tischmodell 1:25",
+   "massstab": 25,
+   "original": [
+    33.6,
+    3.1,
+    1.4
+   ],
+   "glb": "unterzug-441-m25.glb",
+   "usdz": "unterzug-441-m25.usdz",
+   "glbBytes": 465848,
+   "usdzBytes": 1269900,
+   "achsen": [
+    {
+     "name": "18",
+     "x": -0.672,
+     "stuetze": false
+    },
+    {
+     "name": "17",
+     "x": -0.336,
+     "stuetze": true
+    },
+    {
+     "name": "16",
+     "x": -0.168,
+     "stuetze": false
+    },
+    {
+     "name": "15",
+     "x": 0,
+     "stuetze": true
+    },
+    {
+     "name": "14",
+     "x": 0.168,
+     "stuetze": false
+    },
+    {
+     "name": "13",
+     "x": 0.336,
+     "stuetze": true
+    },
+    {
+     "name": "12",
+     "x": 0.504,
+     "stuetze": false
+    },
+    {
+     "name": "G/12",
+     "x": 0.568,
+     "stuetze": true
+    },
+    {
+     "name": "11",
+     "x": 0.672,
+     "stuetze": false
+    }
+   ]
+  },
+  {
+   "id": "unterzug-441-achse17",
+   "titel": "Achse 17 (±3 m)",
+   "massstab": 1,
+   "original": [
+    6.102,
+    3.1,
+    1.4
+   ],
+   "glb": "unterzug-441-achse17.glb",
+   "usdz": "unterzug-441-achse17.usdz",
+   "glbBytes": 848160,
+   "usdzBytes": 2446274,
+   "achsen": [
+    {
+     "name": "17",
+     "x": 0.0008,
+     "stuetze": true
+    }
+   ]
+  },
+  {
+   "id": "unterzug-441-m10",
+   "titel": "Ganzes Bauteil 1:10",
+   "massstab": 10,
+   "original": [
+    33.6,
+    3.1,
+    1.4
+   ],
+   "glb": "unterzug-441-m10.glb",
+   "usdz": "unterzug-441-m10.usdz",
+   "glbBytes": 465848,
+   "usdzBytes": 1266481,
+   "achsen": [
+    {
+     "name": "18",
+     "x": -1.68,
+     "stuetze": false
+    },
+    {
+     "name": "17",
+     "x": -0.84,
+     "stuetze": true
+    },
+    {
+     "name": "16",
+     "x": -0.42,
+     "stuetze": false
+    },
+    {
+     "name": "15",
+     "x": 0,
+     "stuetze": true
+    },
+    {
+     "name": "14",
+     "x": 0.42,
+     "stuetze": false
+    },
+    {
+     "name": "13",
+     "x": 0.84,
+     "stuetze": true
+    },
+    {
+     "name": "12",
+     "x": 1.26,
+     "stuetze": false
+    },
+    {
+     "name": "G/12",
+     "x": 1.42,
+     "stuetze": true
+    },
+    {
+     "name": "11",
+     "x": 1.68,
+     "stuetze": false
+    }
+   ]
+  },
+  {
+   "id": "unterzug-441",
+   "titel": "Ganzes Bauteil 1:1",
+   "massstab": 1,
+   "original": [
+    33.6,
+    3.1,
+    1.4
+   ],
+   "glb": "unterzug-441.glb",
+   "usdz": "unterzug-441.usdz",
+   "glbBytes": 465796,
+   "usdzBytes": 1260483,
+   "achsen": [
+    {
+     "name": "18",
+     "x": -16.8,
+     "stuetze": false
+    },
+    {
+     "name": "17",
+     "x": -8.4,
+     "stuetze": true
+    },
+    {
+     "name": "16",
+     "x": -4.2,
+     "stuetze": false
+    },
+    {
+     "name": "15",
+     "x": 0,
+     "stuetze": true
+    },
+    {
+     "name": "14",
+     "x": 4.2,
+     "stuetze": false
+    },
+    {
+     "name": "13",
+     "x": 8.4,
+     "stuetze": true
+    },
+    {
+     "name": "12",
+     "x": 12.6,
+     "stuetze": false
+    },
+    {
+     "name": "G/12",
+     "x": 14.2,
+     "stuetze": true
+    },
+    {
+     "name": "11",
+     "x": 16.8,
+     "stuetze": false
+    }
+   ]
+  }
+ ],
+ "positionen": [
+  {
+   "position": "1",
+   "durchmesser": 16,
+   "stueck": 18,
+   "laenge": 3,
+   "lageGeschaetzt": false,
+   "lage": "Stützenlängsstäbe: G/17, G/15, G/13 je 4 Eckstäbe, G/12 sechs Stäbe",
+   "hinweis": "Stützenhöhe unterhalb des Unterzugs ist im Plan nicht dargestellt; Stäbe reichen im Modell von 3,05 m unter OK bis knapp unter OK Unterzug.",
+   "imModell": 18
+  },
+  {
+   "position": "2",
+   "durchmesser": 14,
+   "stueck": 12,
+   "laenge": 3,
+   "lageGeschaetzt": false,
+   "lage": "Stützenlängsstäbe in Seitenmitte, G/17, G/15, G/13 je 4",
+   "imModell": 12
+  },
+  {
+   "position": "3",
+   "durchmesser": 6,
+   "stueck": 57,
+   "laenge": 1.9,
+   "lageGeschaetzt": true,
+   "lage": "Stützenbügel außen 44×44, je Stütze G/17, G/15, G/13 19 Stück",
+   "hinweis": "Abstand im Modell gleichmäßig verteilt.",
+   "imModell": 57
+  },
+  {
+   "position": "4",
+   "durchmesser": 6,
+   "stueck": 27,
+   "laenge": 1.45,
+   "lageGeschaetzt": true,
+   "lage": "Rautenbügel (über Eck), je Stütze 9 Stück",
+   "imModell": 27
+  },
+  {
+   "position": "5",
+   "durchmesser": 6,
+   "stueck": 16,
+   "laenge": 1.4,
+   "lageGeschaetzt": true,
+   "lage": "Stützenbügel 19×44 der Stütze G/12",
+   "imModell": 16
+  },
+  {
+   "position": "6",
+   "durchmesser": 6,
+   "stueck": 15,
+   "laenge": "≈ 0,33",
+   "lageGeschaetzt": true,
+   "lage": "S-Haken in Stütze G/12",
+   "hinweis": "Länge im Foto nicht sicher lesbar.",
+   "imModell": 15
+  },
+  {
+   "position": "7",
+   "durchmesser": 20,
+   "stueck": 4,
+   "laenge": 7,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, 2. Lage, Felder 17–15 und 15–13 (je 2)",
+   "imModell": 4
+  },
+  {
+   "position": "8",
+   "durchmesser": 20,
+   "stueck": 4,
+   "laenge": 7.1,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, 2. Lage, Felder 17–15 und 15–13 (je 2)",
+   "imModell": 4
+  },
+  {
+   "position": "9",
+   "durchmesser": 20,
+   "stueck": 11,
+   "laenge": 8.35,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, 1. Lage: Feld 17–15 fünf, Feld 15–13 sechs Stäbe",
+   "imModell": 11
+  },
+  {
+   "position": "10",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 6.5,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 17 (3,20 | 3,30), 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "11",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 6.7,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 17 (3,30 | 3,40), 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "12",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 6.1,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 17 (3,40 | 2,70), 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "13",
+   "durchmesser": 20,
+   "stueck": 4,
+   "laenge": 5.6,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, Feld 13 bis Stütze G/12",
+   "imModell": 4
+  },
+  {
+   "position": "14",
+   "durchmesser": 14,
+   "stueck": 2,
+   "laenge": 5.2,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, Feld 13 bis Stütze G/12",
+   "imModell": 2
+  },
+  {
+   "position": "15",
+   "durchmesser": 14,
+   "stueck": 5,
+   "laenge": 3,
+   "lageGeschaetzt": false,
+   "lage": "Untere Bewehrung im Endbereich G/12–11 (h = 60 cm)",
+   "imModell": 5
+  },
+  {
+   "position": "16",
+   "durchmesser": 28,
+   "stueck": 1,
+   "laenge": 8.5,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 17 (4,10 | 4,40), 1. Lage Mitte",
+   "imModell": 1
+  },
+  {
+   "position": "17",
+   "durchmesser": 28,
+   "stueck": 2,
+   "laenge": 10.1,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 17 (4,70 | 5,40), 1. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "18",
+   "durchmesser": 28,
+   "stueck": 2,
+   "laenge": 11.1,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 17 (5,70 | 5,40), 1. Lage außen",
+   "imModell": 2
+  },
+  {
+   "position": "19",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 5.4,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 15 (2,70 | 2,70), 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "20",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 6,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 15 (3,00 | 3,00), 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "21",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 7.8,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 15 (3,90 | 3,90), 1. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "22",
+   "durchmesser": 20,
+   "stueck": 4,
+   "laenge": 9.6,
+   "lageGeschaetzt": false,
+   "lage": "Obere Bewehrung über Achse 15 und 13 (je 2), 1. Lage außen, Stoß im Feld lü = 1,60 m",
+   "imModell": 4
+  },
+  {
+   "position": "23",
+   "durchmesser": 20,
+   "stueck": 4,
+   "laenge": 9.5,
+   "lageGeschaetzt": false,
+   "lage": "Obere Bewehrung über Achse 15 und 13 (je 2), 1. Lage",
+   "imModell": 4
+  },
+  {
+   "position": "24",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 8,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 13 (4,00 | 4,00), 1. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "25",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 5.8,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 13 (2,90 | 2,90), 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "26",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 5.2,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 13, 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "27",
+   "durchmesser": 20,
+   "stueck": 2,
+   "laenge": 4.8,
+   "lageGeschaetzt": false,
+   "lage": "Stützbewehrung oben über Achse 13, 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "28",
+   "durchmesser": 16,
+   "stueck": 3,
+   "laenge": 4.6,
+   "lageGeschaetzt": true,
+   "lage": "Obere Bewehrung Endbereich, Haken nach unten an Achse 11",
+   "hinweis": "Plan: 4,00 m + 60 cm Haken. Im Modell ist der Haken wegen der geringeren Trägerhöhe (60 cm) verkürzt gezeichnet.",
+   "imModell": 3
+  },
+  {
+   "position": "29",
+   "durchmesser": 16,
+   "stueck": 2,
+   "laenge": 5.15,
+   "lageGeschaetzt": false,
+   "lage": "Obere Bewehrung Endbereich G/12–11, 2. Lage",
+   "imModell": 2
+  },
+  {
+   "position": "30",
+   "durchmesser": 10,
+   "stueck": 164,
+   "laenge": 1.4,
+   "lageGeschaetzt": true,
+   "lage": "Querstäbe Plattenanschluss über dem Unterzug, e = 20 cm",
+   "imModell": 164
+  },
+  {
+   "position": "31",
+   "durchmesser": 10,
+   "stueck": 15,
+   "laenge": 8,
+   "lageGeschaetzt": true,
+   "lage": "Seitenbewehrung Steg außen (Ø10 ME)",
+   "hinweis": "Lage und Stoßfolge im Modell approximiert.",
+   "imModell": 15
+  },
+  {
+   "position": "32",
+   "durchmesser": 10,
+   "stueck": 28,
+   "laenge": 4,
+   "lageGeschaetzt": true,
+   "lage": "Längsstäbe an den Innenbügeln (Ø10 ME)",
+   "hinweis": "Lage im Modell approximiert.",
+   "imModell": 28
+  },
+  {
+   "position": "33",
+   "durchmesser": 10,
+   "stueck": 5,
+   "laenge": 5.2,
+   "lageGeschaetzt": true,
+   "lage": "Seitenbewehrung Endbereich G/12–11",
+   "imModell": 5
+  },
+  {
+   "position": "34",
+   "durchmesser": 10,
+   "stueck": 3,
+   "laenge": 2.4,
+   "lageGeschaetzt": true,
+   "lage": "Montagestäbe Endbereich (Schnitt 5)",
+   "imModell": 3
+  },
+  {
+   "position": "35",
+   "durchmesser": 12,
+   "stueck": 4,
+   "laenge": 2,
+   "lageGeschaetzt": true,
+   "lage": "Zulage an der Aussparung bei G/12: je 2 Stäbe oberhalb und unterhalb der Öffnung",
+   "hinweis": "Mittig über bzw. unter der Aussparung, in den Bügelecken (oben Innenbügel Pos. 49a, unten Flachbügel Pos. 48). Höhenlage im Querschnitt approximiert.",
+   "imModell": 4
+  },
+  {
+   "position": "36",
+   "durchmesser": 20,
+   "stueck": 4,
+   "laenge": 3,
+   "lageGeschaetzt": true,
+   "lage": "Zulage oben über Stütze G/12",
+   "hinweis": "Lage im Foto nicht sicher zuzuordnen.",
+   "imModell": 4
+  },
+  {
+   "position": "37",
+   "durchmesser": 14,
+   "stueck": 2,
+   "laenge": 5.8,
+   "lageGeschaetzt": false,
+   "lage": "Oben am Endauflager Achse 18, Haken 80 cm nach unten",
+   "imModell": 2
+  },
+  {
+   "position": "38",
+   "durchmesser": 14,
+   "stueck": 2,
+   "laenge": 4.8,
+   "lageGeschaetzt": false,
+   "lage": "Oben am Endauflager Achse 18, Haken 80 cm nach unten",
+   "imModell": 2
+  },
+  {
+   "position": "39",
+   "durchmesser": 25,
+   "stueck": 2,
+   "laenge": 7.75,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, Feld 18–17, 2. Lage, Endhaken 25 cm",
+   "imModell": 2
+  },
+  {
+   "position": "40",
+   "durchmesser": 25,
+   "stueck": 2,
+   "laenge": 8.45,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, Feld 18–17, 2. Lage, Endhaken 25 cm",
+   "imModell": 2
+  },
+  {
+   "position": "41",
+   "durchmesser": 25,
+   "stueck": 5,
+   "laenge": 8.7,
+   "lageGeschaetzt": false,
+   "lage": "Feldbewehrung unten, Feld 18–17, 1. Lage, Endhaken 25 cm",
+   "imModell": 5
+  },
+  {
+   "position": "42",
+   "durchmesser": 25,
+   "stueck": 7,
+   "laenge": 0.4,
+   "lageGeschaetzt": true,
+   "lage": "Abstandhalter zwischen 1. und 2. Lage unten, Feld 18–17",
+   "imModell": 7
+  },
+  {
+   "position": "43",
+   "durchmesser": 20,
+   "stueck": 14,
+   "laenge": 0.4,
+   "lageGeschaetzt": true,
+   "lage": "Abstandhalter zwischen 1. und 2. Lage unten, Felder 17–13",
+   "imModell": 14
+  },
+  {
+   "position": "44",
+   "durchmesser": 10,
+   "stueck": 103,
+   "laenge": 2.4,
+   "lageGeschaetzt": true,
+   "lage": "Außenbügel Ø10 in den Feldern, abschnittsweise a = 13,5 / 17,5 / 19 / 23,5 cm, an der Aussparung a = 5 cm",
+   "hinweis": "Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).",
+   "imModell": 103
+  },
+  {
+   "position": "45",
+   "durchmesser": 10,
+   "stueck": 79,
+   "laenge": 2.4,
+   "lageGeschaetzt": true,
+   "lage": "Innenbügel Ø10, mit Pos. 44 in denselben Abschnitten",
+   "hinweis": "Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).",
+   "imModell": 79
+  },
+  {
+   "position": "46",
+   "durchmesser": 12,
+   "stueck": 60,
+   "laenge": 2.42,
+   "lageGeschaetzt": true,
+   "lage": "Außenbügel Ø12 an den Stützen 17, 15, 13 (a = 16 / 17,5 / 19 cm)",
+   "hinweis": "Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).",
+   "imModell": 60
+  },
+  {
+   "position": "47",
+   "durchmesser": 12,
+   "stueck": 60,
+   "laenge": 2.43,
+   "lageGeschaetzt": true,
+   "lage": "Innenbügel Ø12, mit Pos. 46 in denselben Abschnitten",
+   "hinweis": "Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).",
+   "imModell": 60
+  },
+  {
+   "position": "48",
+   "durchmesser": 6,
+   "stueck": 6,
+   "laenge": 1.25,
+   "lageGeschaetzt": false,
+   "lage": "Flache Bügel 42×17 im Untergurt unter der Aussparung (Steg 20 cm), verteilt über die 50 cm Breite",
+   "hinweis": "Bisher fälschlich der Stütze G/12 zugeordnet. Biegeform 42 × 17 cm und Hinweislinie in der Ansicht zeigen auf den Untergurt unter der Öffnung.",
+   "imModell": 6
+  },
+  {
+   "position": "49",
+   "durchmesser": 10,
+   "stueck": 6,
+   "laenge": 1.7,
+   "lageGeschaetzt": true,
+   "lage": "Bügel 42×32 über der Aussparung (50 cm breit, 1,05 m vor dem Sprung bei G/12), a = 10 cm",
+   "hinweis": "Durchmesser im Plan von Ø8 auf Ø10 korrigiert. Die Aussparung selbst ist im Betonmodell nicht dargestellt.",
+   "imModell": 6
+  },
+  {
+   "position": "49a",
+   "durchmesser": 10,
+   "stueck": 6,
+   "laenge": "≈ 1,20",
+   "lageGeschaetzt": true,
+   "lage": "Innenbügel 17×32 zu Pos. 49 über der Aussparung (im Plan nachgetragen, Ø10)",
+   "hinweis": "Stückzahl und Schnittlänge sind im Plan nicht angegeben; im Modell wie Pos. 49 mit 6 Stück angenommen.",
+   "imModell": 6
+  },
+  {
+   "position": "50",
+   "durchmesser": 10,
+   "stueck": 13,
+   "laenge": 2.1,
+   "lageGeschaetzt": false,
+   "lage": "Außenbügel Endbereich G/12–11 (h = 60 cm), e ≈ 19 cm",
+   "hinweis": "Durchmesser im Foto nicht sicher lesbar.",
+   "imModell": 13
+  },
+  {
+   "position": "51",
+   "durchmesser": 10,
+   "stueck": 8,
+   "laenge": 1.6,
+   "lageGeschaetzt": false,
+   "lage": "Innenbügel Endbereich G/12–11",
+   "imModell": 8
+  },
+  {
+   "position": "52",
+   "durchmesser": 10,
+   "stueck": 4,
+   "laenge": 2.5,
+   "lageGeschaetzt": true,
+   "lage": "Steckbügel (U, Schenkel 1,02 m, Steg 44 cm) am Querschnittssprung bei G/12, Schenkel in den 60 cm hohen Endbereich, a = 10 cm",
+   "hinweis": "Lage laut Ansicht am Sprung; Anordnung im Querschnitt approximiert.",
+   "imModell": 4
+  },
+  {
+   "position": "53",
+   "durchmesser": 16,
+   "stueck": 2,
+   "laenge": 5.85,
+   "lageGeschaetzt": true,
+   "lage": "Obere Bewehrung Endbereich, Endhaken (48 + 22 cm) an Achse 11",
+   "hinweis": "In der Ansicht an Achse 11 eingetragen; Lage im Querschnitt approximiert.",
+   "imModell": 2
+  },
+  {
+   "position": "54",
+   "durchmesser": 14,
+   "stueck": 4,
+   "laenge": 1.1,
+   "lageGeschaetzt": true,
+   "lage": "Winkelstab (80 + 30 cm), im Modell an der einspringenden Ecke des Querschnittssprungs bei G/12",
+   "hinweis": "Biegeform aus dem Plan; Einbaulage im Foto nicht sicher zuzuordnen.",
+   "imModell": 4
+  }
+ ],
+ "farben": {
+  "6": "#8e7cc3",
+  "10": "#36a19c",
+  "12": "#4e9e48",
+  "14": "#a3a836",
+  "16": "#d79a26",
+  "20": "#e2702c",
+  "25": "#d03e3e",
+  "28": "#9c2b5d"
+ }
+}

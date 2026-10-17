@@ -1,0 +1,741 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Unterzug Pos. 441</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Vollflächiger 3D-Viewport links, Stahlliste/Detail als Planspalte rechts (mobil darunter) */
+:root{
+  --paper:#e8ebe4; --panel:#f5f6f2; --ink:#1c2a2e; --muted:#5a6869; --line:#c8cfc6;
+  --accent:#1f5ca3; --viewport:#dde2da; --hl:#e8a400; --chip:#e9ede6;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12181b; --panel:#182024; --ink:#e2e8e4; --muted:#8e9c9b; --line:#2b373b;
+  --accent:#78aef0; --viewport:#0e1315; --hl:#ffc433; --chip:#1f292d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12181b; --panel:#182024; --ink:#e2e8e4; --muted:#8e9c9b; --line:#2b373b;
+  --accent:#78aef0; --viewport:#0e1315; --hl:#ffc433; --chip:#1f292d; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;overflow:hidden}
+.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 390px}
+.stage{position:relative;min-width:0;min-height:0;background:var(--viewport);overflow:hidden}
+#cv{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#cv:active{cursor:grabbing}
+.titlecard{position:absolute;left:16px;top:14px;pointer-events:none;max-width:calc(100% - 32px)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.titlecard h1{margin:2px 0 0;font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1;letter-spacing:.01em;text-wrap:balance}
+.titlecard h1 span{color:var(--accent)}
+.toolbar{position:absolute;left:12px;right:12px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button,.tbtn{font:500 13px/1 var(--f-body);color:var(--ink);background:transparent;border:0;padding:8px 10px;cursor:pointer;white-space:nowrap}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.tbtn{background:var(--panel);border:1px solid var(--line);border-radius:6px}
+a.tbtn{display:inline-block;text-decoration:none}
+.tbtn[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.tbtn.back2ar{background:var(--ink);color:var(--panel);border-color:var(--ink);font-weight:600}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.station{flex:1 1 100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 10px;min-width:0}
+.station label{font:600 13px var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+.station input{flex:1 1 160px;min-width:0;accent-color:var(--accent)}
+.station output{font:13px var(--f-mono);font-variant-numeric:tabular-nums;min-width:8.5em}
+.axj{display:flex;flex-wrap:wrap;gap:4px}
+.axj button{font:600 12px var(--f-mono);width:28px;height:28px;border-radius:50%;border:1.4px solid var(--ink);background:var(--panel);color:var(--ink);cursor:pointer;padding:0}
+.axj button.on{background:var(--ink);color:var(--panel)}
+.hint{position:absolute;right:14px;top:16px;font-size:12px;color:var(--muted);text-align:right;pointer-events:none;line-height:1.4}
+.tag{position:absolute;pointer-events:none;transform:translate(-50%,-130%);background:var(--ink);color:var(--panel);font:500 12px/1 var(--f-mono);padding:5px 7px;border-radius:4px;white-space:nowrap}
+
+.panel{background:var(--panel);border-left:1px solid var(--line);min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.pin{padding-inline:18px;padding-block:16px 28px;display:flex;flex-direction:column;gap:18px}
+.ph{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.ph h2{margin:0;font-family:var(--f-display);font-weight:600;font-size:21px;letter-spacing:.02em}
+.small{font-size:12.5px;color:var(--muted);line-height:1.45}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px}
+.legend span{display:inline-flex;align-items:center;gap:5px;font:12px var(--f-mono);color:var(--muted)}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.grp{display:flex;flex-direction:column}
+.gh{display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--ink);padding-bottom:4px;margin-bottom:2px}
+.gh h3{margin:0;font-family:var(--f-display);font-size:15px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.eye{font:500 12px var(--f-body);background:none;border:1px solid var(--line);border-radius:4px;color:var(--muted);padding:3px 7px;cursor:pointer}
+.eye[aria-pressed="false"]{text-decoration:line-through;opacity:.7}
+.row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:6px 4px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;color:var(--ink);cursor:pointer;font:inherit;width:100%}
+.row:hover{background:var(--chip)}
+.row.sel{background:var(--chip);box-shadow:inset 3px 0 0 var(--hl)}
+.pc{width:28px;height:28px;border:1.6px solid currentColor;border-radius:50%;display:grid;place-items:center;font:600 13px var(--f-mono);font-variant-numeric:tabular-nums}
+.rmain{display:flex;align-items:center;gap:8px;min-width:0;font:500 14px var(--f-mono);font-variant-numeric:tabular-nums}
+.rmain em{font-style:normal;font-family:var(--f-body);font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rlg{font:13px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.est{font:600 10px var(--f-body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--muted);border-radius:3px;padding:1px 4px}
+
+.detail{display:flex;flex-direction:column;gap:14px}
+.back{align-self:flex-start;font:500 13px var(--f-body);background:none;border:0;color:var(--accent);cursor:pointer;padding:4px 0}
+.dhead{display:flex;gap:14px;align-items:center}
+.dhead .pc{width:54px;height:54px;font-size:22px;border-width:2.4px}
+.dhead h2{margin:0;font:600 26px/1.05 var(--f-mono);font-variant-numeric:tabular-nums}
+.dhead p{margin:3px 0 0;font-size:13.5px;color:var(--muted)}
+.shapebox{border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:10px}
+.shapebox .cap{display:flex;justify-content:space-between;font:11px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.shapebox svg{width:100%;height:auto;display:block}
+.shp{fill:none;stroke:var(--hl);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.shpglow{fill:none;stroke:var(--hl);stroke-width:16;stroke-linecap:round;stroke-linejoin:round;opacity:.22}
+.dl{fill:none;stroke:var(--muted);stroke-width:1}
+.dt{fill:var(--ink);font:500 14px var(--f-mono)}
+dl.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px 14px;margin:0;font-size:14px}
+dl.facts dt{color:var(--muted)}
+dl.facts dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;min-width:0}
+dl.facts dd.txt{font-family:var(--f-body)}
+.note{font-size:13px;line-height:1.5;border-left:2px dashed var(--muted);padding-left:10px;color:var(--muted)}
+.foot{font-size:12px;line-height:1.5;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:760px){
+  .app{grid-template-columns:minmax(0,1fr);grid-template-rows:56% 44%}
+  .panel{border-left:0;border-top:1px solid var(--line)}
+  .titlecard h1{font-size:24px}
+  .hint{display:none}
+  .seg button,.tbtn{padding:8px 8px;font-size:12.5px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app">
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-label="3D-Modell der Bewehrung"></canvas>
+    <div class="titlecard">
+      <div class="eyebrow">Bewehrungsmodell · 3D</div>
+      <h1>Unterzug <span>Pos. 441</span></h1>
+    </div>
+    <div class="hint">Stab antippen: Position anzeigen · Doppelklick: Drehpunkt setzen<br>Ziehen: drehen · Rechts/zwei Finger: schieben · Rad/Pinch: zoomen · ←/→: Drehpunkt verschieben</div>
+    <div class="tag" id="tag" hidden></div>
+    <div class="toolbar">
+      <div class="station">
+        <label for="st">Drehpunkt</label>
+        <input type="range" id="st" min="0" max="33.6" step="0.05" value="8.4">
+        <output id="sto">x = 8,40 m</output>
+        <div class="axj" id="axj"></div>
+      </div>
+      <a class="tbtn back2ar" id="toAR" href="../#praesentation">▶ Präsentation</a>
+      <button class="tbtn" id="t-pan" aria-pressed="false" title="Ein Finger bzw. linke Maustaste verschiebt die Ansicht">✥ Verschieben</button>
+      <div class="seg" role="group" aria-label="Ansicht">
+        <button id="v-all">Gesamt</button><button id="v-17">Achse 17</button><button id="v-sec">Schnitt</button>
+      </div>
+      <button class="tbtn" id="t-con" aria-pressed="true">Beton</button>
+      <div class="seg" role="group" aria-label="Stabdicke">
+        <button id="th1" aria-pressed="true">Ø echt</button><button id="th3" aria-pressed="false">Ø ×3</button>
+      </div>
+      <div class="seg" role="group" aria-label="Farbe">
+        <button id="c-d" aria-pressed="true">Farbe nach Ø</button><button id="c-s" aria-pressed="false">Stahl</button>
+      </div>
+      <div class="seg" role="group" aria-label="Darstellung">
+        <button id="s2d" aria-pressed="true">2D</button><button id="s3d" aria-pressed="false" title="Für Rot/Cyan-Brillen, rotes Glas links">3D Rot/Cyan</button>
+      </div>
+    </div>
+  </div>
+  <aside class="panel"><div class="pin" id="pin"></div></aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+window.addEventListener('error',function(e){
+  var s=document.getElementById('stage');if(!s||document.getElementById('err'))return;
+  var d=document.createElement('div');d.id='err';
+  d.style.cssText='position:absolute;left:16px;right:16px;top:90px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:13px/1.45 var(--f-mono)';
+  d.textContent='Das 3D-Modell konnte nicht geladen werden: '+(e.message||'unbekannter Fehler')+(typeof THREE==='undefined'?' (three.js wurde nicht geladen)':'');
+  s.appendChild(d);
+});
+if(typeof THREE==='undefined')throw new Error('three.js nicht verfügbar');
+(function(){
+const V3=(x,y,z)=>new THREE.Vector3(x,y,z);
+const fmt=(v,n=2)=>v.toFixed(n).replace('.',',');
+const cm=v=>Math.round(v*100);
+
+/* ---------- Geometrie des Bauteils ---------- */
+const X={18:0,17:8.4,16:12.6,15:16.8,14:21.0,13:25.2,12:29.4,11:33.6};
+const XG12=31.0, XSTEP=31.15, C=0.04;
+const Hat=x=>x<XSTEP?1.0:0.6;
+
+const DCOL={6:'#8e7cc3',10:'#36a19c',12:'#4e9e48',14:'#a3a836',16:'#d79a26',20:'#e2702c',25:'#d03e3e',28:'#9c2b5d'};
+const GROUPS=[
+  ['oben','Obere Längsbewehrung'],['unten','Untere Längsbewehrung'],['buegel','Bügel Unterzug'],
+  ['stuetze','Stützen'],['sonst','Platte, Steg, Abstandhalter']];
+
+/* Stahlliste (aus dem Plan gelesen). shape: Biegeform im lokalen System */
+const P={};
+function def(p,o){P[p]=Object.assign({p,inst:[],est:false},o)}
+def(1,{n:18,d:16,lg:3.00,g:'stuetze',shape:{t:'straight',L:3.0,axis:'y'},where:'Stützenlängsstäbe: G/17, G/15, G/13 je 4 Eckstäbe, G/12 sechs Stäbe',note:'Stützenhöhe unterhalb des Unterzugs ist im Plan nicht dargestellt; Stäbe reichen im Modell von 3,05 m unter OK bis knapp unter OK Unterzug.'});
+def(2,{n:12,d:14,lg:3.00,g:'stuetze',shape:{t:'straight',L:3.0,axis:'y'},where:'Stützenlängsstäbe in Seitenmitte, G/17, G/15, G/13 je 4'});
+def(3,{n:57,d:6,lg:1.90,g:'stuetze',shape:{t:'tie',a:0.44,b:0.44},where:'Stützenbügel außen 44×44, je Stütze G/17, G/15, G/13 19 Stück',est:true,note:'Abstand im Modell gleichmäßig verteilt.'});
+def(4,{n:27,d:6,lg:1.45,g:'stuetze',shape:{t:'diamond',s:0.33},where:'Rautenbügel (über Eck), je Stütze 9 Stück',est:true});
+def(5,{n:16,d:6,lg:1.40,g:'stuetze',shape:{t:'tie',a:0.19,b:0.44},where:'Stützenbügel 19×44 der Stütze G/12',est:true});
+def(6,{n:15,d:6,lg:0.33,lgTxt:'≈ 0,33',g:'stuetze',shape:{t:'shook',L:0.14},where:'S-Haken in Stütze G/12',est:true,note:'Länge im Foto nicht sicher lesbar.'});
+def(7,{n:4,d:20,lg:7.00,g:'unten',shape:{t:'straight',L:7.0},where:'Feldbewehrung unten, 2. Lage, Felder 17–15 und 15–13 (je 2)'});
+def(8,{n:4,d:20,lg:7.10,g:'unten',shape:{t:'straight',L:7.1},where:'Feldbewehrung unten, 2. Lage, Felder 17–15 und 15–13 (je 2)'});
+def(9,{n:11,d:20,lg:8.35,g:'unten',shape:{t:'straight',L:8.35},where:'Feldbewehrung unten, 1. Lage: Feld 17–15 fünf, Feld 15–13 sechs Stäbe'});
+def(10,{n:2,d:20,lg:6.50,g:'oben',shape:{t:'straight',L:6.5},where:'Stützbewehrung oben über Achse 17 (3,20 | 3,30), 2. Lage'});
+def(11,{n:2,d:20,lg:6.70,g:'oben',shape:{t:'straight',L:6.7},where:'Stützbewehrung oben über Achse 17 (3,30 | 3,40), 2. Lage'});
+def(12,{n:2,d:20,lg:6.10,g:'oben',shape:{t:'straight',L:6.1},where:'Stützbewehrung oben über Achse 17 (3,40 | 2,70), 2. Lage'});
+def(13,{n:4,d:20,lg:5.60,g:'unten',shape:{t:'straight',L:5.6},where:'Feldbewehrung unten, Feld 13 bis Stütze G/12'});
+def(14,{n:2,d:14,lg:5.20,g:'unten',shape:{t:'straight',L:5.2},where:'Feldbewehrung unten, Feld 13 bis Stütze G/12'});
+def(15,{n:5,d:14,lg:3.00,g:'unten',shape:{t:'straight',L:3.0},where:'Untere Bewehrung im Endbereich G/12–11 (h = 60 cm)'});
+def(16,{n:1,d:28,lg:8.50,g:'oben',shape:{t:'straight',L:8.5},where:'Stützbewehrung oben über Achse 17 (4,10 | 4,40), 1. Lage Mitte'});
+def(17,{n:2,d:28,lg:10.10,g:'oben',shape:{t:'straight',L:10.1},where:'Stützbewehrung oben über Achse 17 (4,70 | 5,40), 1. Lage'});
+def(18,{n:2,d:28,lg:11.10,g:'oben',shape:{t:'straight',L:11.1},where:'Stützbewehrung oben über Achse 17 (5,70 | 5,40), 1. Lage außen'});
+def(19,{n:2,d:20,lg:5.40,g:'oben',shape:{t:'straight',L:5.4},where:'Stützbewehrung oben über Achse 15 (2,70 | 2,70), 2. Lage'});
+def(20,{n:2,d:20,lg:6.00,g:'oben',shape:{t:'straight',L:6.0},where:'Stützbewehrung oben über Achse 15 (3,00 | 3,00), 2. Lage'});
+def(21,{n:2,d:20,lg:7.80,g:'oben',shape:{t:'straight',L:7.8},where:'Stützbewehrung oben über Achse 15 (3,90 | 3,90), 1. Lage'});
+def(22,{n:4,d:20,lg:9.60,g:'oben',shape:{t:'straight',L:9.6},where:'Obere Bewehrung über Achse 15 und 13 (je 2), 1. Lage außen, Stoß im Feld lü = 1,60 m'});
+def(23,{n:4,d:20,lg:9.50,g:'oben',shape:{t:'straight',L:9.5},where:'Obere Bewehrung über Achse 15 und 13 (je 2), 1. Lage'});
+def(24,{n:2,d:20,lg:8.00,g:'oben',shape:{t:'straight',L:8.0},where:'Stützbewehrung oben über Achse 13 (4,00 | 4,00), 1. Lage'});
+def(25,{n:2,d:20,lg:5.80,g:'oben',shape:{t:'straight',L:5.8},where:'Stützbewehrung oben über Achse 13 (2,90 | 2,90), 2. Lage'});
+def(26,{n:2,d:20,lg:5.20,g:'oben',shape:{t:'straight',L:5.2},where:'Stützbewehrung oben über Achse 13, 2. Lage'});
+def(27,{n:2,d:20,lg:4.80,g:'oben',shape:{t:'straight',L:4.8},where:'Stützbewehrung oben über Achse 13, 2. Lage'});
+def(28,{n:3,d:16,lg:4.60,g:'oben',shape:{t:'hook',L:4.0,h:0.46,end:'end',dir:-1,hTxt:60},where:'Obere Bewehrung Endbereich, Haken nach unten an Achse 11',est:true,note:'Plan: 4,00 m + 60 cm Haken. Im Modell ist der Haken wegen der geringeren Trägerhöhe (60 cm) verkürzt gezeichnet.'});
+def(29,{n:2,d:16,lg:5.15,g:'oben',shape:{t:'straight',L:5.15},where:'Obere Bewehrung Endbereich G/12–11, 2. Lage'});
+def(30,{n:164,d:10,lg:1.40,g:'sonst',shape:{t:'straight',L:1.4,axis:'z'},where:'Querstäbe Plattenanschluss über dem Unterzug, e = 20 cm',est:true});
+def(31,{n:15,d:10,lg:8.00,g:'sonst',shape:{t:'straight',L:8.0},where:'Seitenbewehrung Steg außen (Ø10 ME)',est:true,note:'Lage und Stoßfolge im Modell approximiert.'});
+def(32,{n:28,d:10,lg:4.00,g:'sonst',shape:{t:'straight',L:4.0},where:'Längsstäbe an den Innenbügeln (Ø10 ME)',est:true,note:'Lage im Modell approximiert.'});
+def(33,{n:5,d:10,lg:5.20,g:'sonst',shape:{t:'straight',L:5.2},where:'Seitenbewehrung Endbereich G/12–11',est:true});
+def(34,{n:3,d:10,lg:2.40,g:'sonst',shape:{t:'straight',L:2.4},where:'Montagestäbe Endbereich (Schnitt 5)',est:true});
+def(35,{n:4,d:12,lg:2.00,g:'sonst',shape:{t:'straight',L:2.0},where:'Zulage an der Aussparung bei G/12: je 2 Stäbe oberhalb und unterhalb der Öffnung',est:true,note:'Mittig über bzw. unter der Aussparung, in den Bügelecken (oben Innenbügel Pos. 49a, unten Flachbügel Pos. 48). Höhenlage im Querschnitt approximiert.'});
+def(36,{n:4,d:20,lg:3.00,g:'oben',shape:{t:'straight',L:3.0},where:'Zulage oben über Stütze G/12',est:true,note:'Lage im Foto nicht sicher zuzuordnen.'});
+def(37,{n:2,d:14,lg:5.80,g:'oben',shape:{t:'hook',L:5.0,h:0.8,end:'start',dir:-1},where:'Oben am Endauflager Achse 18, Haken 80 cm nach unten'});
+def(38,{n:2,d:14,lg:4.80,g:'oben',shape:{t:'hook',L:4.0,h:0.8,end:'start',dir:-1},where:'Oben am Endauflager Achse 18, Haken 80 cm nach unten'});
+def(39,{n:2,d:25,lg:7.75,g:'unten',shape:{t:'hook',L:7.5,h:0.25,end:'start',dir:1},where:'Feldbewehrung unten, Feld 18–17, 2. Lage, Endhaken 25 cm'});
+def(40,{n:2,d:25,lg:8.45,g:'unten',shape:{t:'hook',L:8.2,h:0.25,end:'start',dir:1},where:'Feldbewehrung unten, Feld 18–17, 2. Lage, Endhaken 25 cm'});
+def(41,{n:5,d:25,lg:8.70,g:'unten',shape:{t:'hook',L:8.45,h:0.25,end:'start',dir:1},where:'Feldbewehrung unten, Feld 18–17, 1. Lage, Endhaken 25 cm'});
+def(42,{n:7,d:25,lg:0.40,g:'sonst',shape:{t:'straight',L:0.4,axis:'z'},where:'Abstandhalter zwischen 1. und 2. Lage unten, Feld 18–17',est:true});
+def(43,{n:14,d:20,lg:0.40,g:'sonst',shape:{t:'straight',L:0.4,axis:'z'},where:'Abstandhalter zwischen 1. und 2. Lage unten, Felder 17–13',est:true});
+def(44,{n:103,d:10,lg:2.40,g:'buegel',shape:{t:'stirrup',b:0.42,h:0.92},where:'Außenbügel Ø10 in den Feldern, abschnittsweise a = 13,5 / 17,5 / 19 / 23,5 cm, an der Aussparung a = 5 cm',est:true,note:'Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).'});
+def(45,{n:79,d:10,lg:2.40,g:'buegel',shape:{t:'stirrup',b:0.17,h:0.92},where:'Innenbügel Ø10, mit Pos. 44 in denselben Abschnitten',est:true,note:'Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).'});
+def(46,{n:60,d:12,lg:2.42,g:'buegel',shape:{t:'stirrup',b:0.42,h:0.92},where:'Außenbügel Ø12 an den Stützen 17, 15, 13 (a = 16 / 17,5 / 19 cm)',est:true,note:'Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).'});
+def(47,{n:60,d:12,lg:2.43,g:'buegel',shape:{t:'stirrup',b:0.17,h:0.92},where:'Innenbügel Ø12, mit Pos. 46 in denselben Abschnitten',est:true,note:'Abschnitte, Stückzahlen und Abstände aus der Ansicht übernommen. Weil die eingetragenen Abschnitte zusammen nicht exakt in die Feldlängen passen, sind sie je Feld maßstäblich angepasst (siehe Hinweis unten in der Stahlliste).'});
+def(48,{n:6,d:6,lg:1.25,g:'buegel',shape:{t:'stirrup',b:0.42,h:0.17},where:'Flache Bügel 42×17 im Untergurt unter der Aussparung (Steg 20 cm), verteilt über die 50 cm Breite',note:'Bisher fälschlich der Stütze G/12 zugeordnet. Biegeform 42 × 17 cm und Hinweislinie in der Ansicht zeigen auf den Untergurt unter der Öffnung.'});
+def(49,{n:6,d:10,lg:1.70,g:'buegel',shape:{t:'stirrup',b:0.42,h:0.32},where:'Bügel 42×32 über der Aussparung (50 cm breit, 1,05 m vor dem Sprung bei G/12), a = 10 cm',est:true,note:'Durchmesser im Plan von Ø8 auf Ø10 korrigiert. Die Aussparung selbst ist im Betonmodell nicht dargestellt.'});
+def(49.5,{lab:'49a',n:6,d:10,lg:1.20,lgTxt:'≈ 1,20',g:'buegel',shape:{t:'stirrup',b:0.17,h:0.32},where:'Innenbügel 17×32 zu Pos. 49 über der Aussparung (im Plan nachgetragen, Ø10)',est:true,note:'Stückzahl und Schnittlänge sind im Plan nicht angegeben; im Modell wie Pos. 49 mit 6 Stück angenommen.'});
+def(50,{n:13,d:10,lg:2.10,g:'buegel',shape:{t:'stirrup',b:0.42,h:0.52},where:'Außenbügel Endbereich G/12–11 (h = 60 cm), e ≈ 19 cm',note:'Durchmesser im Foto nicht sicher lesbar.'});
+def(51,{n:8,d:10,lg:1.60,g:'buegel',shape:{t:'stirrup',b:0.17,h:0.52},where:'Innenbügel Endbereich G/12–11'});
+def(52,{n:4,d:10,lg:2.50,g:'buegel',shape:{t:'poly',pts:[[1.02,0],[0,0],[0,-0.44],[1.02,-0.44]]},where:'Steckbügel (U, Schenkel 1,02 m, Steg 44 cm) am Querschnittssprung bei G/12, Schenkel in den 60 cm hohen Endbereich, a = 10 cm',est:true,note:'Lage laut Ansicht am Sprung; Anordnung im Querschnitt approximiert.'});
+def(53,{n:2,d:16,lg:5.85,g:'oben',shape:{t:'poly',pts:[[0,0],[5.15,0],[5.15,-0.48],[4.93,-0.48]]},where:'Obere Bewehrung Endbereich, Endhaken (48 + 22 cm) an Achse 11',est:true,note:'In der Ansicht an Achse 11 eingetragen; Lage im Querschnitt approximiert.'});
+def(54,{n:4,d:14,lg:1.10,g:'sonst',shape:{t:'poly',pts:[[0,0],[0,-0.80],[-0.30,-0.80]]},where:'Winkelstab (80 + 30 cm), im Modell an der einspringenden Ecke des Querschnittssprungs bei G/12',est:true,note:'Biegeform aus dem Plan; Einbaulage im Foto nicht sicher zuzuordnen.'});
+
+/* ---------- Anordnung ---------- */
+function add(p,x,y,z){P[p].inst.push({x,y,z})}
+function layer(bars,yOf,wIn){
+  const total=bars.reduce((s,b)=>s+b.n,0);
+  const dmax=Math.max(...bars.map(b=>P[b.p].d))/1000;
+  const half=wIn/2-dmax/2;
+  const zs=[];for(let i=0;i<total;i++)zs.push(total===1?0:-half+2*half*i/(total-1));
+  const flat=[];for(let i=0;i<Math.floor(total/2);i++)flat.push(i,total-1-i);
+  const ctr=total%2?(total-1)/2:null;if(ctr!==null)flat.push(ctr);
+  const used=new Set();
+  for(const b of bars){let k=b.n;const d=P[b.p].d/1000;
+    if(k%2&&ctr!==null&&!used.has(ctr)){used.add(ctr);add(b.p,b.x0,yOf(d),zs[ctr]);k--}
+    for(const s of flat){if(!k)break;if(!used.has(s)){used.add(s);add(b.p,b.x0,yOf(d),zs[s]);k--}}
+  }
+  return dmax;
+}
+function topGroup(Xs,L1,L2,ds){
+  const w=0.42-2*ds;
+  const m=(arr)=>arr.map(b=>({p:b.p,n:b.n,x0:b.x0!==undefined?b.x0:Xs-b.left}));
+  const d1=layer(m(L1),d=>-(C+ds+d/2),w);
+  if(L2.length){const y2=-(C+ds+d1)-0.025;layer(m(L2),d=>y2-d/2,w)}
+}
+function botGroup(H,L1,L2,ds,sp){
+  const w=0.42-2*ds;
+  const d1=layer(L1,d=>-H+C+ds+d/2,w);
+  const yb=-H+C+ds+d1;
+  if(L2.length)layer(L2,d=>yb+sp+d/2,w);
+  return yb+sp/2;
+}
+// oben
+topGroup(X[17],[{p:18,n:2,left:5.70},{p:17,n:2,left:4.70},{p:16,n:1,left:4.10}],[{p:10,n:2,left:3.20},{p:11,n:2,left:3.30},{p:12,n:2,left:3.40}],0.012);
+topGroup(X[15],[{p:22,n:2,left:4.60},{p:23,n:2,left:4.75},{p:21,n:2,left:3.90}],[{p:20,n:2,left:3.00},{p:19,n:2,left:2.70}],0.012);
+topGroup(X[13],[{p:22,n:2,left:5.00},{p:23,n:2,left:5.00},{p:24,n:2,left:4.00}],[{p:25,n:2,left:2.90},{p:26,n:2,left:2.60},{p:27,n:2,left:2.35}],0.012);
+topGroup(0,[{p:37,n:2,x0:0.03},{p:38,n:2,x0:0.03}],[],0.010);
+topGroup(XG12,[{p:28,n:3,x0:33.57-4.0},{p:36,n:4,left:1.5}],[{p:29,n:2,x0:33.57-5.15}],0.010);
+// unten
+let ys=botGroup(1.0,[{p:41,n:5,x0:0.03}],[{p:39,n:2,x0:0.03},{p:40,n:2,x0:0.03}],0.010,0.025);
+for(let i=0;i<7;i++)add(42,1.0+i*1.05,ys,0);
+const cen=(a,b,L)=>(a+b-L)/2;
+ys=botGroup(1.0,[{p:9,n:5,x0:cen(X[17],X[15],8.35)}],[{p:7,n:2,x0:cen(X[17],X[15],7.0)},{p:8,n:2,x0:cen(X[17],X[15],7.1)}],0.010,0.020);
+for(let i=0;i<7;i++)add(43,X[17]+1.0+i*1.05,ys,0);
+ys=botGroup(1.0,[{p:9,n:6,x0:cen(X[15],X[13],8.35)}],[{p:7,n:2,x0:cen(X[15],X[13],7.0)},{p:8,n:2,x0:cen(X[15],X[13],7.1)}],0.010,0.020);
+for(let i=0;i<7;i++)add(43,X[15]+1.0+i*1.05,ys,0);
+botGroup(1.0,[{p:13,n:4,x0:X[13]+0.15},{p:14,n:2,x0:X[13]+0.40}],[],0.010,0);
+botGroup(0.6,[{p:15,n:5,x0:33.57-3.0}],[],0.010,0);
+// Bügel
+function distribute(segs,n){const tot=segs.reduce((s,[a,b])=>s+b-a,0),sp=tot/n,out=[];
+  for(let i=0;i<n;i++){let t=(i+0.5)*sp;for(const[a,b]of segs){if(t<=b-a+1e-9){out.push(a+t);break}t-=b-a}}return out}
+const zones=[X[17],X[15],X[13]];
+// Bügelabschnitte wie in der Ansicht eingetragen: [Positionen, Stück, Abstand a in m]
+const OA=XSTEP-1.55, OB=XSTEP-1.05;            // Aussparung 50 cm, 1,05 m vor dem Sprung
+const B10=[44,45],B12=[46,47];
+const SPANS=[
+  [0.06,X[17]-0.25,[[B10,8,.175],[B10,9,.175],[[44],6,.19],[B10,6,.19],[B10,3,.19],[B12,3,.19],[B12,8,.175],[B12,7,.175]]],
+  [X[17]+0.25,X[15]-0.25,[[B12,6,.16],[B12,2,.16],[B10,6,.19],[B10,6,.19],[[44],6,.19],[B10,6,.19],[B10,3,.19],[B12,3,.19],[B12,5,.19]]],
+  [X[15]+0.25,X[13]-0.25,[[B12,5,.19],[B12,3,.19],[B10,3,.19],[B10,6,.19],[[44],6,.19],[B10,6,.19],[B12,2,.16],[B12,6,.16]]],
+];
+const placed={44:0,45:0,46:0,47:0};
+const off={44:0,45:0.05,46:0,47:0.04};
+const segInfo=[];
+function runSpan(a,b,seq){
+  const nat=seq.reduce((t,[,n,e])=>t+n*e,0),f=(b-a)/nat;let x=a;
+  for(const[ps,n,e]of seq){const x0=x;
+    for(let i=0;i<n;i++){const xi=x+(i+0.5)*e*f;for(const p of ps){add(p,xi+off[p],-C,0);placed[p]++}}
+    x+=n*e*f;segInfo.push({ps,n,e,x0,x1:x})}
+  return f;
+}
+const fit=SPANS.map(([a,b,q])=>runSpan(a,b,q));
+// Feld 13 – Sprung: gelesene Abschnitte, Rest der Stahlliste vor der Aussparung
+const rest12=Math.max(0,60-placed[46]);
+const fD=runSpan(X[13]+0.25,OA-0.20,[[B12,rest12,.16],[B10,2,.135],[B10,8,.135],[B10,5,.235]]);
+fit.push(fD);
+for(const xs of[[OA-0.15,OA-0.05],[OB+0.05,OB+0.15]])for(let i=0;i<3;i++){add(44,xs[0]+i*0.05,-C,0);placed[44]++}
+const r44=103-placed[44],r45=79-placed[45];
+distribute([[OB+0.20,XSTEP-0.04]],Math.max(r44,0)).forEach(x=>add(44,x,-C,0));
+distribute([[OB+0.20,XSTEP-0.04]],Math.max(r45,0)).forEach(x=>add(45,x+0.05,-C,0));
+const fitTxt=fit.map(v=>Math.round((v-1)*100));
+distribute([[XSTEP+0.06,33.56]],13).forEach(x=>add(50,x,-C,0));
+distribute([[XSTEP+0.06,33.56]],8).forEach(x=>add(51,x+0.05,-C,0));
+distribute([[XSTEP-1.55,XSTEP-1.05]],6).forEach(x=>add(49,x,-C,0));
+distribute([[XSTEP-1.55,XSTEP-1.05]],6).forEach(x=>add(48,x+0.02,-0.80,0));
+for(const z of[-0.15,-0.05,0.05,0.15])add(52,XSTEP+0.03,-0.08,z);
+distribute([[XSTEP-1.55,XSTEP-1.05]],6).forEach(x=>add(49.5,x+0.03,-C,0));
+for(const z of[-0.12,0.12])add(53,33.57-5.15,-0.07,z);   // Haken 48 cm endet 5 cm über UK Kragarm
+for(const z of[-0.15,-0.05,0.05,0.15])add(54,XSTEP-0.05,-0.12,z);
+// Platte & Steg
+for(let i=0;i<164;i++)add(30,0.1+i*0.2,-0.028,0);
+const zo=0.21-0.012-0.006, zi=0.085-0.010-0.006;
+for(const y of[-0.36,-0.68])for(const s of[-1,1]){const cnt=(y===-0.68&&s===1)?3:4;for(let i=0;i<cnt;i++){let x0=0.05+i*7.7;
+  if(y<-0.40&&x0<OB&&x0+8.0>OA)x0=OA-0.04-8.0;   // unterer Stab darf nicht durch die Aussparung laufen: endet davor
+  add(31,x0,y,s*(zo-(i%2)*0.012))}}   // Übergreifungsstoß nebeneinander: jeder zweite Stab um 1 Ø nach innen
+for(const y of[-0.36,-0.68])for(const s of[-1,1])for(let i=0;i<7;i++)add(32,0.3+i*4.1,y,s*zi);
+for(const s of[-1,1]){add(33,33.56-5.2,-0.30,s*zo);add(33,33.56-5.2,-0.30,s*zi)}add(33,33.56-5.2,-0.30,0);   // endet 4 cm vor der Stirnfläche
+for(const z of[-0.07,0,0.07])add(34,31.15,-0.47,z);
+// Pos. 35 je 2 Stäbe über und unter der Aussparung (Öffnung y = -0,40 … -0,80), mittig zur Öffnung
+for(const s of[-1,1]){const x0=(OA+OB)/2-1.0;add(35,x0,-0.345,s*zi);add(35,x0,-0.815,s*zo)}
+// Stützen
+const yTies=(n,a,b,off=0)=>Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1)+off);
+for(const xc of zones){
+  for(const[sx,sz]of[[-1,-1],[1,-1],[1,1],[-1,1]])add(1,xc+sx*0.18,-3.05,sz*0.18);
+  for(const[sx,sz]of[[-1,0],[1,0],[0,-1],[0,1]])add(2,xc+sx*0.18,-3.05,sz*0.18);
+  yTies(19,-1.08,-2.96).forEach(y=>add(3,xc,y,0));
+  yTies(9,-1.13,-2.90).forEach(y=>add(4,xc,y,0));
+}
+for(const sx of[-1,1])for(const sz of[-1,0,1])add(1,XG12+sx*0.08,-3.05,sz*0.19);
+yTies(16,-1.08,-2.96).forEach(y=>add(5,XG12,y,0));
+yTies(15,-1.12,-2.92).forEach(y=>add(6,XG12,y,0));
+
+/* ---------- Biegeformen als Punktfolgen (lokal) ---------- */
+function rectPts(w,hh,d,mapF,q0){
+  const hk=Math.max(10*d,0.05),k=0.7071;
+  const TL=[-w/2,q0],TR=[w/2,q0],BR=[w/2,q0-hh],BL=[-w/2,q0-hh];
+  const pq=[[TL[0]+hk*k,TL[1]-hk*k,0],[TL[0],TL[1],0],[TR[0],TR[1],0],[BR[0],BR[1],0],[BL[0],BL[1],0],[TL[0],TL[1],d*1.1],[TL[0]+hk*k,TL[1]-hk*k,d*1.1]];
+  return pq.map(([p,q,o])=>mapF(p,q,o));
+}
+function shapePts(s,d){
+  switch(s.t){
+    case 'straight':
+      if(s.axis==='z')return[V3(0,0,-s.L/2),V3(0,0,s.L/2)];
+      if(s.axis==='y')return[V3(0,0,0),V3(0,s.L,0)];
+      return[V3(0,0,0),V3(s.L,0,0)];
+    case 'hook':
+      return s.end==='start'?[V3(0,s.dir*s.h,0),V3(0,0,0),V3(s.L,0,0)]:[V3(0,0,0),V3(s.L,0,0),V3(s.L,s.dir*s.h,0)];
+    case 'stirrup':
+      return rectPts(s.b-d,s.h-d,d,(p,q,o)=>V3(o,q,p),-d/2);
+    case 'tie':{
+      const hh=s.a-d;return rectPts(s.b-d,hh,d,(p,q,o)=>V3(q,o,p),hh/2);}
+    case 'diamond':{
+      const r=s.s*0.7071-d/2*1.41, hk=Math.max(10*d,0.05);
+      const v=[[r,0],[0,r],[-r,0],[0,-r]];
+      const a=v[0],inw=[-0.7071,0.7071];
+      const pts=[[a[0]-hk*0.92,a[1]+hk*0.39,0],[a[0],a[1],0],[v[1][0],v[1][1],0],[v[2][0],v[2][1],0],[v[3][0],v[3][1],0],[a[0],a[1],d*1.1],[a[0]-hk*0.92,a[1]-hk*0.39,d*1.1]];
+      return pts.map(([x,z,y])=>V3(x,y,z));}
+    case 'poly':
+      return s.pts.map(([x,y])=>V3(x,y,0));
+    case 'shook':{
+      const L=s.L/2,r=0.03;
+      return[V3(-L+0.035,0,r),V3(-L,0,r),V3(-L,0,0),V3(L,0,0),V3(L,0,-r),V3(L-0.035,0,-r)];}
+  }
+}
+function sample(pts,r){
+  if(pts.length<3)return pts.map(p=>p.clone());
+  const out=[pts[0].clone()];
+  for(let i=1;i<pts.length-1;i++){
+    const a=pts[i-1],b=pts[i],c=pts[i+1];
+    const v1=a.clone().sub(b),v2=c.clone().sub(b);
+    const rr=Math.min(r,v1.length()/2.05,v2.length()/2.05);
+    const p1=b.clone().add(v1.normalize().multiplyScalar(rr)),p2=b.clone().add(v2.normalize().multiplyScalar(rr));
+    const seg=8;
+    for(let k=0;k<=seg;k++){const t=k/seg,u=1-t;
+      out.push(V3(u*u*p1.x+2*u*t*b.x+t*t*p2.x,u*u*p1.y+2*u*t*b.y+t*t*p2.y,u*u*p1.z+2*u*t*b.z+t*t*p2.z))}
+  }
+  out.push(pts[pts.length-1].clone());
+  return out;
+}
+function sweep(pts,rad,radial,caps){
+  const n=pts.length,pos=[],nor=[],idx=[],T=[];
+  for(let i=0;i<n;i++){let t;
+    if(i===0)t=pts[1].clone().sub(pts[0]);else if(i===n-1)t=pts[n-1].clone().sub(pts[n-2]);
+    else t=pts[i+1].clone().sub(pts[i]).normalize().add(pts[i].clone().sub(pts[i-1]).normalize());
+    T.push(t.normalize())}
+  let N=Math.abs(T[0].y)<0.9?V3(0,1,0):V3(1,0,0);
+  N.sub(T[0].clone().multiplyScalar(T[0].dot(N))).normalize();
+  for(let i=0;i<n;i++){
+    if(i>0){N.sub(T[i].clone().multiplyScalar(T[i].dot(N))).normalize()}
+    const B=T[i].clone().cross(N);
+    for(let j=0;j<radial;j++){const a=2*Math.PI*j/radial,cx=Math.cos(a),sx=Math.sin(a);
+      const dx=N.x*cx+B.x*sx,dy=N.y*cx+B.y*sx,dz=N.z*cx+B.z*sx;
+      pos.push(pts[i].x+dx*rad,pts[i].y+dy*rad,pts[i].z+dz*rad);nor.push(dx,dy,dz)}
+  }
+  for(let i=0;i<n-1;i++)for(let j=0;j<radial;j++){
+    const a=i*radial+j,b=i*radial+(j+1)%radial,c=(i+1)*radial+j,d=(i+1)*radial+(j+1)%radial;
+    idx.push(a,c,b,b,c,d)}
+  if(caps){for(const[e,sgn]of[[0,-1],[n-1,1]]){
+    const base=pos.length/3,p=pts[e],t=T[e];
+    pos.push(p.x,p.y,p.z);nor.push(t.x*sgn,t.y*sgn,t.z*sgn);
+    for(let j=0;j<radial;j++){const k=e*radial+j;pos.push(pos[k*3],pos[k*3+1],pos[k*3+2]);nor.push(t.x*sgn,t.y*sgn,t.z*sgn)}
+    for(let j=0;j<radial;j++){const a=base+1+j,b=base+1+(j+1)%radial;if(sgn<0)idx.push(base,b,a);else idx.push(base,a,b)}}}
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute('normal',new THREE.Float32BufferAttribute(nor,3));
+  g.setIndex(idx);g.computeBoundingSphere();g.computeBoundingBox();return g;
+}
+
+/* ---------- Szene ---------- */
+const cv=document.getElementById('cv'),stage=document.getElementById('stage');
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(35,1,0.01,400);
+const controls=new THREE.OrbitControls(camera,cv);
+controls.enableDamping=true;controls.dampingFactor=0.09;controls.zoomSpeed=1.1;
+scene.add(new THREE.HemisphereLight(0xf2f5ff,0x5b5550,0.85));
+const sun=new THREE.DirectionalLight(0xffffff,0.95);sun.position.set(-8,14,10);scene.add(sun);
+const fill=new THREE.DirectionalLight(0xffffff,0.35);fill.position.set(10,-4,-8);scene.add(fill);
+
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let thick=1,colorMode='d',showCon=true,sel=null;
+const hidden=new Set();
+const meshes={},proxies={};
+const steel=new THREE.Color('#8b9196');
+
+function build(){
+  for(const p in meshes){scene.remove(meshes[p]);scene.remove(proxies[p]);meshes[p].geometry.dispose();proxies[p].geometry.dispose()}
+  for(const p in P){
+    const o=P[p];if(!o.inst.length)continue;
+    const d=o.d/1000,r=d/2*thick;
+    const pts=sample(shapePts(o.shape,d),Math.max(2.5*d,0.015));
+    const g=sweep(pts,r,o.d>=16?14:10,true);
+    const gp=sweep(pts,Math.max(r*2.5,0.035),5,false);
+    const mat=new THREE.MeshStandardMaterial({color:DCOL[o.d],metalness:0.35,roughness:0.5,transparent:true,opacity:1});
+    const m=new THREE.InstancedMesh(g,mat,o.inst.length);
+    const pm=new THREE.InstancedMesh(gp,new THREE.MeshBasicMaterial({visible:false}),o.inst.length);
+    const M=new THREE.Matrix4();
+    o.inst.forEach((q,i)=>{M.makeTranslation(q.x,q.y,q.z);m.setMatrixAt(i,M);pm.setMatrixAt(i,M)});
+    m.instanceMatrix.needsUpdate=true;pm.instanceMatrix.needsUpdate=true;m.frustumCulled=false;pm.frustumCulled=false;
+    m.userData.p=pm.userData.p=+p;
+    scene.add(m);scene.add(pm);meshes[p]=m;proxies[p]=pm;
+  }
+  applyLook();
+}
+
+// Beton
+const conGroup=new THREE.Group();scene.add(conGroup);
+let conMat,edgeMat;
+function box(x0,x1,y0,y1,z0,z1){
+  const g=new THREE.BoxGeometry(x1-x0,y1-y0,z1-z0);g.translate((x0+x1)/2,(y0+y1)/2,(z0+z1)/2);
+  conGroup.add(new THREE.Mesh(g,conMat));
+  conGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),edgeMat));
+}
+function buildConcrete(){
+  conGroup.clear();
+  const dark=cssv('--viewport').toLowerCase()<'#5';
+  conMat=new THREE.MeshStandardMaterial({color:dark?0x9aa3a6:0xb8bcb4,transparent:true,opacity:dark?0.07:0.16,depthWrite:false,roughness:1,metalness:0});
+  edgeMat=new THREE.LineBasicMaterial({color:new THREE.Color(cssv('--muted')),transparent:true,opacity:0.55});
+  box(0,OA,-1.0,0,-0.25,0.25);box(OA,OB,-0.40,0,-0.25,0.25);box(OA,OB,-1.0,-0.80,-0.25,0.25);box(OB,XSTEP,-1.0,0,-0.25,0.25);box(XSTEP,33.6,-0.6,0,-0.25,0.25);
+  for(const xc of zones)box(xc-0.25,xc+0.25,-3.1,-1.0,-0.25,0.25);
+  box(XG12-0.125,XG12+0.125,-3.1,-1.0,-0.26,0.26);
+  conGroup.visible=showCon;
+}
+// Achsbeschriftung
+const axisGroup=new THREE.Group();scene.add(axisGroup);
+function label(txt,x,y,w){
+  const c=document.createElement('canvas'),s=4,W=w*32*s,Hh=32*s;c.width=W;c.height=Hh;
+  const g=c.getContext('2d');g.fillStyle=cssv('--panel');g.strokeStyle=cssv('--ink');g.lineWidth=2.4*s;
+  g.beginPath();if(w===1)g.arc(W/2,Hh/2,Hh/2-2*s,0,7);else if(g.roundRect)g.roundRect(2*s,2*s,W-4*s,Hh-4*s,Hh/2);else g.rect(2*s,2*s,W-4*s,Hh-4*s);g.fill();g.stroke();
+  g.fillStyle=cssv('--ink');g.font=`600 ${15*s}px "IBM Plex Mono",monospace`;g.textAlign='center';g.textBaseline='middle';g.fillText(txt,W/2,Hh/2+s);
+  const t=new THREE.CanvasTexture(c);t.anisotropy=4;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false}));sp.scale.set(0.42*w,0.42,1);sp.position.set(x,y,0);sp.renderOrder=5;
+  axisGroup.add(sp);
+}
+function buildAxes(){
+  axisGroup.children.forEach(o=>{o.material.map&&o.material.map.dispose()});axisGroup.clear();
+  const lm=new THREE.LineDashedMaterial({color:new THREE.Color(cssv('--muted')),dashSize:0.08,gapSize:0.06});
+  for(const k in X){label(k,X[k],0.85,1);
+    const g=new THREE.BufferGeometry().setFromPoints([V3(X[k],0.62,0),V3(X[k],0.05,0)]);const l=new THREE.Line(g,lm);l.computeLineDistances();axisGroup.add(l)}
+  label('G/12',XG12,-3.45,2.1);for(const k of[17,15,13])label('G/'+k,X[k],-3.45,2.1);
+}
+
+function applyLook(){
+  for(const p in meshes){
+    const m=meshes[p],o=P[p],mat=m.material;
+    m.visible=!hidden.has(o.g);
+    mat.color.set(colorMode==='d'?DCOL[o.d]:steel);
+    if(sel===null){mat.opacity=1;mat.transparent=false;mat.depthWrite=true;mat.emissive.setRGB(0,0,0)}
+    else if(+p===sel){mat.opacity=1;mat.transparent=false;mat.depthWrite=true;mat.color.set(cssv('--hl'));mat.emissive.set(cssv('--hl'))}
+    else{mat.transparent=true;mat.opacity=0.09;mat.depthWrite=false;mat.emissive.setRGB(0,0,0)}
+    mat.needsUpdate=true;
+  }
+}
+function themeChanged(){
+  scene.background=new THREE.Color(cssv('--viewport'));
+  buildConcrete();buildAxes();applyLook();
+}
+
+/* ---------- Kamera ---------- */
+let anim=null;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function fly(target,pos){
+  if(reduce){controls.target.copy(target);camera.position.copy(pos);return}
+  anim={t0:performance.now(),ft:controls.target.clone(),fp:camera.position.clone(),tt:target,tp:pos};
+}
+const views={
+  all:()=>fly(V3(16.8,-1.1,0),V3(3.5,13,40)),
+  a17:()=>fly(V3(8.4,-0.75,0),V3(5.0,1.2,3.6)),
+  sec:()=>fly(V3(16.0,-0.5,0),V3(18.3,-0.42,0.0001)),
+};
+function focusPos(p){
+  const o=P[p];if(!o.inst.length)return;
+  const bb=new THREE.Box3();const g=meshes[p].geometry.boundingBox;
+  o.inst.forEach(q=>{bb.expandByPoint(V3(q.x+g.min.x,q.y+g.min.y,q.z+g.min.z));bb.expandByPoint(V3(q.x+g.max.x,q.y+g.max.y,q.z+g.max.z))});
+  const c=bb.getCenter(V3()),sz=bb.getSize(V3()).length();
+  const dist=Math.min(Math.max(sz*1.25,1.6),48);
+  const dir=camera.position.clone().sub(controls.target).normalize();
+  if(Math.abs(dir.y)>0.95)dir.set(-0.4,0.35,0.85).normalize();
+  fly(c,c.clone().add(dir.multiplyScalar(dist)));
+}
+
+/* ---------- Auswahl ---------- */
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+let down=null;
+cv.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY,t:performance.now()}});
+cv.addEventListener('pointerup',e=>{
+  if(!down)return;const moved=Math.hypot(e.clientX-down.x,e.clientY-down.y);
+  if(moved<7&&performance.now()-down.t<600)pick(e);down=null});
+cv.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||e.buttons)return;hover(e)});
+cv.addEventListener('pointerleave',()=>{tag.hidden=true});
+const tag=document.getElementById('tag');
+function hit(e){
+  const r=cv.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+  ray.setFromCamera(ndc,camera);
+  const objs=Object.keys(proxies).filter(p=>meshes[p].visible).map(p=>proxies[p]);
+  const hs=ray.intersectObjects(objs,false);
+  return hs.length?hs[0].object.userData.p:null;
+}
+function hover(e){
+  const p=hit(e);
+  if(p===null){tag.hidden=true;cv.style.cursor='';return}
+  const o=P[p],r=stage.getBoundingClientRect();
+  tag.textContent=`Pos. ${o.lab||p} · ${o.n} Ø${o.d} · lg = ${o.lgTxt||fmt(o.lg)} m`;
+  tag.style.left=(e.clientX-r.left)+'px';tag.style.top=(e.clientY-r.top)+'px';tag.hidden=false;cv.style.cursor='pointer';
+}
+function pick(e){const p=hit(e);select(p,false)}
+function select(p,focus){
+  sel=p;applyLook();renderPanel();
+  if(p!==null&&focus)focusPos(p);
+}
+
+/* ---------- Biegeform-Skizze ---------- */
+function shapeSVG(o){
+  const s=o.shape,W=320,H=170;let g='',body='';
+  const path=d=>`<path class="shpglow" d="${d}"/><path class="shp" d="${d}"/>`;
+  const dim=(x1,y1,x2,y2,t,tx,ty,anchor='middle')=>`<line class="dl" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/><line class="dl" x1="${x1}" y1="${y1-5}" x2="${x1}" y2="${y1+5}"/><line class="dl" x1="${x2}" y1="${y2-5}" x2="${x2}" y2="${y2+5}"/><text class="dt" x="${tx}" y="${ty}" text-anchor="${anchor}">${t}</text>`;
+  const vdim=(x,y1,y2,t)=>`<line class="dl" x1="${x}" y1="${y1}" x2="${x}" y2="${y2}"/><line class="dl" x1="${x-5}" y1="${y1}" x2="${x+5}" y2="${y1}"/><line class="dl" x1="${x-5}" y1="${y2}" x2="${x+5}" y2="${y2}"/><text class="dt" x="${x+9}" y="${(y1+y2)/2+5}">${t}</text>`;
+  if(s.t==='straight'){
+    body=path(`M30 95 H290`)+dim(30,60,290,60,cm(s.L),160,50);
+  }else if(s.t==='hook'){
+    const up=s.dir>0,hh=up?40:60,ht=s.hTxt||cm(s.h);
+    const y=up?115:65;
+    if(s.end==='start'){body=path(`M40 ${up?y-hh:y+hh} V${y} H290`)+dim(40,up?140:40,290,up?140:40,cm(s.L),165,up?160:30)+`<text class="dt" x="${48}" y="${up?y-hh/2+5:y+hh/2+5}">${ht}</text>`}
+    else{body=path(`M30 ${y} H280 V${up?y-hh:y+hh}`)+dim(30,up?140:40,280,up?140:40,cm(s.L),155,up?160:30)+`<text class="dt" x="${272}" y="${up?y-hh/2+5:y+hh/2+5}" text-anchor="end">${ht}</text>`}
+  }else if(s.t==='stirrup'||s.t==='tie'){
+    const bw=s.t==='stirrup'?s.b:s.b, bh=s.t==='stirrup'?s.h:s.a;
+    const sc=Math.min(170/bw,120/bh),w=Math.max(bw*sc,26),h=Math.max(bh*sc,26);
+    const x0=(W-w)/2-14,y0=(H-h)/2+4;
+    body=path(`M${x0+16} ${y0+16} L${x0} ${y0} H${x0+w} V${y0+h} H${x0} V${y0} L${x0+18} ${y0+18}`)
+      +dim(x0,y0+h+18,x0+w,y0+h+18,cm(bw),x0+w/2,y0+h+36)+vdim(x0+w+18,y0,y0+h,cm(bh));
+  }else if(s.t==='diamond'){
+    const r=55,cx=150,cy=88;
+    body=path(`M${cx+r-14} ${cy-8} L${cx+r} ${cy} L${cx} ${cy-r} L${cx-r} ${cy} L${cx} ${cy+r} L${cx+r} ${cy} L${cx+r-14} ${cy+8}`)
+      +`<text class="dt" x="${cx+r/2+12}" y="${cy+r/2+14}">${cm(s.s)}</text><text class="dt" x="${cx+r/2+12}" y="${cy-r/2-4}">${cm(s.s)}</text>`;
+  }else if(s.t==='poly'){
+    const seg=[];for(let i=1;i<s.pts.length;i++){const[a,b]=s.pts[i-1],[c,d]=s.pts[i];seg.push([c-a,d-b])}
+    const mx=Math.max(...seg.map(([dx,dy])=>Math.hypot(dx,dy))),sc=200/mx;
+    let x=0,y=0;const q=[[0,0]];
+    for(const[dx,dy]of seg){const l=Math.hypot(dx,dy),L=Math.max(28,l*sc);x+=dx/l*L;y-=dy/l*L;q.push([x,y])}
+    const xs=q.map(p=>p[0]),ys=q.map(p=>p[1]),ox=(W-(Math.max(...xs)-Math.min(...xs)))/2-Math.min(...xs),oy=(H-(Math.max(...ys)-Math.min(...ys)))/2-Math.min(...ys);
+    const Q=q.map(([a,b])=>[a+ox,b+oy]);
+    body=path('M'+Q.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L'));
+    seg.forEach(([dx,dy],i)=>{const[a,b]=Q[i],[c,d]=Q[i+1],mxp=(a+c)/2,myp=(b+d)/2,hor=Math.abs(dy)<1e-9;
+      body+=`<text class="dt" x="${hor?mxp:mxp+10}" y="${hor?myp-10:myp+5}" text-anchor="${hor?'middle':'start'}">${cm(Math.hypot(dx,dy))}</text>`});
+  }else if(s.t==='shook'){
+    body=path(`M90 70 Q70 70 70 88 Q70 104 90 104 H230 Q250 104 250 120 Q250 136 230 136`)+dim(70,50,250,50,'≈ '+cm(o.lg),160,40);
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Biegeform Pos. ${o.p}">${body}</svg>`;
+}
+
+/* ---------- Panel ---------- */
+const pin=document.getElementById('pin');
+const kgm=d=>0.00617*d*d;
+function legend(){return `<div class="legend">${Object.keys(DCOL).map(d=>`<span><i class="sw" style="background:${DCOL[d]}"></i>Ø${d}</span>`).join('')}</div>`}
+function renderPanel(){
+  if(sel!==null){renderDetail(P[sel]);return}
+  let tot=0;Object.values(P).forEach(o=>tot+=o.n*o.lg*kgm(o.d));
+  let h=`<div class="ph"><h2>Stahlliste</h2><span class="small">${Object.keys(P).length} Positionen · ${fmt(tot/1000,1)} t</span></div>${legend()}`;
+  for(const[g,name]of GROUPS){
+    const rows=Object.values(P).filter(o=>o.g===g);
+    h+=`<div class="grp"><div class="gh"><h3>${name}</h3><button class="eye" data-g="${g}" aria-pressed="${!hidden.has(g)}">${hidden.has(g)?'ausgeblendet':'sichtbar'}</button></div>`;
+    for(const o of rows)h+=`<button class="row" data-p="${o.p}"><span class="pc" style="color:${DCOL[o.d]}">${o.lab||o.p}</span><span class="rmain">${o.n} Ø${o.d}${o.est?' <span class="est">Lage ca.</span>':''}</span><span class="rlg">${o.lgTxt||fmt(o.lg)} m</span></button>`;
+    h+=`</div>`;
+  }
+  h+=`<p class="foot">Abgelesen aus dem Foto eines Bewehrungsplans. Anzahl, Durchmesser, Schnittlängen und Biegemaße stammen aus Stahlliste und Biegeformen. Querschnitt 50 × 100 cm (Endbereich 60 cm) aus den Bügelmaßen abgeleitet. Positionen mit „Lage ca.“ sind im Modell plausibel angeordnet, ihre genaue Lage war im Foto nicht eindeutig. Bügel Pos. 44–47 in Abschnitten nach der Ansicht; Anpassung an die Feldlänge je Feld: ${fitTxt.map(v=>(v>0?'+':'')+v+' %').join(' · ')}. Aussparung 50 × 40 cm bei G/12 eingetragen.</p>`;
+  pin.innerHTML=h;
+  pin.querySelectorAll('.row').forEach(b=>b.onclick=()=>select(+b.dataset.p,true));
+  pin.querySelectorAll('.eye').forEach(b=>b.onclick=()=>{const g=b.dataset.g;hidden.has(g)?hidden.delete(g):hidden.add(g);applyLook();renderPanel()});
+}
+function renderDetail(o){
+  const L=o.n*o.lg,kg=L*kgm(o.d);
+  const shapeName={straight:'gerader Stab',hook:'Stab mit Endhaken',stirrup:'Bügel, geschlossen, 135°-Haken',tie:'Stützenbügel, geschlossen',diamond:'Rautenbügel',shook:'S-Haken',poly:'gebogener Stab'}[o.shape.t];
+  pin.innerHTML=`<div class="detail">
+    <button class="back" id="back">← Alle Positionen</button>
+    <div class="dhead"><span class="pc" style="color:${colorMode==='d'?DCOL[o.d]:'var(--ink)'}">${o.lab||o.p}</span>
+      <div><h2>${o.n} Ø ${o.d}</h2><p>BSt III · lg = ${o.lgTxt||fmt(o.lg)} m</p></div></div>
+    <div class="shapebox"><div class="cap"><span>Biegeform</span><span>Maße in cm</span></div>${shapeSVG(o)}</div>
+    <dl class="facts">
+      <dt>Lage</dt><dd class="txt">${o.where}</dd>
+      <dt>Form</dt><dd class="txt">${shapeName}</dd>
+      <dt>Gesamtlänge</dt><dd>${fmt(L)} m</dd>
+      <dt>Gewicht</dt><dd>${fmt(kg,1)} kg <span class="small">(${fmt(kgm(o.d),3)} kg/m)</span></dd>
+      <dt>Im Modell</dt><dd>${o.inst.length} Stück${o.inst.length!==o.n?' <span class="small">(Liste: '+o.n+')</span>':''}</dd>
+    </dl>
+    ${o.est?'<span class="est" style="align-self:flex-start">Lage im Modell geschätzt</span>':''}
+    ${o.note?`<p class="note">${o.note}</p>`:''}
+    <button class="tbtn" id="focus" style="align-self:flex-start">Heranzoomen</button>
+  </div>`;
+  document.getElementById('back').onclick=()=>select(null);
+  document.getElementById('focus').onclick=()=>focusPos(o.p);
+  pin.parentElement.scrollTop=0;
+}
+
+/* ---------- Bedienleiste ---------- */
+const $=id=>document.getElementById(id);
+$('v-all').onclick=views.all;$('v-17').onclick=views.a17;$('v-sec').onclick=views.sec;
+$('t-con').onclick=e=>{showCon=!showCon;conGroup.visible=showCon;e.currentTarget.setAttribute('aria-pressed',showCon)};
+function setThick(t){thick=t;$('th1').setAttribute('aria-pressed',t===1);$('th3').setAttribute('aria-pressed',t===3);build()}
+$('th1').onclick=()=>setThick(1);$('th3').onclick=()=>setThick(3);
+function setColor(c){colorMode=c;$('c-d').setAttribute('aria-pressed',c==='d');$('c-s').setAttribute('aria-pressed',c==='s');applyLook();renderPanel()}
+$('c-d').onclick=()=>setColor('d');$('c-s').onclick=()=>setColor('s');
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&sel!==null)select(null);
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();shiftTo(controls.target.x+(e.key==='ArrowRight'?1:-1)*(e.shiftKey?2:0.5))}
+});
+
+/* ---------- Drehpunkt in Längsrichtung ---------- */
+const st=$('st'),sto=$('sto'),axj=$('axj');
+let sliding=false;
+function shiftTo(x){
+  x=Math.max(-1,Math.min(34.6,x));anim=null;
+  const dx=x-controls.target.x;controls.target.x+=dx;camera.position.x+=dx;
+}
+st.addEventListener('input',()=>{sliding=true;shiftTo(+st.value)});
+st.addEventListener('change',()=>{sliding=false});
+const axKeys=['18','17','16','15','14','13','12','11'];
+axj.innerHTML=axKeys.map(k=>`<button data-x="${X[k]}" aria-label="Drehpunkt auf Achse ${k}">${k}</button>`).join('');
+axj.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  const x=+b.dataset.x,dx=x-controls.target.x;
+  fly(V3(x,controls.target.y,controls.target.z),camera.position.clone().add(V3(dx,0,0)));
+});
+let lastX=null;
+function syncStation(){
+  const x=controls.target.x;if(Math.abs(x-(lastX??-99))<0.005)return;lastX=x;
+  if(!sliding)st.value=Math.max(0,Math.min(33.6,x));
+  let near='';for(const k of axKeys)if(Math.abs(X[k]-x)<0.3)near=' · Achse '+k;
+  sto.textContent='x = '+fmt(x)+' m'+near;
+  axj.querySelectorAll('button').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.x-x)<0.3));
+}
+// Doppelklick / Doppeltipp: Drehpunkt auf angeklickte Stelle
+function setPivotAt(e){
+  const r=cv.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+  ray.setFromCamera(ndc,camera);
+  const objs=Object.keys(proxies).filter(p=>meshes[p].visible).map(p=>proxies[p]);
+  let hs=ray.intersectObjects(objs,false);
+  if(!hs.length&&showCon)hs=ray.intersectObjects(conGroup.children.filter(o=>o.isMesh),false);
+  if(!hs.length)return;
+  const pt=hs[0].point,d=pt.clone().sub(controls.target);
+  fly(pt.clone(),camera.position.clone().add(d));
+}
+cv.addEventListener('dblclick',setPivotAt);
+let lastTap=0;
+cv.addEventListener('pointerup',e=>{if(e.pointerType!=='touch')return;const t=performance.now();if(t-lastTap<320)setPivotAt(e);lastTap=t});
+
+/* ---------- 3D Rot/Cyan (Anaglyph) ---------- */
+// Linkes und rechtes Bild über StereoCamera, gemischt mit den Dubois-Matrizen (wie three.js AnaglyphEffect).
+// Konvergenz auf dem Drehpunkt, Augenabstand 1/30 des Betrachtungsabstands: gleichmäßige Tiefe beim Zoomen.
+let stereo3d=location.hash.toLowerCase().includes('3d');
+const stCam=new THREE.StereoCamera(),rtL=new THREE.WebGLRenderTarget(1,1),rtR=new THREE.WebGLRenderTarget(1,1);
+const anaMat=new THREE.ShaderMaterial({
+  uniforms:{mapLeft:{value:rtL.texture},mapRight:{value:rtR.texture},
+    mL:{value:new THREE.Matrix3().fromArray([0.4561,-0.0400822,-0.0152161,0.500484,-0.0378246,-0.0205971,0.176381,-0.0157589,-0.00546856])},
+    mR:{value:new THREE.Matrix3().fromArray([-0.0434706,0.378476,-0.0721527,-0.0879388,0.73364,-0.112961,-0.00155529,-0.0184503,1.2264])}},
+  vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}',
+  fragmentShader:'uniform sampler2D mapLeft;uniform sampler2D mapRight;uniform mat3 mL;uniform mat3 mR;varying vec2 vUv;'+
+    'void main(){vec4 l=texture2D(mapLeft,vUv),r=texture2D(mapRight,vUv);gl_FragColor=vec4(clamp(mL*l.rgb+mR*r.rgb,0.,1.),1.);}',
+  depthTest:false,depthWrite:false});
+const anaScene=new THREE.Scene(),anaCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+anaScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),anaMat));
+function renderAnaglyph(){
+  const s=renderer.getDrawingBufferSize(new THREE.Vector2());
+  if(rtL.width!==s.x||rtL.height!==s.y){rtL.setSize(s.x,s.y);rtR.setSize(s.x,s.y)}
+  const dist=camera.position.distanceTo(controls.target);camera.focus=dist;stCam.eyeSep=dist/30;
+  camera.updateMatrixWorld();stCam.update(camera);
+  renderer.setRenderTarget(rtL);renderer.clear();renderer.render(scene,stCam.cameraL);
+  renderer.setRenderTarget(rtR);renderer.clear();renderer.render(scene,stCam.cameraR);
+  renderer.setRenderTarget(null);renderer.render(anaScene,anaCam);
+}
+// Zurück zur AR-/Präsentationsansicht, 3D-Wahl wird mitgenommen
+const AR_URL='../';
+function setStereo(on){stereo3d=on;document.getElementById('toAR').href=AR_URL+(on?'#praesentation-3d':'#praesentation');document.getElementById('s2d').setAttribute('aria-pressed',!on);document.getElementById('s3d').setAttribute('aria-pressed',on)}
+document.getElementById('s2d').onclick=()=>setStereo(false);document.getElementById('s3d').onclick=()=>setStereo(true);
+setStereo(stereo3d);
+
+/* ---------- Werkzeug Verschieben ---------- */
+// Ein Finger bzw. linke Maustaste verschiebt die Ansicht; Antippen wählt weiterhin Stäbe aus
+document.getElementById('t-pan').onclick=e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';
+  e.currentTarget.setAttribute('aria-pressed',on);
+  controls.mouseButtons.LEFT=on?THREE.MOUSE.PAN:THREE.MOUSE.ROTATE;controls.touches.ONE=on?THREE.TOUCH.PAN:THREE.TOUCH.ROTATE};
+
+/* ---------- Start ---------- */
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe(stage);resize();
+themeChanged();build();renderPanel();
+controls.target.set(8.4,-0.75,0);camera.position.set(4.6,1.3,3.9);controls.update();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',themeChanged);
+new MutationObserver(themeChanged).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts)document.fonts.ready.then(buildAxes);
+
+const clock=performance.now();
+(function loop(now){
+  if(anim){const k=Math.min((now-anim.t0)/650,1),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    controls.target.lerpVectors(anim.ft,anim.tt,e);camera.position.lerpVectors(anim.fp,anim.tp,e);if(k>=1)anim=null}
+  controls.update();syncStation();
+  if(sel!==null&&meshes[sel]){meshes[sel].material.emissiveIntensity=reduce?0.45:0.3+0.28*Math.sin((now-clock)/240)}
+  if(stereo3d)renderAnaglyph();else renderer.render(scene,camera);
+  requestAnimationFrame(loop);
+})(performance.now());
+})();
+</script>
+
+</body></html>

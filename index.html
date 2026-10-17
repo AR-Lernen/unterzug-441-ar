@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Unterzug 441 AR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Modellbühne füllt den Schirm, Bedienleiste wie ein Planschriftfeld unten */
+:root{
+  --paper:#e8ebe4; --panel:#f5f6f2; --ink:#1c2a2e; --muted:#5a6869; --line:#c8cfc6;
+  --accent:#1f5ca3; --stage:#dde2da; --hl:#e8a400;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12181b; --panel:#182024; --ink:#e2e8e4; --muted:#8e9c9b; --line:#2b373b;
+  --accent:#78aef0; --stage:#0e1315; --hl:#ffc433; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12181b; --panel:#182024; --ink:#e2e8e4; --muted:#8e9c9b; --line:#2b373b;
+  --accent:#78aef0; --stage:#0e1315; --hl:#ffc433; color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;overflow:hidden}
+.app{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto}
+.stage{position:relative;overflow:hidden;min-height:0;background:var(--stage)}
+model-viewer{width:100%;height:100%;background:transparent;--poster-color:transparent}
+.titlecard{position:absolute;left:16px;top:14px;pointer-events:none;max-width:calc(100% - 32px)}
+.eyebrow{font:11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:2px 0 0;font:700 30px/1 var(--f-display);letter-spacing:.01em;text-wrap:balance}
+h1 span{color:var(--accent)}
+.load{position:absolute;left:16px;top:70px;font:12px var(--f-mono);color:var(--muted)}
+.arbtn{position:absolute;right:16px;bottom:16px;font:600 15px var(--f-body);color:var(--panel);background:var(--ink);border:0;border-radius:6px;padding:11px 16px;cursor:pointer}
+.arbtn:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.noar{position:absolute;right:16px;bottom:16px;max-width:min(330px,calc(100% - 32px));font-size:12.5px;line-height:1.45;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.dim{font:500 12px var(--f-mono);background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px 6px;white-space:nowrap;pointer-events:none}
+.dim small{display:block;font-size:11px;color:var(--muted)}
+.bar{background:var(--panel);border-top:1px solid var(--line);padding-inline:16px;padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:12px 22px;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld>span{font:600 12px var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper)}
+.seg button{font:500 13.5px/1 var(--f-body);color:var(--ink);background:transparent;border:0;padding:9px 11px;cursor:pointer;white-space:nowrap}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.size{font:500 14px var(--f-mono);font-variant-numeric:tabular-nums;min-width:0}
+.size small{display:block;font:12px var(--f-body);color:var(--muted);margin-top:3px}
+.chk{display:flex;align-items:center;gap:7px;font-size:14px;cursor:pointer}
+.chk input{accent-color:var(--accent);width:16px;height:16px}
+.legend .sw{display:flex;flex-wrap:wrap;gap:4px 10px;font:12.5px var(--f-mono)}
+.legend .sw span{display:inline-flex;align-items:center;gap:4px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.est{margin:0;flex:1 1 260px;font-size:12.5px;line-height:1.4;color:var(--muted)}
+.lnk{font:600 13.5px var(--f-body);color:var(--accent);text-decoration:none;white-space:nowrap}
+.lnk:hover{text-decoration:underline}
+.stage canvas.st3d{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.stbar{position:absolute;right:16px;top:14px;display:flex;gap:6px;z-index:2}
+.gest{position:absolute;left:16px;bottom:12px;margin:0;max-width:calc(100% - 32px);font:12px var(--f-body);color:var(--muted);pointer-events:none;z-index:2}
+.stbtn{font:600 13px var(--f-body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 11px;cursor:pointer}
+.cap{position:absolute;left:16px;top:72px;max-width:calc(100% - 32px);font:600 15px var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--panel);background:var(--ink);border-radius:4px;padding:6px 10px;pointer-events:none}
+.titlecard,.load,.cap,.noar{z-index:2}
+.stage.sbs .titlecard,.stage.sbs .cap,.stage.sbs .load,.stage.sbs .noar,.stage.sbs .stbar,.stage.sbs .gest{display:none}
+.tbtn{font:600 13.5px/1 var(--f-body);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:9px 12px;cursor:pointer;white-space:nowrap}
+.tbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.hint3d{margin:0;flex:1 1 220px;font-size:12.5px;line-height:1.4;color:var(--muted)}
+@media (max-width:640px){h1{font-size:24px}.bar{gap:10px 14px}.seg button{padding:8px 9px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage" id="stage">
+    <model-viewer id="mv" alt="Bewehrungsmodell Unterzug Pos. 441"
+      camera-controls touch-action="none" shadow-intensity="0.6" exposure="1.05"
+      ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor"
+      camera-orbit="-35deg 70deg auto" min-camera-orbit="auto auto 0m" interaction-prompt="none">
+      <button slot="ar-button" class="arbtn" id="arbtn">In AR ansehen</button>
+      <button slot="hotspot-L" class="dim" id="hL" data-position="0 0 0" data-normal="0 1 0"></button>
+      <button slot="hotspot-H" class="dim" id="hH" data-position="0 0 0" data-normal="1 0 0"></button>
+      <button slot="hotspot-B" class="dim" id="hB" data-position="0 0 0" data-normal="0 0 1"></button>
+    </model-viewer>
+    <div class="titlecard">
+      <div class="eyebrow">Bewehrungsmodell · AR-Ansicht</div>
+      <h1>Unterzug <span>Pos. 441</span></h1>
+    </div>
+    <canvas class="st3d" id="st3d" hidden aria-label="Stereo-3D-Ansicht des Bewehrungsmodells"></canvas>
+    <div class="load" id="load">Modell wird geladen …</div>
+    <div class="cap" id="cap" hidden></div>
+    <div class="stbar"><button class="stbtn" id="bReset">Ansicht zurücksetzen</button><button class="stbtn" id="bFull">Vollbild</button></div>
+    <p class="gest" id="gest">Ziehen: drehen · „✥ Verschieben“, zwei Finger oder rechte Maustaste: verschieben · Pinch oder Mausrad: zoomen</p>
+    <p class="noar" id="noar" hidden>AR ist auf diesem Gerät nicht verfügbar. Die Schaltfläche erscheint auf Handy oder Tablet (Android mit ARCore, iPhone/iPad mit iOS 12+). Modell und Maße lassen sich hier trotzdem prüfen.</p>
+  </div>
+
+  <div class="bar">
+    <div class="fld"><span>Variante</span>
+      <div class="seg" id="segV" role="group" aria-label="Variante"></div>
+    </div>
+    <button class="tbtn" id="bTour" aria-pressed="false">▶ Präsentation</button>
+    <button class="tbtn" id="bPan" aria-pressed="false" title="Ein Finger bzw. linke Maustaste verschiebt die Ansicht">✥ Verschieben</button>
+    <div class="fld"><span>Darstellung</span>
+      <div class="seg" id="segD" role="group" aria-label="Darstellung">
+        <button data-m="2d" aria-pressed="true">2D</button><button data-m="ana" aria-pressed="false">3D Rot/Cyan</button><button data-m="sbs" aria-pressed="false">3D Side-by-Side</button>
+      </div>
+    </div>
+    <p class="hint3d" id="hint3d" hidden></p>
+    <label class="chk" for="cDim"><input type="checkbox" id="cDim" checked> Maße zeigen</label>
+    <div class="size" id="size">–</div>
+    <div class="fld legend"><span>Farbe nach Ø</span><div class="sw" id="legend"></div></div>
+    <p class="est" id="est"></p>
+    <a class="lnk" href="modell/unterzug-441-modell.html">Interaktives 3D-Modell mit Stahlliste →</a>
+  </div>
+</div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<script>
+(function(){
+  const mv=document.getElementById('mv'),$=id=>document.getElementById(id),stage=$('stage');
+  // Varianten, Abmessungen, Achsen und Positionen schreibt tools/export.mjs nach models/varianten.json
+  let V=[],cur=null,base=null;
+  const f=(v,n=2)=>v.toFixed(n).replace('.',',');
+  const len=m=>m>=1?f(m)+' m':m>=0.1?f(m*100,1)+' cm':f(m*1000,0)+' mm';
+  const mb=b=>f(b/1e6,1)+' MB';
+  const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  // Einstellungen je Betrachter merken (Präsentation, Darstellung); ohne Speicher geht es auch
+  const store={get(){try{return JSON.parse(localStorage.getItem('ug441')||'{}')}catch(e){return{}}},
+    set(o){try{localStorage.setItem('ug441',JSON.stringify(Object.assign(store.get(),o)))}catch(e){}}};
+  function press(seg,btn){seg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn))}
+  $('segV').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;press($('segV'),b);select(V[+b.dataset.i])});
+  $('cDim').addEventListener('change',update);
+  function select(v){if(v===cur)return;cur=v;base=null;$('load').hidden=false;$('load').textContent='Modell wird geladen …';
+    mv.cameraOrbit='-35deg 70deg auto';mv.cameraTarget='auto auto auto';mv.fieldOfView='auto';if(!tour.on)mv.maxCameraOrbit='auto';
+    mv.setAttribute('ios-src','models/'+v.usdz);mv.src='models/'+v.glb;update()}
+  function update(){if(!cur)return;
+    const k=cur.massstab,[L,H,B]=cur.original,m=x=>k===1?len(x):len(x)+'<small>Modell '+len(x/k)+'</small>';
+    $('size').innerHTML=`${len(L/k)} × ${len(H/k)} × ${len(B/k)}<small>${k===1?'Originalgröße':'Maßstab 1:'+k+' · Original '+len(L)+' lang'} · GLB ${mb(cur.glbBytes)} · USDZ ${mb(cur.usdzBytes)}</small>`;
+    $('hL').innerHTML='Länge '+m(L);$('hH').innerHTML='Höhe '+m(H);$('hB').innerHTML='Breite '+m(B);
+    $('noar').hidden=!noAR||tour.on||stereo.on;$('gest').hidden=tour.on||!$('noar').hidden;
+    const show=$('cDim').checked&&!!base&&!tour.on&&!stereo.on;['hL','hH','hB'].forEach(i=>$(i).hidden=!show);
+    if(base){const{c,dm}=base,x1=c.x+dm.x/2,y0=c.y-dm.y/2,z1=c.z+dm.z/2;
+      mv.updateHotspot({name:'hotspot-L',position:`${c.x}m ${y0}m ${z1}m`});
+      mv.updateHotspot({name:'hotspot-H',position:`${x1}m ${c.y}m ${z1}m`});
+      mv.updateHotspot({name:'hotspot-B',position:`${x1}m ${y0}m ${c.z}m`});}
+  }
+  mv.addEventListener('load',()=>{$('load').hidden=true;base={c:mv.getBoundingBoxCenter(),dm:mv.getDimensions()};
+    if(tour.on)tour.keys=tourKeys();
+    if(stereo.on){stereo.load(mv.src);if(!tour.on)stereo.setCam(overviewCam())}
+    update()});
+  mv.addEventListener('error',()=>{$('load').hidden=false;$('load').textContent='Modell konnte nicht geladen werden.'});
+  let noAR=false;
+  customElements.whenDefined('model-viewer').then(()=>setTimeout(()=>{noAR=!mv.canActivateAR;update()},2500));
+
+  /* ---------- Präsentation: Umfahrung, Durchfahrt, Rotation am Knoten ---------- */
+  // Kamera wie bei model-viewer: Ziel (m), Azimut th und Polarwinkel ph (Grad), Abstand r (m)
+  const tour={on:false,t0:0,keys:null};
+  function fitRadius(L,H,B){const a=stage.clientWidth/Math.max(stage.clientHeight,1),v=15*Math.PI/180,h=Math.atan(Math.tan(v)*a);
+    return 0.92*0.5*Math.hypot(L,H,B)/Math.sin(Math.min(v,h))}
+  function overviewCam(){const{c,dm}=base;return{tx:c.x,ty:c.y,tz:c.z,th:-35,ph:70,r:fitRadius(dm.x,dm.y,dm.z)}}
+  function tourKeys(){if(!base||!cur)return null;
+    const k=cur.massstab,L=base.dm.x,H=base.dm.y,B=base.dm.z,R0=fitRadius(L,H,B);
+    const yb=H-0.5/k;                                   // Mitte des 1 m hohen Unterzugs unter OK
+    const rf=Math.min(1.4/k,L/4),rn=Math.min(5/k,R0*0.6);
+    const cols=(cur.achsen||[]).filter(a=>a.stuetze),node=cols.find(c=>c.name==='17')||cols[0]||{name:'',x:0};
+    const fly=Math.min(20,Math.max(8,L*k*0.55)),K=[];
+    const add=(dt,cap,o,lin)=>K.push({t:(K.length?K[K.length-1].t:0)+dt,cap,lin,...o});
+    const over={tx:0,ty:H/2,tz:0,ph:68,r:R0};
+    add(0,'Umfahrung',{...over,th:-35},true);
+    add(16,'Umfahrung',{...over,th:325});
+    add(5,'Durchfahrt entlang des Unterzugs',{tx:-L/2,ty:yb,tz:0,th:270,ph:84,r:rf},true);
+    add(fly,'Durchfahrt entlang des Unterzugs',{tx:L/2-rf,ty:yb,tz:0,th:270,ph:84,r:rf});
+    add(5,'Knoten Achse '+node.name,{tx:node.x,ty:yb-0.2/k,tz:0,th:300,ph:62,r:rn},true);
+    add(14,'Knoten Achse '+node.name,{tx:node.x,ty:yb-0.2/k,tz:0,th:660,ph:62,r:rn});
+    add(6,'Umfahrung',{...over,th:685});                 // 685° = -35°: nahtlos zum Anfang
+    mv.maxCameraOrbit=`auto auto ${(R0*1.3).toFixed(4)}m`;  // Übersicht darf über den Standardabstand hinaus
+    return K}
+  function tourAt(K,t){t%=K[K.length-1].t;let i=0;while(i<K.length-2&&t>K[i+1].t)i++;
+    const a=K[i],b=K[i+1];let u=(t-a.t)/(b.t-a.t);if(!a.lin)u=u*u*(3-2*u);
+    const p={cap:a.lin?a.cap:b.cap};for(const n of['tx','ty','tz','th','ph','r'])p[n]=a[n]+(b[n]-a[n])*u;return p}
+  function applyCam(p){if(stereo.on){stereo.setCam(p);return}
+    mv.cameraTarget=`${p.tx}m ${p.ty}m ${p.tz}m`;mv.cameraOrbit=`${p.th}deg ${p.ph}deg ${p.r}m`;mv.jumpCameraToGoal()}
+  function tourFrame(now){if(!tour.on)return;
+    if(tour.keys){const p=tourAt(tour.keys,(now-tour.t0)/1000);applyCam(p);if($('cap').textContent!==p.cap)$('cap').textContent=p.cap}
+    requestAnimationFrame(tourFrame)}
+  function setTour(on){if(on===tour.on)return;tour.on=on;store.set({tour:on});
+    $('bTour').setAttribute('aria-pressed',on);$('bTour').textContent=on?'■ Präsentation stoppen':'▶ Präsentation';$('cap').hidden=!on;
+    if(on){mv.fieldOfView='30deg';tour.keys=tourKeys();tour.t0=performance.now();requestAnimationFrame(tourFrame)}
+    else{mv.maxCameraOrbit='auto';if(stereo.on)stereo.syncControls()}
+    update()}
+  $('bTour').addEventListener('click',()=>setTour(!tour.on));
+  // Eingriff in die Ansicht beendet die Fahrt
+  for(const el of[mv,$('st3d')])el.addEventListener('pointerdown',()=>setTour(false));
+  mv.addEventListener('ar-status',e=>{if(e.detail.status==='session-started')setTour(false)});
+  new ResizeObserver(()=>{if(tour.on)tour.keys=tourKeys()}).observe(stage);
+
+  /* ---------- Werkzeug Verschieben: ein Finger / linke Maustaste verschiebt statt zu drehen ---------- */
+  // model-viewer kennt dafür keinen Modus; im Werkzeug übernimmt die Seite Ziehen, Pinch und Mausrad selbst.
+  const pan={on:false,pts:new Map()};
+  function setPan(on){pan.on=on;pan.pts.clear();$('bPan').setAttribute('aria-pressed',on);mv.cameraControls=!on;
+    mv.style.cursor=on?'move':'';if(stereo.on)stereo.panMode(on)}
+  $('bPan').addEventListener('click',()=>setPan(!pan.on));
+  function panBy(dx,dy){const o=mv.getCameraOrbit(),t=mv.getCameraTarget(),s=2*o.radius*Math.tan(mv.getFieldOfView()*Math.PI/360)/Math.max(mv.clientHeight,1);
+    const st=Math.sin(o.theta),ct=Math.cos(o.theta),sp=Math.sin(o.phi),cp=Math.cos(o.phi);
+    const R=[ct,0,-st],U=[-cp*st,sp,-cp*ct];                 // Bildschirm rechts / oben in Modellkoordinaten
+    mv.cameraTarget=`${t.x-(R[0]*dx-U[0]*dy)*s}m ${t.y-(R[1]*dx-U[1]*dy)*s}m ${t.z-(R[2]*dx-U[2]*dy)*s}m`;mv.jumpCameraToGoal()}
+  function zoomBy(f){const o=mv.getCameraOrbit();mv.cameraOrbit=`${o.theta}rad ${o.phi}rad ${o.radius*f}m`;mv.jumpCameraToGoal()}
+  mv.addEventListener('pointerdown',e=>{if(!pan.on)return;mv.setPointerCapture(e.pointerId);pan.pts.set(e.pointerId,{x:e.clientX,y:e.clientY})});
+  mv.addEventListener('pointermove',e=>{if(!pan.on||!pan.pts.has(e.pointerId))return;
+    const prev=pan.pts.get(e.pointerId),cur={x:e.clientX,y:e.clientY};
+    if(pan.pts.size===1)panBy(cur.x-prev.x,cur.y-prev.y);
+    else if(pan.pts.size===2){const [a,b]=[...pan.pts.entries()].map(([id,p])=>id===e.pointerId?cur:p),
+      [a0,b0]=[...pan.pts.values()];zoomBy(Math.hypot(a0.x-b0.x,a0.y-b0.y)/Math.max(Math.hypot(a.x-b.x,a.y-b.y),1))}
+    pan.pts.set(e.pointerId,cur)});
+  for(const ev of['pointerup','pointercancel'])mv.addEventListener(ev,e=>pan.pts.delete(e.pointerId));
+  mv.addEventListener('wheel',e=>{if(!pan.on)return;e.preventDefault();zoomBy(Math.exp(e.deltaY*0.0015))},{passive:false});
+
+  /* ---------- Ansicht zurücksetzen (nach Drehen, Verschieben, Zoomen) ---------- */
+  $('bReset').addEventListener('click',()=>{setTour(false);if(!base)return;
+    if(stereo.on){stereo.setCam(overviewCam());return}
+    mv.cameraTarget='auto auto auto';mv.cameraOrbit='-35deg 70deg auto';mv.fieldOfView='auto'});
+
+  /* ---------- Vollbild ---------- */
+  $('bFull').addEventListener('click',()=>{
+    if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+    else if(stage.requestFullscreen)stage.requestFullscreen().catch(()=>{$('bFull').hidden=true})});
+  document.addEventListener('fullscreenchange',()=>{$('bFull').textContent=document.fullscreenElement?'Vollbild beenden':'Vollbild'});
+  if(!stage.requestFullscreen)$('bFull').hidden=true;
+
+  /* ---------- Stereo-3D (three.js, nur bei Bedarf geladen) ---------- */
+  // ana: Rot/Cyan-Anaglyph für Papp-/Kunststoffbrillen; sbs: halbes Side-by-Side für 3D-TV und 3D-Beamer
+  const HINT={ana:'Rot/Cyan-Brille aufsetzen (rotes Glas links). Augenabstand passt sich dem Betrachtungsabstand an.',
+    sbs:'Bild im Vollbild auf 3D-Fernseher oder 3D-Beamer zeigen und dort den Modus „Side-by-Side“ wählen.'};
+  const stereo={on:false,mode:'2d',ready:null,
+    async init(){
+      const THREE=await import('three');
+      const [{GLTFLoader},{OrbitControls},{RoomEnvironment},{FullScreenQuad}]=await Promise.all([
+        import('three/addons/loaders/GLTFLoader.js'),import('three/addons/controls/OrbitControls.js'),
+        import('three/addons/environments/RoomEnvironment.js'),import('three/addons/postprocessing/Pass.js')]);
+      const cv=$('st3d'),r=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+      r.setPixelRatio(Math.min(devicePixelRatio,2));r.toneMapping=THREE.NeutralToneMapping;r.toneMappingExposure=1.05;
+      const scene=new THREE.Scene(),pm=new THREE.PMREMGenerator(r);
+      scene.environment=pm.fromScene(new RoomEnvironment(),0.04).texture;
+      const cam=new THREE.PerspectiveCamera(30,1,0.01,1000),ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;
+      const st=new THREE.StereoCamera(),rtL=new THREE.WebGLRenderTarget(1,1),rtR=new THREE.WebGLRenderTarget(1,1);
+      // Dubois-Matrizen wie in three/addons/effects/AnaglyphEffect.js
+      const quad=new FullScreenQuad(new THREE.ShaderMaterial({
+        uniforms:{mapLeft:{value:rtL.texture},mapRight:{value:rtR.texture},
+          colorMatrixLeft:{value:new THREE.Matrix3().fromArray([0.4561,-0.0400822,-0.0152161,0.500484,-0.0378246,-0.0205971,0.176381,-0.0157589,-0.00546856])},
+          colorMatrixRight:{value:new THREE.Matrix3().fromArray([-0.0434706,0.378476,-0.0721527,-0.0879388,0.73364,-0.112961,-0.00155529,-0.0184503,1.2264])}},
+        vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+        fragmentShader:'uniform sampler2D mapLeft;uniform sampler2D mapRight;uniform mat3 colorMatrixLeft;uniform mat3 colorMatrixRight;varying vec2 vUv;'+
+          'void main(){vec4 l=texture2D(mapLeft,vUv),rr=texture2D(mapRight,vUv);'+
+          'gl_FragColor=vec4(clamp(colorMatrixLeft*l.rgb+colorMatrixRight*rr.rgb,0.,1.),max(l.a,rr.a));'+
+          '\n#include <tonemapping_fragment>\n#include <colorspace_fragment>\n}'}));
+      let model=null,url=null,W=1,H=1;
+      const resize=()=>{W=Math.max(stage.clientWidth,1);H=Math.max(stage.clientHeight,1);r.setSize(W,H,false);
+        const pr=r.getPixelRatio();rtL.setSize(W*pr,H*pr);rtR.setSize(W*pr,H*pr);cam.aspect=W/H;cam.updateProjectionMatrix()};
+      new ResizeObserver(resize).observe(stage);resize();
+      this.load=u=>{if(u===url)return;url=u;new GLTFLoader().load(u,g=>{if(u!==url)return;
+        if(model)scene.remove(model);model=g.scene;
+        model.traverse(o=>{if(o.isMesh&&o.material.transparent)o.material.depthWrite=false});scene.add(model)})};
+      this.setCam=p=>{const T=new THREE.Vector3(p.tx,p.ty,p.tz),th=p.th*Math.PI/180,ph=p.ph*Math.PI/180;
+        cam.position.set(T.x+p.r*Math.sin(ph)*Math.sin(th),T.y+p.r*Math.cos(ph),T.z+p.r*Math.sin(ph)*Math.cos(th));
+        ctl.target.copy(T);cam.lookAt(T)};
+      this.syncControls=()=>ctl.update();
+      this.panMode=on=>{ctl.mouseButtons.LEFT=on?THREE.MOUSE.PAN:THREE.MOUSE.ROTATE;ctl.touches.ONE=on?THREE.TOUCH.PAN:THREE.TOUCH.ROTATE};
+      this.getCam=()=>{const d=cam.position.clone().sub(ctl.target),R=d.length();
+        return{tx:ctl.target.x,ty:ctl.target.y,tz:ctl.target.z,r:R,th:Math.atan2(d.x,d.z)*180/Math.PI,ph:Math.acos(d.y/R)*180/Math.PI}};
+      const frame=()=>{if(!this.on)return;requestAnimationFrame(frame);
+        if(!tour.on)ctl.update();
+        scene.background=new THREE.Color(cssv('--stage'));
+        // Konvergenz auf das Ziel, Augenabstand 1/30 des Abstands: angenehme Tiefe bei jedem Maßstab
+        const dist=cam.position.distanceTo(ctl.target);cam.focus=dist;st.eyeSep=dist/30;
+        cam.near=Math.max(dist/500,1e-4);cam.far=dist*50+100;cam.updateProjectionMatrix();cam.updateMatrixWorld();
+        st.update(cam);
+        if(this.mode==='ana'){r.setRenderTarget(rtL);r.clear();r.render(scene,st.cameraL);
+          r.setRenderTarget(rtR);r.clear();r.render(scene,st.cameraR);r.setRenderTarget(null);quad.render(r)}
+        else{r.setScissorTest(true);r.clear();
+          r.setViewport(0,0,W/2,H);r.setScissor(0,0,W/2,H);r.render(scene,st.cameraL);
+          r.setViewport(W/2,0,W/2,H);r.setScissor(W/2,0,W/2,H);r.render(scene,st.cameraR);
+          r.setScissorTest(false);r.setViewport(0,0,W,H)}};
+      this.start=()=>requestAnimationFrame(frame)},
+    async set(mode){
+      press($('segD'),$('segD').querySelector(`[data-m="${mode}"]`));store.set({mode});
+      $('hint3d').hidden=mode==='2d';$('hint3d').textContent=HINT[mode]||'';stage.classList.toggle('sbs',mode==='sbs');
+      if(mode==='2d'){if(this.on){const p=this.getCam();this.on=false;$('st3d').hidden=true;if(!tour.on)applyCam(p)}this.mode=mode;update();return}
+      this.mode=mode;
+      try{this.ready=this.ready||this.init();await this.ready}
+      catch(e){this.ready=null;$('hint3d').textContent='3D-Darstellung konnte nicht geladen werden (keine Verbindung zu cdn.jsdelivr.net?).';
+        press($('segD'),$('segD').querySelector('[data-m="2d"]'));stage.classList.remove('sbs');return}
+      if(this.mode!==mode)return;
+      if(!this.on){const o=mv.getCameraOrbit(),t=mv.getCameraTarget();
+        this.setCam({tx:t.x,ty:t.y,tz:t.z,th:o.theta*180/Math.PI,ph:o.phi*180/Math.PI,r:o.radius});
+        this.on=true;$('st3d').hidden=false;this.panMode(pan.on);this.load(mv.src);this.start()}
+      update()}};
+  $('segD').addEventListener('click',e=>{const b=e.target.closest('button');if(b)stereo.set(b.dataset.m)});
+
+  /* ---------- Start ---------- */
+  // Link-Anker: #praesentation, #3d, #sbs (kombinierbar, z. B. #praesentation-3d); sonst die zuletzt gewählte Einstellung
+  const hash=location.hash.slice(1).toLowerCase().split('-'),saved=store.get();
+  const wantTour=hash.includes('praesentation')||(!location.hash&&saved.tour===true);
+  const wantMode=hash.includes('sbs')?'sbs':hash.includes('3d')?'ana':(!location.hash&&saved.mode)||'2d';
+  fetch('models/varianten.json').then(r=>r.json()).then(d=>{V=d.varianten;
+    // Variante per Link-Anker wählen: #m50, #m25, #achse17, #m10, #ganz (kombinierbar, z. B. #m10-praesentation)
+    const key=v=>v.id.replace(/^unterzug-441-?/,'')||'ganz',start=V.find(v=>hash.includes(key(v)))||V[0];
+    $('segV').innerHTML=V.map((v,i)=>`<button data-i="${i}" aria-pressed="${v===start}">${v.titel}</button>`).join('');
+    const used=[...new Set(d.positionen.map(p=>p.durchmesser))].sort((a,b)=>a-b);
+    $('legend').innerHTML=used.map(x=>`<span><i style="background:${d.farben[x]}"></i>Ø${x}</span>`).join('');
+    const est=d.positionen.filter(p=>p.lageGeschaetzt).map(p=>p.position);
+    $('est').textContent=`Lage geschätzt: Pos. ${est.join(', ')}. In GLB und USDZ als „lageGeschaetzt“ gekennzeichnet.`;
+    select(start);
+    customElements.whenDefined('model-viewer').then(()=>{if(wantMode!=='2d')stereo.set(wantMode);if(wantTour)setTour(true)})})
+    .catch(()=>{$('load').textContent='Variantenliste konnte nicht geladen werden.'});
+})();
+</script>
+</body>
+</html>
