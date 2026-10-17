@@ -172,6 +172,20 @@ h1 span{color:var(--accent)}
   // Handy (Android): Scene Viewer, verankert das Modell stabiler im Raum, zeigt aber keine Positionsmarken.
   // VR-/MR-Brillen (Quest, PICO): WebXR, dort bleiben Marken und Infofenster in AR bedienbar.
   if(/OculusBrowser|Quest|Pico/i.test(navigator.userAgent))mv.setAttribute('ar-modes','webxr quick-look');
+  // Große Android-Tablets (z. B. Galaxy Tab S9 Ultra): Chrome lädt dort die Desktop-Website und meldet sich als Linux,
+  // model-viewer bietet dann keinen Scene Viewer an. Solche Geräte öffnen den Scene Viewer hier selbst
+  // (gleiche Parameter wie model-viewer). Fehlt er, kehrt Android mit #…-svfehlt zurück, dann gilt wieder Chrome-AR.
+  const ua=navigator.userAgent;
+  const tabletDesktop=/Linux/i.test(ua)&&!/Android|OculusBrowser|Quest|Pico/i.test(ua)&&navigator.maxTouchPoints>1&&!location.hash.includes('svfehlt');
+  mv.addEventListener('click',e=>{
+    if(!tabletDesktop||!cur||!e.target.closest('#arbtn'))return;
+    e.preventDefault();e.stopPropagation();setTour(false);
+    const page=location.href.split('#')[0],key=cur.id.replace(/^unterzug-441-?/,'')||'ganz';
+    const file=new URL('models/'+cur.glb,page).toString();
+    const params=new URLSearchParams({mode:'ar_preferred',disable_occlusion:'true',resizable:'false',title:'Unterzug Pos. 441 · '+cur.titel});
+    const a=document.createElement('a');
+    a.href=`intent://arvr.google.com/scene-viewer/1.2?${params}&file=${encodeURIComponent(file)}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${encodeURIComponent(page+'#'+key+'-svfehlt')}`+';end;';
+    document.body.appendChild(a);a.click();a.remove()},true);
 
   /* ---------- Positionsmarken: antippen zeigt Stückzahl, Ø, Länge und Lage ---------- */
   // Marken je Variante aus varianten.json (Punkt auf einem Stab der Position); in WebXR-AR bleiben sie antippbar
