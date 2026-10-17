@@ -13,7 +13,6 @@ VR-/MR-Brillen). Auf Android-Handys startet AR im Scene Viewer (stabil, ohne
 Marken), auf iPhone/iPad in Quick Look.
 
 Direkt starten per Link-Anker, z. B. `#m10` (Maßstab 1:10 für den Boden), `#m5` (1:5), `#ganz` (1:1),
-`#vorort` bzw. `#vorortstahl` (Knoten G/12 in 1:1 zum Ausrichten am Bauwerk),
 `#praesentation` oder `#3d`.
 
 Lagen mit dem Vermerk „Lage geschätzt“ sind im Modell plausibel angeordnet,
