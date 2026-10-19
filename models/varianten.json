@@ -392,7 +392,11 @@
      "y": 0.0453,
      "z": -0.003
     }
-   ]
+   ],
+   "glbFt": "unterzug-441-m50-ft.glb",
+   "usdzFt": "unterzug-441-m50-ft.usdz",
+   "glbFtBytes": 470840,
+   "usdzFtBytes": 1286219
   },
   {
    "id": "unterzug-441-m25",
@@ -785,7 +789,11 @@
      "y": 0.0905,
      "z": -0.006
     }
-   ]
+   ],
+   "glbFt": "unterzug-441-m25-ft.glb",
+   "usdzFt": "unterzug-441-m25-ft.usdz",
+   "glbFtBytes": 470840,
+   "usdzFtBytes": 1285841
   },
   {
    "id": "unterzug-441-achse17",
@@ -958,7 +966,11 @@
      "y": 2.1535,
      "z": 0.0715
     }
-   ]
+   ],
+   "glbFt": "unterzug-441-achse17-ft.glb",
+   "usdzFt": "unterzug-441-achse17-ft.usdz",
+   "glbFtBytes": 850728,
+   "usdzFtBytes": 2452158
   },
   {
    "id": "unterzug-441-m10",
@@ -1351,7 +1363,11 @@
      "y": 0.2263,
      "z": -0.015
     }
-   ]
+   ],
+   "glbFt": "unterzug-441-m10-ft.glb",
+   "usdzFt": "unterzug-441-m10-ft.usdz",
+   "glbFtBytes": 470836,
+   "usdzFtBytes": 1281922
   },
   {
    "id": "unterzug-441-m5",
@@ -1744,7 +1760,11 @@
      "y": 0.4526,
      "z": -0.03
     }
-   ]
+   ],
+   "glbFt": "unterzug-441-m5-ft.glb",
+   "usdzFt": "unterzug-441-m5-ft.usdz",
+   "glbFtBytes": 470836,
+   "usdzFtBytes": 1281543
   },
   {
    "id": "unterzug-441",
@@ -2137,7 +2157,11 @@
      "y": 2.2628,
      "z": -0.15
     }
-   ]
+   ],
+   "glbFt": "unterzug-441-ft.glb",
+   "usdzFt": "unterzug-441-ft.usdz",
+   "glbFtBytes": 470784,
+   "usdzFtBytes": 1275743
   },
   {
    "id": "unterzug-441-vorort17",
@@ -2316,7 +2340,11 @@
     "xc": 8.4,
     "hx": 0.25,
     "hz": 0.25
-   }
+   },
+   "glbFt": "unterzug-441-vorort17-ft.glb",
+   "usdzFt": "unterzug-441-vorort17-ft.usdz",
+   "glbFtBytes": 859144,
+   "usdzFtBytes": 2465912
   },
   {
    "id": "unterzug-441-vorort15",
@@ -2477,7 +2505,11 @@
     "xc": 16.8,
     "hx": 0.25,
     "hz": 0.25
-   }
+   },
+   "glbFt": "unterzug-441-vorort15-ft.glb",
+   "usdzFt": "unterzug-441-vorort15-ft.usdz",
+   "glbFtBytes": 724680,
+   "usdzFtBytes": 2062020
   },
   {
    "id": "unterzug-441-vorort13",
@@ -2644,7 +2676,11 @@
     "xc": 25.2,
     "hx": 0.25,
     "hz": 0.25
-   }
+   },
+   "glbFt": "unterzug-441-vorort13-ft.glb",
+   "usdzFt": "unterzug-441-vorort13-ft.usdz",
+   "glbFtBytes": 664464,
+   "usdzFtBytes": 1890051
   },
   {
    "id": "unterzug-441-vorortg12",
@@ -2851,7 +2887,11 @@
     "xc": 31,
     "hx": 0.125,
     "hz": 0.26
-   }
+   },
+   "glbFt": "unterzug-441-vorortg12-ft.glb",
+   "usdzFt": "unterzug-441-vorortg12-ft.usdz",
+   "glbFtBytes": 446744,
+   "usdzFtBytes": 1233879
   }
  ],
  "positionen": [

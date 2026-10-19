@@ -120,6 +120,7 @@ dl.facts dd.txt{font-family:var(--f-body)}
         <button id="v-all">Gesamt</button><button id="v-17">Achse 17</button><button id="v-sec">Schnitt</button>
       </div>
       <button class="tbtn" id="t-con" aria-pressed="true">Beton</button>
+      <button class="tbtn" id="t-ft" aria-pressed="false" title="Fertigteilträger quer zum Unterzug, Lage aus der Ansicht geschätzt">Fertigteilträger</button>
       <div class="seg" role="group" aria-label="Stabdicke">
         <button id="th1" aria-pressed="true">Ø echt</button><button id="th3" aria-pressed="false">Ø ×3</button>
       </div>
@@ -270,6 +271,14 @@ function distribute(segs,n){const tot=segs.reduce((s,[a,b])=>s+b-a,0),sp=tot/n,o
 const zones=[X[17],X[15],X[13]];
 // Bügelabschnitte wie in der Ansicht eingetragen: [Positionen, Stück, Abstand a in m]
 const OA=XSTEP-1.55, OB=XSTEP-1.05;            // Aussparung 50 cm, 1,05 m vor dem Sprung
+// Fertigteilträger quer zum Unterzug, aus der Ansicht abgelesen (Lage geschätzt): Raster 1,20 m ab Achse 18,
+// Trapezquerschnitt oben 30 / unten 22 cm, 7 … 57 cm unter OK; an der Aussparung entfällt einer. Im Modell je 2 m über die Seitenflächen.
+const FT={e:1.20,bo:0.30,bu:0.22,yo:-0.07,yu:-0.57,L:2.0,xs:[]};
+for(let x=FT.e;x<33.4;x+=FT.e)if(!(x>OA-0.2&&x<OB+0.2))FT.xs.push(+x.toFixed(2));
+function ftGeometry(){
+  const s=new THREE.Shape([V3(-FT.bu/2,FT.yu,0),V3(FT.bu/2,FT.yu,0),V3(FT.bo/2,FT.yo,0),V3(-FT.bo/2,FT.yo,0)]);
+  const zl=0.25+FT.L,g=new THREE.ExtrudeGeometry(s,{depth:2*zl,bevelEnabled:false});g.translate(0,0,-zl);return g;
+}
 const B10=[44,45],B12=[46,47];
 const SPANS=[
   [0.06,X[17]-0.25,[[B10,8,.175],[B10,9,.175],[[44],6,.19],[B10,6,.19],[B10,3,.19],[B12,3,.19],[B12,8,.175],[B12,7,.175]]],
@@ -480,6 +489,15 @@ function buildConcrete(){
   box(XG12-0.125,XG12+0.125,-3.1,-1.0,-0.26,0.26);
   conGroup.visible=showCon;
 }
+// Fertigteilträger (ein-/ausblendbar)
+const ftGroup=new THREE.Group();ftGroup.visible=false;scene.add(ftGroup);
+function buildPrecast(){
+  ftGroup.clear();
+  const g=ftGeometry(),eg=new THREE.EdgesGeometry(g),dark=cssv('--viewport').toLowerCase()<'#5';
+  const m=new THREE.MeshStandardMaterial({color:0xc9a27a,transparent:true,opacity:dark?0.22:0.35,depthWrite:false,roughness:1,metalness:0});
+  const lm=new THREE.LineBasicMaterial({color:0x8a6a4a,transparent:true,opacity:0.7});
+  for(const x of FT.xs){const a=new THREE.Mesh(g,m),l=new THREE.LineSegments(eg,lm);a.position.x=l.position.x=x;ftGroup.add(a,l)}
+}
 // Achsbeschriftung
 const axisGroup=new THREE.Group();scene.add(axisGroup);
 function label(txt,x,y,w){
@@ -512,7 +530,7 @@ function applyLook(){
 }
 function themeChanged(){
   scene.background=new THREE.Color(cssv('--viewport'));
-  buildConcrete();buildAxes();applyLook();
+  buildConcrete();buildPrecast();buildAxes();applyLook();
 }
 
 /* ---------- Kamera ---------- */
@@ -653,6 +671,7 @@ function renderDetail(o){
 /* ---------- Bedienleiste ---------- */
 const $=id=>document.getElementById(id);
 $('v-all').onclick=views.all;$('v-17').onclick=views.a17;$('v-sec').onclick=views.sec;
+$('t-ft').onclick=e=>{ftGroup.visible=!ftGroup.visible;e.currentTarget.setAttribute('aria-pressed',ftGroup.visible)};
 $('t-con').onclick=e=>{showCon=!showCon;conGroup.visible=showCon;e.currentTarget.setAttribute('aria-pressed',showCon)};
 function setThick(t){thick=t;$('th1').setAttribute('aria-pressed',t===1);$('th3').setAttribute('aria-pressed',t===3);build()}
 $('th1').onclick=()=>setThick(1);$('th3').onclick=()=>setThick(3);
