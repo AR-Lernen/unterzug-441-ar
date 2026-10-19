@@ -370,7 +370,8 @@ h1 span{color:var(--accent)}
   const hash=location.hash.slice(1).toLowerCase().split('-'),saved=store.get();
   const wantTour=hash.includes('praesentation')||(!location.hash&&saved.tour===true);
   const wantMode=hash.includes('sbs')?'sbs':hash.includes('3d')?'ana':(!location.hash&&saved.mode)||'2d';
-  fetch('models/varianten.json').then(r=>r.json()).then(d=>{V=d.varianten;FARBEN=d.farben;d.positionen.forEach(p=>POS[p.position]=p);
+  fetch('models/varianten.json').then(r=>r.json()).then(d=>{V=d.varianten.filter(v=>!v.vorOrt);   // Vor-Ort-Ausschnitte nur auf vorort.html
+    FARBEN=d.farben;d.positionen.forEach(p=>POS[p.position]=p);
     // Variante per Link-Anker wählen: #m50, #m25, #achse17, #m10, #m5, #ganz (kombinierbar, z. B. #m10-praesentation)
     const key=v=>v.id.replace(/^unterzug-441-?/,'')||'ganz',start=V.find(v=>hash.includes(key(v)))||V[0];
     $('segV').innerHTML=V.map((v,i)=>`<button data-i="${i}" aria-pressed="${v===start}">${v.titel}</button>`).join('');

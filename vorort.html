@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Unterzug 441 vor Ort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Vor-Ort-Modus: Vorschau oben, Bedienung unten; in AR liegt die Bedienung als DOM-Overlay über dem Kamerabild */
+:root{
+  --paper:#e8ebe4; --panel:#f5f6f2; --ink:#1c2a2e; --muted:#5a6869; --line:#c8cfc6;
+  --accent:#1f5ca3; --stage:#dde2da; --mark:#ffc400; --warn:#b3261e;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12181b; --panel:#182024; --ink:#e2e8e4; --muted:#8e9c9b; --line:#2b373b;
+  --accent:#78aef0; --stage:#0e1315; --warn:#ff8a80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12181b; --panel:#182024; --ink:#e2e8e4; --muted:#8e9c9b; --line:#2b373b;
+  --accent:#78aef0; --stage:#0e1315; --warn:#ff8a80; color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;overflow:hidden}
+.app{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto}
+.stage{position:relative;min-height:0;background:var(--stage)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.title{position:absolute;left:16px;top:14px;pointer-events:none}
+.eyebrow{font:11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:2px 0 0;font:700 28px/1 var(--f-display)}
+h1 span{color:var(--accent)}
+.load{position:absolute;left:16px;top:66px;font:12px var(--f-mono);color:var(--muted)}
+.bar{background:var(--panel);border-top:1px solid var(--line);padding-inline:16px;padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px;max-height:52vh;overflow-y:auto}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld>span{font:600 12px var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper);align-self:flex-start}
+.seg button{font:500 14px/1 var(--f-body);color:var(--ink);background:transparent;border:0;padding:10px 12px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.go{font:600 16px var(--f-body);color:var(--panel);background:var(--accent);border:0;border-radius:6px;padding:12px 18px;cursor:pointer;align-self:flex-start}
+.go:disabled{opacity:.45;cursor:default}
+.note{margin:0;font-size:13.5px;line-height:1.45;color:var(--muted);max-width:70ch}
+.note b{color:var(--ink)}
+.warn{color:var(--warn)}
+ol.steps{margin:0;padding-left:20px;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:70ch}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* AR-Overlay */
+#ov{position:fixed;inset:0;pointer-events:none;font-family:var(--f-body)}
+#ov .top{position:absolute;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;background:rgba(0,0,0,.55);color:#fff;font-size:15px;line-height:1.35;pointer-events:auto}
+#ov .top b{color:var(--mark)}
+#ov .cross{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.5)}
+#ov .cross::before,#ov .cross::after{content:"";position:absolute;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+#ov .cross::before{left:50%;top:-10px;bottom:-10px;width:2px;margin-left:-1px}
+#ov .cross::after{top:50%;left:-10px;right:-10px;height:2px;margin-top:-1px}
+#ov .bot{position:absolute;left:0;right:0;bottom:0;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(0,0,0,.55);display:flex;flex-wrap:wrap;gap:8px;justify-content:center;pointer-events:auto}
+#ov button{font:600 15px var(--f-body);color:#111;background:#fff;border:0;border-radius:6px;padding:11px 14px;min-width:48px;cursor:pointer}
+#ov button.main{background:var(--mark)}
+#ov button[aria-pressed="true"]{background:var(--mark)}
+#ov .grp{display:flex;gap:4px;align-items:center;color:#fff;font:600 12px var(--f-display);letter-spacing:.06em;text-transform:uppercase}
+#ov .grp button{padding:10px 12px}
+@media (max-width:640px){h1{font-size:23px}#ov button{padding:10px 11px;font-size:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage">
+    <canvas id="cv" aria-label="Vorschau des Bewehrungsausschnitts"></canvas>
+    <div class="title">
+      <div class="eyebrow">Bewehrungsmodell · vor Ort</div>
+      <h1>Unterzug <span>Pos. 441</span></h1>
+    </div>
+    <div class="load" id="load">Modell wird geladen …</div>
+  </div>
+  <div class="bar">
+    <div class="fld"><span>Stütze, an der du stehst</span><div class="seg" id="segC"></div></div>
+    <div class="fld"><span>Welche Seite der Stütze tippst du an?</span>
+      <div class="seg" id="segF">
+        <button data-f="stirn" aria-pressed="true">Stirnseite (quer zum Träger)</button><button data-f="laengs" aria-pressed="false">Längsseite (parallel zum Träger)</button>
+      </div>
+    </div>
+    <p class="note" id="soll"></p>
+    <button class="go" id="bAR" disabled>In AR ausrichten</button>
+    <p class="note" id="arinfo">Prüfe, ob AR verfügbar ist …</p>
+    <ol class="steps">
+      <li>Vor die gewählte Seite der Stütze stellen und „In AR ausrichten“ antippen.</li>
+      <li>Boden langsam abschwenken, bis der Ring auf dem Boden liegt.</li>
+      <li>Fadenkreuz auf die <b>linke untere Ecke</b> der Stützenseite richten, „Punkt setzen“. Dann die <b>rechte untere Ecke</b>.</li>
+      <li>Mit den Knöpfen fein nachstellen: längs, quer, Höhe, Drehung. „180°“, falls die Aussparung auf der falschen Seite liegt.</li>
+    </ol>
+  </div>
+</div>
+
+<div id="ov" hidden>
+  <div class="top" id="ovMsg"></div>
+  <div class="cross" id="ovCross"></div>
+  <div class="bot" id="ovBot"></div>
+</div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const $ = id => document.getElementById( id ), f = ( v, n = 1 ) => v.toFixed( n ).replace( '.', ',' );
+const store = { get() { try { return JSON.parse( localStorage.getItem( 'ug441vo' ) || '{}' ); } catch ( e ) { return {}; } },
+  set( o ) { try { localStorage.setItem( 'ug441vo', JSON.stringify( Object.assign( store.get(), o ) ) ); } catch ( e ) {} } };
+
+/* ---------- Ausrichtung aus zwei Bodenpunkten (rein rechnerisch, ohne three.js-Szene) ---------- */
+// A = linke, B = rechte untere Ecke der angetippten Stützenseite (Weltkoordinaten, y oben).
+// Stirnseite: Trägerachse zeigt vom Betrachter weg (Modell-x = vorwärts). Längsseite: Trägerachse läuft links→rechts.
+// Rückgabe: Ursprung (Stützenmitte am Boden), Achsen des Modells, gemessene und Soll-Breite.
+function alignFromCorners( A, B, side, hx, hz ) {
+  const y = ( A.y + B.y ) / 2;
+  let ux = B.x - A.x, uz = B.z - A.z; const w = Math.hypot( ux, uz ); ux /= w; uz /= w;   // nach rechts
+  const fx = uz, fz = - ux;                                                                // vorwärts = oben × rechts
+  const mx = ( A.x + B.x ) / 2, mz = ( A.z + B.z ) / 2;
+  if ( side === 'stirn' ) return { o: [ mx + fx * hx, y, mz + fz * hx ], x: [ fx, 0, fz ], z: [ ux, 0, uz ], gemessen: w, soll: 2 * hz };
+  return { o: [ mx + fx * hz, y, mz + fz * hz ], x: [ ux, 0, uz ], z: [ - fx, 0, - fz ], gemessen: w, soll: 2 * hx };
+}
+window.alignFromCorners = alignFromCorners;   // für Tests
+
+/* ---------- Szene ---------- */
+const cv = $( 'cv' ), renderer = new THREE.WebGLRenderer( { canvas: cv, antialias: true, alpha: true } );
+renderer.setPixelRatio( Math.min( devicePixelRatio, 2 ) ); renderer.toneMapping = THREE.NeutralToneMapping; renderer.xr.enabled = true;
+const scene = new THREE.Scene(), pm = new THREE.PMREMGenerator( renderer );
+scene.environment = pm.fromScene( new RoomEnvironment(), 0.04 ).texture;
+const cssv = n => getComputedStyle( document.documentElement ).getPropertyValue( n ).trim();
+const camera = new THREE.PerspectiveCamera( 35, 1, 0.02, 200 ), controls = new OrbitControls( camera, cv );
+controls.enableDamping = true; controls.target.set( 0, 2.2, 0 ); camera.position.set( - 5, 3.2, 6 );
+const holder = new THREE.Group(); holder.matrixAutoUpdate = false; scene.add( holder );
+const reticle = new THREE.Mesh( new THREE.RingGeometry( 0.05, 0.065, 40 ).rotateX( - Math.PI / 2 ), new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
+reticle.matrixAutoUpdate = false; reticle.visible = false; scene.add( reticle );
+const dotMat = new THREE.MeshBasicMaterial( { color: 0xffc400 } ), dots = [];
+function resize() { const s = cv.parentElement; const w = s.clientWidth, h = s.clientHeight;
+  if ( renderer.xr.isPresenting ) return; renderer.setSize( w, h, false ); camera.aspect = w / Math.max( h, 1 ); camera.updateProjectionMatrix(); }
+new ResizeObserver( resize ).observe( cv.parentElement );
+
+/* ---------- Modelle ---------- */
+let V = [], cur = null, model = null, beton = true, side = 'stirn';
+const loader = new GLTFLoader();
+function setBeton( on ) { beton = on; model?.traverse( o => { if ( o.isMesh && o.material?.name === 'Beton' ) o.visible = on; } ); }
+function select( v ) {
+  cur = v; store.set( { stuetze: v.vorOrt.stuetze } );
+  $( 'segC' ).querySelectorAll( 'button' ).forEach( b => b.setAttribute( 'aria-pressed', b.dataset.id === v.id ) );
+  $( 'load' ).hidden = false; $( 'load' ).textContent = 'Modell wird geladen …'; updateSoll();
+  loader.load( 'models/' + v.glb, g => { if ( cur !== v ) return; if ( model ) holder.remove( model );
+    model = g.scene; model.traverse( o => { if ( o.isMesh && o.material?.transparent ) o.material.depthWrite = false; } );
+    holder.add( model ); setBeton( beton ); $( 'load' ).hidden = true; }, undefined, () => { $( 'load' ).textContent = 'Modell konnte nicht geladen werden.'; } );
+}
+function updateSoll() { if ( !cur ) return; const { hx, hz } = cur.vorOrt;
+  const breite = side === 'stirn' ? 2 * hz : 2 * hx;
+  $( 'soll' ).innerHTML = `Stütze <b>${cur.vorOrt.stuetze}</b>: ${f( 2 * hx * 100, 0 )} × ${f( 2 * hz * 100, 0 )} cm (längs × quer zum Träger). Die angetippte Seite ist <b>${f( breite * 100, 0 )} cm</b> breit. Unterkante Unterzug im Modell 2,10 m über Boden.`; }
+$( 'segF' ).addEventListener( 'click', e => { const b = e.target.closest( 'button' ); if ( !b ) return; side = b.dataset.f;
+  $( 'segF' ).querySelectorAll( 'button' ).forEach( x => x.setAttribute( 'aria-pressed', x === b ) ); updateSoll(); } );
+fetch( 'models/varianten.json' ).then( r => r.json() ).then( d => {
+  V = d.varianten.filter( v => v.vorOrt );
+  $( 'segC' ).innerHTML = V.map( v => `<button data-id="${v.id}" aria-pressed="false">${v.vorOrt.stuetze}</button>` ).join( '' );
+  $( 'segC' ).addEventListener( 'click', e => { const b = e.target.closest( 'button' ); if ( b ) select( V.find( v => v.id === b.dataset.id ) ); } );
+  const h = location.hash.slice( 1 ).toLowerCase(), want = store.get().stuetze;
+  select( V.find( v => v.vorOrt.stuetze.replace( '/', '' ).toLowerCase() === h ) || V.find( v => v.vorOrt.stuetze === want ) || V[ V.length - 1 ] );
+} ).catch( () => { $( 'load' ).textContent = 'Variantenliste konnte nicht geladen werden.'; } );
+
+/* ---------- AR: Ausrichten, verankern, nachstellen ---------- */
+const ar = { session: null, hitSource: null, ref: null, hit: null, pts: [], base: null, anchor: null, pendingAnchor: null,
+  off: { x: 0, y: 0, z: 0, rot: 0, flip: 0 }, aligned: false };
+const ovMsg = $( 'ovMsg' ), ovBot = $( 'ovBot' );
+function msg( t ) { ovMsg.innerHTML = t; }
+function buttons( list ) { ovBot.innerHTML = ''; for ( const [ label, fn, cls, pressed ] of list ) {
+  if ( label.startsWith( 'grp:' ) ) { const g = document.createElement( 'div' ); g.className = 'grp'; g.textContent = label.slice( 4 ); ovBot.appendChild( g ); continue; }
+  const b = document.createElement( 'button' ); b.textContent = label; if ( cls ) b.className = cls; if ( pressed !== undefined ) b.setAttribute( 'aria-pressed', pressed );
+  b.addEventListener( 'click', e => { e.stopPropagation(); fn(); } ); ( ovBot.lastElementChild?.className === 'grp' ? ovBot.lastElementChild : ovBot ).appendChild( b ); } }
+function stepPoints() {
+  ar.pts = []; ar.aligned = false; ar.anchor?.delete?.(); ar.anchor = null; holder.visible = false; dots.forEach( d => scene.remove( d ) ); dots.length = 0;
+  $( 'ovCross' ).hidden = false;
+  msg( `Fadenkreuz auf die <b>linke untere Ecke</b> der ${side === 'stirn' ? 'Stirnseite' : 'Längsseite'} von Stütze ${cur.vorOrt.stuetze} richten.` );
+  buttons( [ [ 'Punkt setzen', setPoint, 'main' ], [ 'Beenden', () => ar.session.end() ] ] );
+}
+function setPoint() {
+  if ( !ar.hit ) { msg( 'Noch kein Boden erkannt. Handy langsam über den Boden schwenken, bis der Ring erscheint.' ); return; }
+  const p = new THREE.Vector3().setFromMatrixPosition( ar.hit ); ar.pts.push( p );
+  const dot = new THREE.Mesh( new THREE.CylinderGeometry( 0.012, 0.012, 0.004, 20 ), dotMat ); dot.position.copy( p ); scene.add( dot ); dots.push( dot );
+  if ( ar.pts.length === 1 ) { msg( 'Jetzt die <b>rechte untere Ecke</b> derselben Seite.' ); return; }
+  const [ A, B ] = ar.pts, r = alignFromCorners( A, B, side, cur.vorOrt.hx, cur.vorOrt.hz );
+  ar.base = new THREE.Matrix4().makeBasis( new THREE.Vector3( ...r.x ), new THREE.Vector3( 0, 1, 0 ), new THREE.Vector3( ...r.z ) ).setPosition( ...r.o );
+  ar.off = { x: 0, y: 0, z: 0, rot: 0, flip: 0 }; ar.aligned = true; holder.visible = true; $( 'ovCross' ).hidden = true;
+  dots.forEach( d => scene.remove( d ) ); dots.length = 0;
+  const q = new THREE.Quaternion().setFromRotationMatrix( ar.base );
+  ar.pendingAnchor = { p: r.o, q: [ q.x, q.y, q.z, q.w ] };
+  const dev = ( r.gemessen - r.soll ) * 100;
+  msg( `Ausgerichtet. Gemessene Breite ${f( r.gemessen * 100 )} cm (Soll ${f( r.soll * 100, 0 )} cm)` +
+    ( Math.abs( dev ) > 4 ? ` · <span style="color:#ff8a80">Abweichung ${f( dev )} cm – Ecken eventuell neu setzen</span>` : '' ) );
+  tuneButtons();
+}
+function nudge( k, d ) { ar.off[ k ] += d; showOff(); }
+function showOff() { const o = ar.off;
+  msg( `Versatz: längs ${f( o.x * 100, 0 )} cm · quer ${f( o.z * 100, 0 )} cm · Höhe ${f( o.y * 100, 0 )} cm · Drehung ${f( o.rot * 180 / Math.PI )}°${o.flip ? ' · 180° gedreht' : ''}${ar.anchor ? ' · verankert' : ''}` ); }
+function tuneButtons() {
+  buttons( [
+    [ 'grp:Längs' ], [ '−', () => nudge( 'x', - 0.01 ) ], [ '+', () => nudge( 'x', 0.01 ) ],
+    [ 'grp:Quer' ], [ '−', () => nudge( 'z', - 0.01 ) ], [ '+', () => nudge( 'z', 0.01 ) ],
+    [ 'grp:Höhe' ], [ '−', () => nudge( 'y', - 0.01 ) ], [ '+', () => nudge( 'y', 0.01 ) ],
+    [ 'grp:Drehen' ], [ '↺', () => nudge( 'rot', 0.5 * Math.PI / 180 ) ], [ '↻', () => nudge( 'rot', - 0.5 * Math.PI / 180 ) ],
+    [ '180°', () => { ar.off.flip ^= 1; showOff(); } ],
+    [ 'Beton', () => { setBeton( !beton ); tuneButtons(); showOff(); }, '', beton ],
+    [ 'Neu ausrichten', stepPoints ], [ 'Beenden', () => ar.session.end() ]
+  ] );
+}
+const tmpM = new THREE.Matrix4(), offM = new THREE.Matrix4(), rotM = new THREE.Matrix4();
+function placeHolder( base ) { const o = ar.off;
+  offM.makeTranslation( o.x, o.y, o.z ); rotM.makeRotationY( o.rot + ( o.flip ? Math.PI : 0 ) );
+  holder.matrix.copy( base ).multiply( offM ).multiply( rotM ); holder.matrixWorldNeedsUpdate = true; }
+
+async function startAR() {
+  const ov = $( 'ov' ); ov.hidden = false;
+  ov.addEventListener( 'beforexrselect', e => e.preventDefault() );   // Tipps auf Knöpfe nicht als AR-Auswahl werten
+  let session;
+  try { session = await navigator.xr.requestSession( 'immersive-ar', { requiredFeatures: [ 'hit-test' ], optionalFeatures: [ 'anchors', 'dom-overlay' ], domOverlay: { root: ov } } ); }
+  catch ( e ) { ov.hidden = true; $( 'arinfo' ).textContent = 'AR konnte nicht gestartet werden: ' + e.message; return; }
+  ar.session = session; renderer.xr.setReferenceSpaceType( 'local' ); await renderer.xr.setSession( session );
+  ar.ref = renderer.xr.getReferenceSpace();
+  ar.hitSource = await session.requestHitTestSource( { space: await session.requestReferenceSpace( 'viewer' ) } );
+  scene.background = null; holder.matrix.identity(); stepPoints();
+  session.addEventListener( 'end', () => { ar.session = null; ar.hitSource = null; ar.anchor = null; ar.aligned = false; ov.hidden = true;
+    reticle.visible = false; holder.visible = true; holder.matrix.identity(); dots.forEach( d => scene.remove( d ) ); dots.length = 0; resize(); } );
+}
+$( 'bAR' ).addEventListener( 'click', startAR );
+if ( navigator.xr?.isSessionSupported ) navigator.xr.isSessionSupported( 'immersive-ar' ).then( ok => {
+  $( 'bAR' ).disabled = !ok;
+  $( 'arinfo' ).innerHTML = ok ? 'AR verfügbar. Ausrichtung über zwei Ecken des Stützenfußes, danach im Raum verankert.'
+    : '<span class="warn">AR ist hier nicht verfügbar.</span> Die Ausrichtung braucht Chrome auf Android mit „Google Play-Dienste für AR“. Auf diesem Gerät nur Vorschau.';
+} ).catch( () => { $( 'arinfo' ).textContent = 'AR ist hier nicht verfügbar. Nur Vorschau.'; } );
+else $( 'arinfo' ).innerHTML = '<span class="warn">AR ist hier nicht verfügbar</span> (kein WebXR). Die Ausrichtung braucht Chrome auf Android. Nur Vorschau.';
+
+renderer.setAnimationLoop( ( t, frame ) => {
+  if ( frame && ar.session ) {
+    const hits = ar.hitSource ? frame.getHitTestResults( ar.hitSource ) : [];
+    if ( hits.length ) { const pose = hits[ 0 ].getPose( ar.ref ); ar.hit = tmpM.fromArray( pose.transform.matrix ).clone(); reticle.matrix.copy( ar.hit ); reticle.visible = !ar.aligned; }
+    else { ar.hit = null; reticle.visible = false; }
+    // Raumanker anlegen, sobald ausgerichtet (falls das Gerät Anker kann)
+    if ( ar.pendingAnchor && frame.createAnchor ) { const a = ar.pendingAnchor; ar.pendingAnchor = null;
+      frame.createAnchor( new XRRigidTransform( { x: a.p[ 0 ], y: a.p[ 1 ], z: a.p[ 2 ] }, { x: a.q[ 0 ], y: a.q[ 1 ], z: a.q[ 2 ], w: a.q[ 3 ] } ), ar.ref )
+        .then( anc => { if ( ar.aligned ) { ar.anchor = anc; showOff(); } else anc.delete(); } ).catch( () => {} ); }
+    else if ( ar.pendingAnchor ) ar.pendingAnchor = null;
+    if ( ar.aligned ) {
+      let base = ar.base;
+      if ( ar.anchor && frame.trackedAnchors?.has( ar.anchor ) ) { const ap = frame.getPose( ar.anchor.anchorSpace, ar.ref ); if ( ap ) base = tmpM.fromArray( ap.transform.matrix ); }
+      placeHolder( base );
+    }
+  } else {
+    scene.background = new THREE.Color( cssv( '--stage' ) ); controls.update();
+  }
+  renderer.render( scene, camera );
+} );
+</script>
+</body>
+</html>

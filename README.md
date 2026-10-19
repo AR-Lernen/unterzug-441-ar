@@ -13,8 +13,12 @@ VR-/MR-Brillen). Auf Android-Handys startet AR im Scene Viewer (stabil, ohne
 Marken), auf iPhone/iPad in Quick Look.
 
 Direkt starten per Link-Anker, z. B. `#m10` (Maßstab 1:10 für den Boden), `#m5` (1:5), `#ganz` (1:1),
-`#vorort` bzw. `#vorortstahl` (Knoten G/12 in 1:1 zum Ausrichten am Bauwerk),
 `#praesentation` oder `#3d`.
+
+**Vor Ort (Testzweig):** `vorort.html` legt das 1:1-Modell in WebXR (Chrome auf Android) auf eine
+echte Stütze (17, 15, 13, G/12). Man tippt die linke und rechte untere Ecke einer Stützenseite an;
+das Modell wird daraus ausgerichtet, im Raum verankert und lässt sich in 1-cm- und 0,5°-Schritten
+nachstellen.
 
 Lagen mit dem Vermerk „Lage geschätzt“ sind im Modell plausibel angeordnet,
 aber nicht aus dem Plan bestimmt. Das Modell dient der Anschauung in der Lehre
