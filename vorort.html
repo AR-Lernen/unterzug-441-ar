@@ -209,7 +209,7 @@ function updateUI() {
 const zweiStuetzen = () => umfang === 'ganz' && methode === 'stuetzen';
 function updateSoll() { if ( !cur || !cur2 ) return; const { hx, hz } = cur.vorOrt;
   if ( zweiStuetzen() ) {
-    $( 'soll' ).innerHTML = `Stütze <b>${cur.vorOrt.stuetze}</b> und <b>${cur2.vorOrt.stuetze}</b> liegen <b>${f( Math.abs( cur2.vorOrt.xc - cur.vorOrt.xc ), 2 )} m</b> auseinander (Mitte zu Mitte). Je weiter auseinander, desto genauer die Richtung. Unterkante Unterzug im Modell 2,10 m über Boden.`;
+    $( 'soll' ).innerHTML = `Stütze <b>${cur.vorOrt.stuetze}</b> und <b>${cur2.vorOrt.stuetze}</b> liegen <b>${f( Math.abs( cur2.vorOrt.xc - cur.vorOrt.xc ), 2 )} m</b> auseinander (Mitte zu Mitte). Je weiter auseinander, desto genauer die Richtung. Unterkante Unterzug 2,20 m über Boden (gemessen).`;
     $( 'steps' ).innerHTML = `<li>Auf eine Seite des Trägers stellen, vor Stütze ${cur.vorOrt.stuetze}, und „In AR ausrichten“ antippen.</li>
       <li>Boden langsam abschwenken, bis der Ring auf dem Boden liegt.</li>
       <li>Fadenkreuz auf die <b>Mitte der Unterkante</b> der dir zugewandten Stützenseite richten, „Punkt setzen“.</li>
@@ -217,7 +217,7 @@ function updateSoll() { if ( !cur || !cur2 ) return; const { hx, hz } = cur.vorO
       <li>Mit den Knöpfen fein nachstellen: längs, quer, Höhe, Drehung.</li>`;
     return; }
   const breite = side === 'stirn' ? 2 * hz : 2 * hx;
-  $( 'soll' ).innerHTML = `Stütze <b>${cur.vorOrt.stuetze}</b>: ${f( 2 * hx * 100, 0 )} × ${f( 2 * hz * 100, 0 )} cm (längs × quer zum Träger). Die angetippte Seite ist <b>${f( breite * 100, 0 )} cm</b> breit. Unterkante Unterzug im Modell 2,10 m über Boden.` +
+  $( 'soll' ).innerHTML = `Stütze <b>${cur.vorOrt.stuetze}</b>: ${f( 2 * hx * 100, 0 )} × ${f( 2 * hz * 100, 0 )} cm (längs × quer zum Träger). Die angetippte Seite ist <b>${f( breite * 100, 0 )} cm</b> breit. Unterkante Unterzug 2,20 m über Boden (gemessen).` +
     ( umfang === 'ganz' ? ' <span class="warn">Beim ganzen Träger wirkt sich ein kleiner Richtungsfehler am Ende stark aus; „Zwei Stützen“ ist genauer.</span>' : '' );
   $( 'steps' ).innerHTML = `<li>Vor die gewählte Seite der Stütze stellen und „In AR ausrichten“ antippen.</li>
       <li>Boden langsam abschwenken, bis der Ring auf dem Boden liegt.</li>
