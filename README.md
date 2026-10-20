@@ -15,6 +15,10 @@ Marken), auf iPhone/iPad in Quick Look.
 Direkt starten per Link-Anker, z. B. `#m10` (Maßstab 1:10 für den Boden), `#m5` (1:5), `#ganz` (1:1),
 `#praesentation` oder `#3d`.
 
+**Fertigteilträger:** Schalter „Fertigteilträger“ (Link-Anker `#ft`, z. B. `#m10-ft`) blendet die Querträger
+ein, Lage aus der Ansicht geschätzt (Raster 1,20 m, Trapezquerschnitt). Gilt auch in AR.
+Lichte Höhe vom Fußboden bis Unterkante Unterzug: 2,20 m.
+
 Lagen mit dem Vermerk „Lage geschätzt“ sind im Modell plausibel angeordnet,
 aber nicht aus dem Plan bestimmt. Das Modell dient der Anschauung in der Lehre
 und ersetzt keine Ausführungsunterlage.

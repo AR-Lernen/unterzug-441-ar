@@ -120,6 +120,7 @@ dl.facts dd.txt{font-family:var(--f-body)}
         <button id="v-all">Gesamt</button><button id="v-17">Achse 17</button><button id="v-sec">Schnitt</button>
       </div>
       <button class="tbtn" id="t-con" aria-pressed="true">Beton</button>
+      <button class="tbtn" id="t-ft" aria-pressed="false" title="Fertigteilträger quer zum Unterzug, Lage aus der Ansicht geschätzt">Fertigteilträger</button>
       <div class="seg" role="group" aria-label="Stabdicke">
         <button id="th1" aria-pressed="true">Ø echt</button><button id="th3" aria-pressed="false">Ø ×3</button>
       </div>
@@ -153,6 +154,7 @@ const cm=v=>Math.round(v*100);
 /* ---------- Geometrie des Bauteils ---------- */
 const X={18:0,17:8.4,16:12.6,15:16.8,14:21.0,13:25.2,12:29.4,11:33.6};
 const XG12=31.0, XSTEP=31.15, C=0.04;
+const YF=-3.2;   // Fußboden: lichte Höhe 2,20 m bis UK Unterzug (am Bauwerk gemessen)
 const Hat=x=>x<XSTEP?1.0:0.6;
 
 const DCOL={6:'#8e7cc3',10:'#36a19c',12:'#4e9e48',14:'#a3a836',16:'#d79a26',20:'#e2702c',25:'#d03e3e',28:'#9c2b5d'};
@@ -163,7 +165,7 @@ const GROUPS=[
 /* Stahlliste (aus dem Plan gelesen). shape: Biegeform im lokalen System */
 const P={};
 function def(p,o){P[p]=Object.assign({p,inst:[],est:false},o)}
-def(1,{n:18,d:16,lg:3.00,g:'stuetze',shape:{t:'straight',L:3.0,axis:'y'},where:'Stützenlängsstäbe: G/17, G/15, G/13 je 4 Eckstäbe, G/12 sechs Stäbe',note:'Stützenhöhe unterhalb des Unterzugs ist im Plan nicht dargestellt; Stäbe reichen im Modell von 3,05 m unter OK bis knapp unter OK Unterzug.'});
+def(1,{n:18,d:16,lg:3.00,g:'stuetze',shape:{t:'straight',L:3.0,axis:'y'},where:'Stützenlängsstäbe: G/17, G/15, G/13 je 4 Eckstäbe, G/12 sechs Stäbe',note:'Stützenhöhe unterhalb des Unterzugs ist im Plan nicht dargestellt; Stäbe beginnen im Modell 5 cm über dem Fußboden (lichte Höhe 2,20 m bis UK Unterzug) und reichen 3,00 m nach oben.'});
 def(2,{n:12,d:14,lg:3.00,g:'stuetze',shape:{t:'straight',L:3.0,axis:'y'},where:'Stützenlängsstäbe in Seitenmitte, G/17, G/15, G/13 je 4'});
 def(3,{n:57,d:6,lg:1.90,g:'stuetze',shape:{t:'tie',a:0.44,b:0.44},where:'Stützenbügel außen 44×44, je Stütze G/17, G/15, G/13 19 Stück',est:true,note:'Abstand im Modell gleichmäßig verteilt.'});
 def(4,{n:27,d:6,lg:1.45,g:'stuetze',shape:{t:'diamond',s:0.33},where:'Rautenbügel (über Eck), je Stütze 9 Stück',est:true});
@@ -270,6 +272,14 @@ function distribute(segs,n){const tot=segs.reduce((s,[a,b])=>s+b-a,0),sp=tot/n,o
 const zones=[X[17],X[15],X[13]];
 // Bügelabschnitte wie in der Ansicht eingetragen: [Positionen, Stück, Abstand a in m]
 const OA=XSTEP-1.55, OB=XSTEP-1.05;            // Aussparung 50 cm, 1,05 m vor dem Sprung
+// Fertigteilträger quer zum Unterzug, aus der Ansicht abgelesen (Lage geschätzt): Raster 1,20 m ab Achse 18,
+// Trapezquerschnitt oben 30 / unten 22 cm, 7 … 57 cm unter OK; an der Aussparung entfällt einer. Im Modell je 2 m über die Seitenflächen.
+const FT={e:1.20,bo:0.30,bu:0.22,yo:-0.07,yu:-0.57,L:2.0,xs:[]};
+for(let x=FT.e;x<33.4;x+=FT.e)if(!(x>OA-0.2&&x<OB+0.2))FT.xs.push(+x.toFixed(2));
+function ftGeometry(){
+  const s=new THREE.Shape([V3(-FT.bu/2,FT.yu,0),V3(FT.bu/2,FT.yu,0),V3(FT.bo/2,FT.yo,0),V3(-FT.bo/2,FT.yo,0)]);
+  const zl=0.25+FT.L,g=new THREE.ExtrudeGeometry(s,{depth:2*zl,bevelEnabled:false});g.translate(0,0,-zl);return g;
+}
 const B10=[44,45],B12=[46,47];
 const SPANS=[
   [0.06,X[17]-0.25,[[B10,8,.175],[B10,9,.175],[[44],6,.19],[B10,6,.19],[B10,3,.19],[B12,3,.19],[B12,8,.175],[B12,7,.175]]],
@@ -318,14 +328,14 @@ for(const s of[-1,1]){const x0=(OA+OB)/2-1.0;add(35,x0,-0.345,s*zi);add(35,x0,-0
 // Stützen
 const yTies=(n,a,b,off=0)=>Array.from({length:n},(_,i)=>a+(b-a)*i/(n-1)+off);
 for(const xc of zones){
-  for(const[sx,sz]of[[-1,-1],[1,-1],[1,1],[-1,1]])add(1,xc+sx*0.18,-3.05,sz*0.18);
-  for(const[sx,sz]of[[-1,0],[1,0],[0,-1],[0,1]])add(2,xc+sx*0.18,-3.05,sz*0.18);
-  yTies(19,-1.08,-2.96).forEach(y=>add(3,xc,y,0));
+  for(const[sx,sz]of[[-1,-1],[1,-1],[1,1],[-1,1]])add(1,xc+sx*0.18,YF+0.05,sz*0.18);
+  for(const[sx,sz]of[[-1,0],[1,0],[0,-1],[0,1]])add(2,xc+sx*0.18,YF+0.05,sz*0.18);
+  yTies(19,-1.08,YF+0.14).forEach(y=>add(3,xc,y,0));
   yTies(9,-1.13,-2.90).forEach(y=>add(4,xc,y,0));
 }
-for(const sx of[-1,1])for(const sz of[-1,0,1])add(1,XG12+sx*0.08,-3.05,sz*0.19);
-yTies(16,-1.08,-2.96).forEach(y=>add(5,XG12,y,0));
-yTies(15,-1.12,-2.92).forEach(y=>add(6,XG12,y,0));
+for(const sx of[-1,1])for(const sz of[-1,0,1])add(1,XG12+sx*0.08,YF+0.05,sz*0.19);
+yTies(16,-1.08,YF+0.14).forEach(y=>add(5,XG12,y,0));
+yTies(15,-1.12,YF+0.18).forEach(y=>add(6,XG12,y,0));
 
 // Übergreifungsstöße der Längsbewehrung (oben und unten) nebeneinander (Kontaktstoß) statt in derselben Achse:
 // Stäbe von links nach rechts; überlappt ein Stab einen bereits gesetzten derselben Lage, rückt er um das
@@ -476,9 +486,18 @@ function buildConcrete(){
   conMat=new THREE.MeshStandardMaterial({color:dark?0x9aa3a6:0xb8bcb4,transparent:true,opacity:dark?0.07:0.16,depthWrite:false,roughness:1,metalness:0});
   edgeMat=new THREE.LineBasicMaterial({color:new THREE.Color(cssv('--muted')),transparent:true,opacity:0.55});
   box(0,OA,-1.0,0,-0.25,0.25);box(OA,OB,-0.40,0,-0.25,0.25);box(OA,OB,-1.0,-0.80,-0.25,0.25);box(OB,XSTEP,-1.0,0,-0.25,0.25);box(XSTEP,33.6,-0.6,0,-0.25,0.25);
-  for(const xc of zones)box(xc-0.25,xc+0.25,-3.1,-1.0,-0.25,0.25);
-  box(XG12-0.125,XG12+0.125,-3.1,-1.0,-0.26,0.26);
+  for(const xc of zones)box(xc-0.25,xc+0.25,YF,-1.0,-0.25,0.25);
+  box(XG12-0.125,XG12+0.125,YF,-1.0,-0.26,0.26);
   conGroup.visible=showCon;
+}
+// Fertigteilträger (ein-/ausblendbar)
+const ftGroup=new THREE.Group();ftGroup.visible=false;scene.add(ftGroup);
+function buildPrecast(){
+  ftGroup.clear();
+  const g=ftGeometry(),eg=new THREE.EdgesGeometry(g),dark=cssv('--viewport').toLowerCase()<'#5';
+  const m=new THREE.MeshStandardMaterial({color:0xc9a27a,transparent:true,opacity:dark?0.22:0.35,depthWrite:false,roughness:1,metalness:0});
+  const lm=new THREE.LineBasicMaterial({color:0x8a6a4a,transparent:true,opacity:0.7});
+  for(const x of FT.xs){const a=new THREE.Mesh(g,m),l=new THREE.LineSegments(eg,lm);a.position.x=l.position.x=x;ftGroup.add(a,l)}
 }
 // Achsbeschriftung
 const axisGroup=new THREE.Group();scene.add(axisGroup);
@@ -496,7 +515,7 @@ function buildAxes(){
   const lm=new THREE.LineDashedMaterial({color:new THREE.Color(cssv('--muted')),dashSize:0.08,gapSize:0.06});
   for(const k in X){label(k,X[k],0.85,1);
     const g=new THREE.BufferGeometry().setFromPoints([V3(X[k],0.62,0),V3(X[k],0.05,0)]);const l=new THREE.Line(g,lm);l.computeLineDistances();axisGroup.add(l)}
-  label('G/12',XG12,-3.45,2.1);for(const k of[17,15,13])label('G/'+k,X[k],-3.45,2.1);
+  label('G/12',XG12,YF-0.35,2.1);for(const k of[17,15,13])label('G/'+k,X[k],YF-0.35,2.1);
 }
 
 function applyLook(){
@@ -512,7 +531,7 @@ function applyLook(){
 }
 function themeChanged(){
   scene.background=new THREE.Color(cssv('--viewport'));
-  buildConcrete();buildAxes();applyLook();
+  buildConcrete();buildPrecast();buildAxes();applyLook();
 }
 
 /* ---------- Kamera ---------- */
@@ -653,6 +672,7 @@ function renderDetail(o){
 /* ---------- Bedienleiste ---------- */
 const $=id=>document.getElementById(id);
 $('v-all').onclick=views.all;$('v-17').onclick=views.a17;$('v-sec').onclick=views.sec;
+$('t-ft').onclick=e=>{ftGroup.visible=!ftGroup.visible;e.currentTarget.setAttribute('aria-pressed',ftGroup.visible)};
 $('t-con').onclick=e=>{showCon=!showCon;conGroup.visible=showCon;e.currentTarget.setAttribute('aria-pressed',showCon)};
 function setThick(t){thick=t;$('th1').setAttribute('aria-pressed',t===1);$('th3').setAttribute('aria-pressed',t===3);build()}
 $('th1').onclick=()=>setThick(1);$('th3').onclick=()=>setThick(3);
