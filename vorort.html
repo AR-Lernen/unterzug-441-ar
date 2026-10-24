@@ -55,6 +55,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #ov .top{position:absolute;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;background:rgba(0,0,0,.55);color:#fff;font-size:15px;line-height:1.35;pointer-events:auto}
 #ov .top b{color:var(--mark)}
 #ov .cross{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.5)}
+#ov .cross.ok{border-color:#5df28a}
+#ov .diag{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 76px);padding:3px 8px;border-radius:4px;background:rgba(0,0,0,.55);color:#fff;font:11px var(--f-mono)}
 #ov .cross::before,#ov .cross::after{content:"";position:absolute;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
 #ov .cross::before{left:50%;top:-10px;bottom:-10px;width:2px;margin-left:-1px}
 #ov .cross::after{top:50%;left:-10px;right:-10px;height:2px;margin-top:-1px}
@@ -102,6 +104,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <div id="ov" hidden>
   <div class="top" id="ovMsg"></div>
   <div class="cross" id="ovCross"></div>
+  <div class="diag" id="ovDiag"></div>
   <div class="bot" id="ovBot"></div>
 </div>
 
@@ -304,46 +307,63 @@ function placeHolder( base ) { const o = ar.off;
 
 async function startAR() {
   const ov = $( 'ov' ); ov.hidden = false;
-  ov.addEventListener( 'beforexrselect', e => e.preventDefault() );   // Tipps auf Knöpfe nicht als AR-Auswahl werten
+  if ( !ov.dataset.sel ) { ov.dataset.sel = 1; ov.addEventListener( 'beforexrselect', e => e.preventDefault() ); }   // Tipps auf Knöpfe nicht als AR-Auswahl werten
   let session;
   try { session = await navigator.xr.requestSession( 'immersive-ar', { requiredFeatures: [ 'hit-test' ], optionalFeatures: [ 'anchors', 'dom-overlay' ], domOverlay: { root: ov } } ); }
   catch ( e ) { ov.hidden = true; $( 'arinfo' ).textContent = 'AR konnte nicht gestartet werden: ' + e.message; return; }
-  ar.session = session; renderer.xr.setReferenceSpaceType( 'local' ); await renderer.xr.setSession( session );
-  ar.ref = renderer.xr.getReferenceSpace();
-  ar.hitSource = await session.requestHitTestSource( { space: await session.requestReferenceSpace( 'viewer' ) } );
-  scene.background = null; holder.matrix.identity(); stepPoints();
-  session.addEventListener( 'end', () => { ar.session = null; ar.hitSource = null; ar.anchor = null; ar.aligned = false; ov.hidden = true;
+  ar.fehlerT = 0; ar.hit = null; ar.ref = null;
+  try {
+    scene.background = null; renderer.xr.setReferenceSpaceType( 'local' ); await renderer.xr.setSession( session );
+    ar.ref = renderer.xr.getReferenceSpace(); ar.session = session;
+    ar.hitSource = await session.requestHitTestSource( { space: await session.requestReferenceSpace( 'viewer' ) } );
+  } catch ( e ) { ov.hidden = true; ar.session = null; $( 'arinfo' ).textContent = 'AR-Start fehlgeschlagen: ' + e.message; session.end().catch( () => {} ); return; }
+  holder.matrix.identity(); stepPoints();
+  session.addEventListener( 'end', () => { ar.session = null; ar.ref = null; ar.hitSource = null; ar.anchor = null; ar.aligned = false; ov.hidden = true;
     reticle.visible = false; holder.visible = true; holder.matrix.identity(); dots.forEach( d => scene.remove( d ) ); dots.length = 0; resize(); } );
 }
 $( 'bAR' ).addEventListener( 'click', startAR );
 if ( navigator.xr?.isSessionSupported ) navigator.xr.isSessionSupported( 'immersive-ar' ).then( ok => {
   $( 'bAR' ).disabled = !ok;
-  $( 'arinfo' ).innerHTML = ok ? 'AR verfügbar. Ausrichtung über zwei Ecken des Stützenfußes, danach im Raum verankert.'
+  $( 'arinfo' ).innerHTML = ok ? 'AR verfügbar. Ausrichtung über zwei Punkte, danach im Raum verankert.'
     : '<span class="warn">AR ist hier nicht verfügbar.</span> Die Ausrichtung braucht Chrome auf Android mit „Google Play-Dienste für AR“. Auf diesem Gerät nur Vorschau.';
 } ).catch( () => { $( 'arinfo' ).textContent = 'AR ist hier nicht verfügbar. Nur Vorschau.'; } );
 else $( 'arinfo' ).innerHTML = '<span class="warn">AR ist hier nicht verfügbar</span> (kein WebXR). Die Ausrichtung braucht Chrome auf Android. Nur Vorschau.';
 
+// Ein Fehler in einem Bild darf die Schleife nicht beenden (three.js fordert das nächste Bild erst nach dem Aufruf an),
+// sonst steht die Einblendung still und es werden keine Punkte mehr angenommen.
 renderer.setAnimationLoop( ( t, frame ) => {
-  if ( frame && ar.session ) {
+  try { frameStep( frame ); renderer.render( scene, camera ); }
+  catch ( e ) { console.error( e ); if ( ar.session ) { ar.fehlerT = performance.now(); $( 'ovDiag' ).textContent = 'Fehler: ' + e.message; } }
+} );
+function frameStep( frame ) {
+  if ( frame && ar.session && ar.ref ) {
     const hits = ar.hitSource ? frame.getHitTestResults( ar.hitSource ) : [];
     const vp = frame.getViewerPose( ar.ref ); if ( vp ) ar.viewer = vp.transform.position;
-    if ( hits.length ) { const pose = hits[ 0 ].getPose( ar.ref ); ar.hit = tmpM.fromArray( pose.transform.matrix ).clone(); reticle.matrix.copy( ar.hit ); reticle.visible = !ar.aligned; }
-    else { ar.hit = null; reticle.visible = false; }
+    // getPose kann null liefern (Tracking noch nicht bereit oder kurz verloren)
+    const pose = hits.length ? hits[ 0 ].getPose( ar.ref ) : null;
+    if ( pose ) { ar.hit = tmpM.fromArray( pose.transform.matrix ).clone(); ar.hitT = performance.now(); reticle.matrix.copy( ar.hit ); reticle.visible = !ar.aligned; }
+    else if ( performance.now() - ( ar.hitT || 0 ) > 500 ) { ar.hit = null; reticle.visible = false; }   // kurze Aussetzer überbrücken
+    if ( !ar.aligned ) $( 'ovCross' ).classList.toggle( 'ok', !!ar.hit );
+    diag( vp, hits.length );
     // Raumanker anlegen, sobald ausgerichtet (falls das Gerät Anker kann)
     if ( ar.pendingAnchor && frame.createAnchor ) { const a = ar.pendingAnchor; ar.pendingAnchor = null;
       frame.createAnchor( new XRRigidTransform( { x: a.p[ 0 ], y: a.p[ 1 ], z: a.p[ 2 ] }, { x: a.q[ 0 ], y: a.q[ 1 ], z: a.q[ 2 ], w: a.q[ 3 ] } ), ar.ref )
-        .then( anc => { if ( ar.aligned ) { ar.anchor = anc; showOff(); } else anc.delete(); } ).catch( () => {} ); }
+        .then( anc => { if ( ar.aligned ) ar.anchor = anc; else anc.delete(); } ).catch( () => {} ); }
     else if ( ar.pendingAnchor ) ar.pendingAnchor = null;
     if ( ar.aligned ) {
       let base = ar.base;
       if ( ar.anchor && frame.trackedAnchors?.has( ar.anchor ) ) { const ap = frame.getPose( ar.anchor.anchorSpace, ar.ref ); if ( ap ) base = tmpM.fromArray( ap.transform.matrix ); }
       placeHolder( base );
     }
-  } else {
+  } else if ( !ar.session ) {
     scene.background = new THREE.Color( cssv( '--stage' ) ); controls.update();
   }
-  renderer.render( scene, camera );
-} );
+}
+// Kleine Statuszeile in AR: Tracking, Boden, Anker, Overlay
+let diagT = 0;
+function diag( vp, nHits ) { const now = performance.now(); if ( now - diagT < 400 || now - ( ar.fehlerT || 0 ) < 3000 ) return; diagT = now;
+  $( 'ovDiag' ).textContent = [ vp ? 'Tracking ✓' : 'Tracking ✗ (langsamer bewegen)', ar.hit ? 'Boden ✓' : `Boden ✗ (${nHits})`,
+    ar.anchor ? 'Anker ✓' : ( ar.aligned ? 'ohne Anker' : '' ), ar.session?.domOverlayState ? '' : 'kein Overlay' ].filter( Boolean ).join( ' · ' ); }
 </script>
 </body>
 </html>
