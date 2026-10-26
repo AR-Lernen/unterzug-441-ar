@@ -321,6 +321,19 @@ function placeHolder( base ) { const o = ar.off;
   offM.makeTranslation( o.x, o.y, o.z ); rotM.makeRotationY( o.rot + ( o.flip ? Math.PI : 0 ) );
   holder.matrix.copy( base ).multiply( offM ).multiply( rotM ); holder.matrixWorldNeedsUpdate = true; }
 
+// Bietet Chrome WebXR-Layers an (renderState.layers), zeichnet three.js in eine Projektionsebene. Die wird in Handy-AR
+// auf manchen Geräten nicht angezeigt: Tracking und Anker laufen, das Modell bleibt unsichtbar. Darum beim Start
+// renderState.layers an der Sitzung verbergen, damit three.js die klassische XRWebGLLayer nimmt (die Sitzung selbst
+// bleibt unverändert, Chrome braucht das echte Objekt). Mit #layers im Link bleibt der neue Weg zum Vergleich.
+async function setSessionKlassisch( s ) {
+  ar.layers = s.renderState.layers !== undefined;
+  if ( !ar.layers || location.hash.includes( 'layers' ) ) return renderer.xr.setSession( s );
+  const get = Object.getOwnPropertyDescriptor( Object.getPrototypeOf( s ), 'renderState' )?.get;
+  Object.defineProperty( s, 'renderState', { configurable: true, get() {
+    const rs = get ? get.call( s ) : undefined;
+    return new Proxy( rs, { get: ( r, k ) => k === 'layers' ? undefined : Reflect.get( r, k ) } ); } } );
+  try { await renderer.xr.setSession( s ); } finally { delete s.renderState; }
+}
 async function startAR() {
   const ov = $( 'ov' ); ov.hidden = false;
   if ( !ov.dataset.sel ) { ov.dataset.sel = 1; ov.addEventListener( 'beforexrselect', e => e.preventDefault() ); }   // Tipps auf Knöpfe nicht als AR-Auswahl werten
@@ -329,7 +342,7 @@ async function startAR() {
   catch ( e ) { ov.hidden = true; $( 'arinfo' ).textContent = 'AR konnte nicht gestartet werden: ' + e.message; return; }
   ar.fehlerT = 0; ar.hit = null; ar.ref = null;
   try {
-    scene.background = null; renderer.xr.setReferenceSpaceType( 'local' ); await renderer.xr.setSession( session );
+    scene.background = null; renderer.xr.setReferenceSpaceType( 'local' ); await setSessionKlassisch( session );
     ar.ref = renderer.xr.getReferenceSpace(); ar.session = session;
     ar.hitSource = await session.requestHitTestSource( { space: await session.requestReferenceSpace( 'viewer' ) } );
   } catch ( e ) { ov.hidden = true; ar.session = null; $( 'arinfo' ).textContent = 'AR-Start fehlgeschlagen: ' + e.message; session.end().catch( () => {} ); return; }
@@ -391,7 +404,8 @@ let diagT = 0;
 function diag( vp, nHits ) { const now = performance.now(); if ( now - diagT < 400 || now - ( ar.fehlerT || 0 ) < 3000 ) return; diagT = now;
   $( 'ovDiag' ).textContent = [ vp ? 'Tracking ✓' : 'Tracking ✗ (langsamer bewegen)', ar.hit ? 'Boden ✓' : `Boden ✗ (${nHits})`,
     ar.anchor ? 'Anker ✓' : ( ar.aligned ? ( ar.ancVerworfen ? 'Anker verworfen' : 'ohne Anker' ) : '' ),
-    ar.aligned && vp ? 'Modell ' + modelDist( vp ) : '', ar.session?.domOverlayState ? '' : 'kein Overlay' ].filter( Boolean ).join( ' · ' ); }
+    ar.aligned && vp ? 'Modell ' + modelDist( vp ) : '', ar.session?.domOverlayState ? '' : 'kein Overlay',
+    ar.layers ? ( location.hash.includes( 'layers' ) ? 'Ebene: Layers' : 'Ebene: klassisch' ) : '' ].filter( Boolean ).join( ' · ' ); }
 // Abstand Betrachter – Ursprung des Modells (Stützenmitte am Boden); „?“ bei ungültiger Lage
 function modelDist( vp ) { const o = new THREE.Vector3().setFromMatrixPosition( holder.matrix ), p = vp.transform.position;
   const d = Math.hypot( o.x - p.x, o.y - p.y, o.z - p.z ); return Number.isFinite( d ) ? f( d ) + ' m entfernt' : '?'; }
