@@ -109,6 +109,7 @@ h1 span{color:var(--accent)}
       <div class="seg" id="segV" role="group" aria-label="Variante"></div>
     </div>
     <button class="tbtn" id="bTour" aria-pressed="false">▶ Präsentation</button>
+    <a class="tbtn" id="bWeb" href="ar.html" title="Eigene AR-Ansicht in Chrome (WebXR), unabhängig von der Google-App">AR im Browser</a>
     <button class="tbtn" id="bPan" aria-pressed="false" title="Ein Finger bzw. linke Maustaste verschiebt die Ansicht">✥ Verschieben</button>
     <div class="fld"><span>Darstellung</span>
       <div class="seg" id="segD" role="group" aria-label="Darstellung">
@@ -156,7 +157,7 @@ h1 span{color:var(--accent)}
   function select(v){if(v===cur)return;cur=v;base=null;if(typeof renderMarks==='function')renderMarks();$('load').hidden=false;$('load').textContent='Modell wird geladen …';
     mv.cameraOrbit='-35deg 70deg auto';mv.cameraTarget='auto auto auto';mv.fieldOfView='auto';if(!tour.on)mv.maxCameraOrbit='auto';
     mv.setAttribute('ios-src','models/'+fUsdz(v));mv.src='models/'+fGlb(v);update()}
-  function update(){if(!cur)return;
+  function update(){if(!cur)return;$('bWeb').href='ar.html#'+(cur.id.replace(/^unterzug-441-?/,'')||'ganz')+(ft?'-ft':'');
     const k=cur.massstab,[L,H,B]=cur.original,m=x=>k===1?len(x):len(x)+'<small>Modell '+len(x/k)+'</small>';
     $('size').innerHTML=`${len(L/k)} × ${len(H/k)} × ${len(B/k)}<small>${k===1?'Originalgröße':'Maßstab 1:'+k+' · Original '+len(L)+' lang'} · GLB ${mb(ft?cur.glbFtBytes:cur.glbBytes)} · USDZ ${mb(ft?cur.usdzFtBytes:cur.usdzBytes)}</small>`;
     $('hL').innerHTML='Länge '+m(L);$('hH').innerHTML='Höhe '+m(H);$('hB').innerHTML='Breite '+m(B);
