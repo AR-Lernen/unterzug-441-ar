@@ -258,11 +258,11 @@ function buttons( list ) { ovBot.innerHTML = ''; for ( const [ label, fn, cls, p
   const b = document.createElement( 'button' ); b.textContent = label; if ( cls ) b.className = cls; if ( pressed !== undefined ) b.setAttribute( 'aria-pressed', pressed );
   b.addEventListener( 'click', e => { e.stopPropagation(); fn(); } ); ( ovBot.lastElementChild?.className === 'grp' ? ovBot.lastElementChild : ovBot ).appendChild( b ); } }
 function stepPoints() {
-  ar.pts = []; ar.aligned = false; ar.anchor?.delete?.(); ar.anchor = null; holder.visible = false; dots.forEach( d => scene.remove( d ) ); dots.length = 0;
+  ar.pts = []; ar.aligned = false; ar.anchor?.delete?.(); ar.anchor = null; ar.ancRel = null; ar.ancVerworfen = false; holder.visible = false; dots.forEach( d => scene.remove( d ) ); dots.length = 0;
   $( 'ovCross' ).hidden = false;
   msg( zweiStuetzen() ? `Stütze <b>${cur.vorOrt.stuetze}</b>: Fadenkreuz auf die <b>Mitte der Unterkante</b> der dir zugewandten Seite richten.`
     : `Fadenkreuz auf die <b>linke untere Ecke</b> der ${side === 'stirn' ? 'Stirnseite' : 'Längsseite'} von Stütze ${cur.vorOrt.stuetze} richten.` );
-  buttons( [ [ 'Punkt setzen', setPoint, 'main' ], [ 'Beenden', () => ar.session.end() ] ] );
+  buttons( [ [ 'Punkt setzen', setPoint, 'main' ], [ 'Ohne Ausrichten zeigen', showHere ], [ 'Beenden', () => ar.session.end() ] ] );
 }
 function setPoint() {
   if ( !ar.hit ) { msg( 'Noch kein Boden erkannt. Handy langsam über den Boden schwenken, bis der Ring erscheint.' ); return; }
@@ -272,8 +272,12 @@ function setPoint() {
   if ( ar.pts.length === 1 ) { ar.cam = ar.viewer && { x: ar.viewer.x, z: ar.viewer.z };
     msg( zwei ? `Jetzt auf derselben Trägerseite zu Stütze <b>${cur2.vorOrt.stuetze}</b> gehen (Handy auf den Boden gerichtet lassen) und dort die <b>Mitte der Unterkante</b> antippen.`
       : 'Jetzt die <b>rechte untere Ecke</b> derselben Seite.' ); return; }
+  if ( ar.pts[ 0 ].distanceTo( ar.pts[ 1 ] ) < 0.1 ) {
+    ar.pts.pop(); scene.remove( dots.pop() );
+    msg( 'Die beiden Punkte liegen zu dicht beieinander. Fadenkreuz auf den zweiten Punkt richten, warten bis es grün ist, dann erneut „Punkt setzen“.' ); return; }
   const [ A, B ] = ar.pts, r = zwei ? alignFromColumns( A, B, ar.cam || A, cur.vorOrt.xc, cur2.vorOrt.xc, cur.vorOrt.hz )
     : alignFromCorners( A, B, side, cur.vorOrt.hx, cur.vorOrt.hz );
+  if ( ![ ...r.o, ...r.x, ...r.z ].every( Number.isFinite ) ) { stepPoints(); msg( 'Ausrichtung ungültig, bitte die Punkte neu setzen.' ); return; }
   ar.base = new THREE.Matrix4().makeBasis( new THREE.Vector3( ...r.x ), new THREE.Vector3( 0, 1, 0 ), new THREE.Vector3( ...r.z ) ).setPosition( ...r.o );
   ar.off = { x: 0, y: 0, z: 0, rot: 0, flip: 0 }; ar.aligned = true; holder.visible = true; $( 'ovCross' ).hidden = true;
   dots.forEach( d => scene.remove( d ) ); dots.length = 0;
@@ -281,9 +285,21 @@ function setPoint() {
   ar.pendingAnchor = { p: r.o, q: [ q.x, q.y, q.z, q.w ] };
   const dev = ( r.gemessen - r.soll ) * 100;
   const tol = zwei ? 8 : 4, was = zwei ? 'Abstand' : 'Breite', soll = zwei ? `${f( r.soll, 2 )} m` : `${f( r.soll * 100, 0 )} cm`;
-  msg( `Ausgerichtet. Gemessener ${was} ${zwei ? f( r.gemessen, 2 ) + ' m' : f( r.gemessen * 100 ) + ' cm'} (Soll ${soll})` +
+  msg( `Ausgerichtet. ${zwei ? 'Gemessener' : 'Gemessene'} ${was} ${zwei ? f( r.gemessen, 2 ) + ' m' : f( r.gemessen * 100 ) + ' cm'} (Soll ${soll})` +
     ( Math.abs( dev ) > tol ? ` · <span style="color:#ff8a80">Abweichung ${f( dev )} cm – Punkte eventuell neu setzen</span>` : '' ) );
   tuneButtons();
+}
+// Modell ohne Ausrichtung an der Stelle des Fadenkreuzes zeigen (Stütze steht dort, Träger quer vor dem Betrachter)
+function showHere() {
+  if ( !ar.hit ) { msg( 'Noch kein Boden erkannt. Handy langsam über den Boden schwenken, bis das Fadenkreuz grün ist.' ); return; }
+  const p = new THREE.Vector3().setFromMatrixPosition( ar.hit ), v = ar.viewer || { x: p.x, z: p.z + 1 };
+  let fx = p.x - v.x, fz = p.z - v.z; const l = Math.hypot( fx, fz ) || 1; fx /= l; fz /= l;   // Blickrichtung auf dem Boden
+  const x = new THREE.Vector3( - fz, 0, fx ), z = new THREE.Vector3( - fx, 0, - fz );            // Trägerachse quer zur Blickrichtung
+  ar.base = new THREE.Matrix4().makeBasis( x, new THREE.Vector3( 0, 1, 0 ), z ).setPosition( p );
+  ar.off = { x: 0, y: 0, z: 0, rot: 0, flip: 0 }; ar.aligned = true; ar.ancRel = null; holder.visible = true; $( 'ovCross' ).hidden = true;
+  dots.forEach( d => scene.remove( d ) ); dots.length = 0;
+  const q = new THREE.Quaternion().setFromRotationMatrix( ar.base ); ar.pendingAnchor = { p: p.toArray(), q: [ q.x, q.y, q.z, q.w ] };
+  msg( 'Modell ohne Ausrichtung am Fadenkreuz abgestellt. Mit den Knöpfen verschieben und drehen.' ); tuneButtons();
 }
 function nudge( k, d ) { ar.off[ k ] += d; showOff(); }
 function showOff() { const o = ar.off;
@@ -300,7 +316,7 @@ function tuneButtons() {
     [ 'Neu ausrichten', stepPoints ], [ 'Beenden', () => ar.session.end() ]
   ] );
 }
-const tmpM = new THREE.Matrix4(), offM = new THREE.Matrix4(), rotM = new THREE.Matrix4();
+const tmpM = new THREE.Matrix4(), offM = new THREE.Matrix4(), rotM = new THREE.Matrix4(), baseM = new THREE.Matrix4();
 function placeHolder( base ) { const o = ar.off;
   offM.makeTranslation( o.x, o.y, o.z ); rotM.makeRotationY( o.rot + ( o.flip ? Math.PI : 0 ) );
   holder.matrix.copy( base ).multiply( offM ).multiply( rotM ); holder.matrixWorldNeedsUpdate = true; }
@@ -332,9 +348,10 @@ else $( 'arinfo' ).innerHTML = '<span class="warn">AR ist hier nicht verfügbar<
 // Ein Fehler in einem Bild darf die Schleife nicht beenden (three.js fordert das nächste Bild erst nach dem Aufruf an),
 // sonst steht die Einblendung still und es werden keine Punkte mehr angenommen.
 renderer.setAnimationLoop( ( t, frame ) => {
-  try { frameStep( frame ); renderer.render( scene, camera ); }
-  catch ( e ) { console.error( e ); if ( ar.session ) { ar.fehlerT = performance.now(); $( 'ovDiag' ).textContent = 'Fehler: ' + e.message; } }
+  try { frameStep( frame ); } catch ( e ) { fehler( e ); }
+  try { renderer.render( scene, camera ); } catch ( e ) { fehler( e ); }
 } );
+function fehler( e ) { console.error( e ); if ( ar.session ) { ar.fehlerT = performance.now(); $( 'ovDiag' ).textContent = 'Fehler: ' + e.message; } }
 function frameStep( frame ) {
   if ( frame && ar.session && ar.ref ) {
     const hits = ar.hitSource ? frame.getHitTestResults( ar.hitSource ) : [];
@@ -348,11 +365,21 @@ function frameStep( frame ) {
     // Raumanker anlegen, sobald ausgerichtet (falls das Gerät Anker kann)
     if ( ar.pendingAnchor && frame.createAnchor ) { const a = ar.pendingAnchor; ar.pendingAnchor = null;
       frame.createAnchor( new XRRigidTransform( { x: a.p[ 0 ], y: a.p[ 1 ], z: a.p[ 2 ] }, { x: a.q[ 0 ], y: a.q[ 1 ], z: a.q[ 2 ], w: a.q[ 3 ] } ), ar.ref )
-        .then( anc => { if ( ar.aligned ) ar.anchor = anc; else anc.delete(); } ).catch( () => {} ); }
+        .then( anc => { if ( ar.aligned ) { ar.anchor = anc; ar.ancRel = null; } else anc.delete(); } ).catch( () => {} ); }
     else if ( ar.pendingAnchor ) ar.pendingAnchor = null;
     if ( ar.aligned ) {
       let base = ar.base;
-      if ( ar.anchor && frame.trackedAnchors?.has( ar.anchor ) ) { const ap = frame.getPose( ar.anchor.anchorSpace, ar.ref ); if ( ap ) base = tmpM.fromArray( ap.transform.matrix ); }
+      // Anker: nur seine Bewegung seit dem Anlegen übernehmen (ancRel = Anker⁻¹ · Ausrichtung beim ersten Bild),
+      // so stört eine abweichende Drehung oder Lage des Ankers nicht. Liegt er beim Anlegen > 10 cm daneben, wird er verworfen.
+      if ( ar.anchor && frame.trackedAnchors?.has( ar.anchor ) ) { const ap = frame.getPose( ar.anchor.anchorSpace, ar.ref );
+        if ( ap ) { const am = tmpM.fromArray( ap.transform.matrix );
+          if ( !ar.ancRel ) {
+            const d = new THREE.Vector3().setFromMatrixPosition( am ).distanceTo( new THREE.Vector3().setFromMatrixPosition( ar.base ) );
+            if ( d > 0.1 ) { ar.anchor.delete?.(); ar.anchor = null; ar.ancVerworfen = true; }
+            else ar.ancRel = am.clone().invert().multiply( ar.base );
+          }
+          if ( ar.ancRel ) base = baseM.copy( am ).multiply( ar.ancRel );
+        } }
       placeHolder( base );
     }
   } else if ( !ar.session ) {
@@ -363,7 +390,11 @@ function frameStep( frame ) {
 let diagT = 0;
 function diag( vp, nHits ) { const now = performance.now(); if ( now - diagT < 400 || now - ( ar.fehlerT || 0 ) < 3000 ) return; diagT = now;
   $( 'ovDiag' ).textContent = [ vp ? 'Tracking ✓' : 'Tracking ✗ (langsamer bewegen)', ar.hit ? 'Boden ✓' : `Boden ✗ (${nHits})`,
-    ar.anchor ? 'Anker ✓' : ( ar.aligned ? 'ohne Anker' : '' ), ar.session?.domOverlayState ? '' : 'kein Overlay' ].filter( Boolean ).join( ' · ' ); }
+    ar.anchor ? 'Anker ✓' : ( ar.aligned ? ( ar.ancVerworfen ? 'Anker verworfen' : 'ohne Anker' ) : '' ),
+    ar.aligned && vp ? 'Modell ' + modelDist( vp ) : '', ar.session?.domOverlayState ? '' : 'kein Overlay' ].filter( Boolean ).join( ' · ' ); }
+// Abstand Betrachter – Ursprung des Modells (Stützenmitte am Boden); „?“ bei ungültiger Lage
+function modelDist( vp ) { const o = new THREE.Vector3().setFromMatrixPosition( holder.matrix ), p = vp.transform.position;
+  const d = Math.hypot( o.x - p.x, o.y - p.y, o.z - p.z ); return Number.isFinite( d ) ? f( d ) + ' m entfernt' : '?'; }
 </script>
 </body>
 </html>
