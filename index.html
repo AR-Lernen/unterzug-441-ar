@@ -140,7 +140,7 @@ h1 span{color:var(--accent)}
   // Varianten, Abmessungen, Achsen und Positionen schreibt tools/export.mjs nach models/varianten.json
   let V=[],cur=null,base=null,ft=false;
   // Mit Fertigteilträgern eigene Dateien, damit der Schalter auch in Scene Viewer und Quick Look gilt
-  const fGlb=v=>ft?v.glbFt:v.glb,fUsdz=v=>ft?v.usdzFt:v.usdz;
+  const fGlb=v=>(ft?v.glbFt+'?v='+v.glbFtV:v.glb+'?v='+v.glbV),fUsdz=v=>(ft?v.usdzFt+'?v='+v.usdzFtV:v.usdz+'?v='+v.usdzV);   // ?v= Inhalts-Hash gegen veraltete Zwischenspeicher
   const f=(v,n=2)=>v.toFixed(n).replace('.',',');
   const len=m=>m>=1?f(m)+' m':m>=0.1?f(m*100,1)+' cm':f(m*1000,0)+' mm';
   const mb=b=>f(b/1e6,1)+' MB';

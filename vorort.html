@@ -185,7 +185,7 @@ function select( v ) {
 function select2( v ) { cur2 = v; press( 'segC2', b => b.dataset.id === v.id ); updateUI(); }
 // Ganzer Träger: eine Datei für alle Stützen, nach Stütze A verschoben; Ausschnitt: Datei der Stütze (Ursprung schon am Stützenfuß)
 function loadModel() {
-  const v = umfang === 'ganz' ? FULL : cur, file = v.glbFt || v.glb;
+  const v = umfang === 'ganz' ? FULL : cur, file = ( v.glbFt || v.glb ) + '?v=' + ( v.glbFtV || v.glbV );   // ?v= gegen veraltete Zwischenspeicher
   if ( file === modelFile && model ) { placeModel(); return; }
   modelFile = file; $( 'load' ).hidden = false; $( 'load' ).textContent = 'Modell wird geladen …';
   loader.load( 'models/' + file, g => { if ( modelFile !== file ) return; if ( model ) holder.remove( model );
