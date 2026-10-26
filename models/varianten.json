@@ -395,8 +395,8 @@
    ],
    "glbFt": "unterzug-441-m50-ft.glb",
    "usdzFt": "unterzug-441-m50-ft.usdz",
-   "glbFtBytes": 470768,
-   "usdzFtBytes": 1284588
+   "glbFtBytes": 470720,
+   "usdzFtBytes": 1283739
   },
   {
    "id": "unterzug-441-m25",
@@ -792,8 +792,8 @@
    ],
    "glbFt": "unterzug-441-m25-ft.glb",
    "usdzFt": "unterzug-441-m25-ft.usdz",
-   "glbFtBytes": 470768,
-   "usdzFtBytes": 1284159
+   "glbFtBytes": 470720,
+   "usdzFtBytes": 1283310
   },
   {
    "id": "unterzug-441-achse17",
@@ -969,8 +969,8 @@
    ],
    "glbFt": "unterzug-441-achse17-ft.glb",
    "usdzFt": "unterzug-441-achse17-ft.usdz",
-   "glbFtBytes": 850716,
-   "usdzFtBytes": 2451894
+   "glbFtBytes": 850668,
+   "usdzFtBytes": 2451045
   },
   {
    "id": "unterzug-441-m10",
@@ -1366,8 +1366,8 @@
    ],
    "glbFt": "unterzug-441-m10-ft.glb",
    "usdzFt": "unterzug-441-m10-ft.usdz",
-   "glbFtBytes": 470764,
-   "usdzFtBytes": 1280491
+   "glbFtBytes": 470716,
+   "usdzFtBytes": 1279642
   },
   {
    "id": "unterzug-441-m5",
@@ -1763,8 +1763,8 @@
    ],
    "glbFt": "unterzug-441-m5-ft.glb",
    "usdzFt": "unterzug-441-m5-ft.usdz",
-   "glbFtBytes": 470764,
-   "usdzFtBytes": 1280694
+   "glbFtBytes": 470716,
+   "usdzFtBytes": 1279845
   },
   {
    "id": "unterzug-441",
@@ -2160,8 +2160,8 @@
    ],
    "glbFt": "unterzug-441-ft.glb",
    "usdzFt": "unterzug-441-ft.usdz",
-   "glbFtBytes": 470716,
-   "usdzFtBytes": 1274470
+   "glbFtBytes": 470664,
+   "usdzFtBytes": 1273621
   }
  ],
  "positionen": [
