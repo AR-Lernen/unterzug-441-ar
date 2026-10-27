@@ -163,7 +163,7 @@ let V = [], FULL = null, cur = null, cur2 = null, model = null, modelFile = '', 
   umfang = store.get().umfang || 'ganz', methode = store.get().methode || 'stuetzen';
 const footMat = new THREE.MeshBasicMaterial( { color: 0xffc400 } );
 // Lage einer Stütze im ganzen Modell (Modellsystem aus varianten.json)
-const axFull = v => FULL.achsen.find( a => a.name === v.vorOrt.stuetze ).x;
+const axFull = v => FULL.achsen.find( a => a.name === '18' ).x + v.vorOrt.xc;   // Achse 18 = x 0; Stützenmitte aus vorOrt.xc (G/13 steht neben der Achse)
 // Gelber Fußabdruck aller Stützen für das ganze Modell (die Ausschnitte haben ihn schon in der Datei)
 function footprints() { const g = new THREE.Group(), t = 0.003, w = 0.02;
   for ( const v of V ) { const cx = axFull( v ), { hx, hz } = v.vorOrt;
