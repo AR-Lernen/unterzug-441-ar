@@ -15,6 +15,9 @@ Marken), auf iPhone/iPad in Quick Look.
 Direkt starten per Link-Anker, z. B. `#m10` (Maßstab 1:10 für den Boden), `#m5` (1:5), `#ganz` (1:1),
 `#praesentation` oder `#3d`.
 
+**AR im Browser:** Schließt sich die Google-App beim AR-Start, den Knopf „AR im Browser“ nehmen (`ar.html`):
+läuft direkt in Chrome (WebXR), Modell am Fadenkreuz abstellen, verschieben und drehen.
+
 **Fertigteilträger:** Schalter „Fertigteilträger“ (Link-Anker `#ft`, z. B. `#m10-ft`) blendet die Querträger
 ein, Lage aus der Ansicht geschätzt (Raster 1,20 m, Trapezquerschnitt). Gilt auch in AR.
 Lichte Höhe vom Fußboden bis Unterkante Unterzug: 2,20 m.
