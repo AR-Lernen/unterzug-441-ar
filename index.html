@@ -117,7 +117,7 @@ h1 span{color:var(--accent)}
       </div>
     </div>
     <p class="hint3d" id="hint3d" hidden></p>
-    <p class="hint3d" id="svtip" hidden>Schließt sich die Google-App beim AR-Start? Dann „AR im Browser“ nehmen: läuft direkt in Chrome, ohne Google-App.</p>
+    <p class="hint3d" id="svtip" hidden>„In AR ansehen“ startet hier im Browser (Chrome), ohne Google-App. <a href="#" id="svlink" style="color:var(--accent)">Stattdessen über die Google-App (Scene Viewer)</a> – schließt sich in manchen Versionen beim Start.</p>
     <p class="hint3d" id="tabtip" hidden>Android-Tablet? Startet AR nicht in der Google-Ansicht: Chrome ⋮ → Einstellungen → Website-Einstellungen → Desktopwebsite ausschalten und neu laden.</p>
     <p class="hint3d" id="diag" hidden style="font-family:var(--f-mono);font-size:11px;word-break:break-all"></p>
     <div class="fld"><span>Positionen antippen (Browser, VR-/MR-Brille)</span>
@@ -196,15 +196,21 @@ h1 span{color:var(--accent)}
   if(location.hash.includes('geraet')){const d=$('diag');d.hidden=false;
     d.textContent=`UA: ${ua} · maxTouchPoints: ${navigator.maxTouchPoints} · ontouchstart: ${'ontouchstart' in window} · coarse: ${matchMedia('(any-pointer: coarse)').matches} · Tablet-Desktop erkannt: ${tabletDesktop}`;
     customElements.whenDefined('model-viewer').then(()=>setTimeout(()=>{d.textContent+=` · AR-Modus möglich: ${mv.canActivateAR}`},2500))}
+  // Android (auch Tablet im Desktop-Modus): „In AR ansehen“ öffnet die eigene AR-Seite ar.html (WebXR in Chrome).
+  // Der Scene Viewer der Google-App schließt sich in manchen Versionen sofort beim Start; er bleibt über #svlink erreichbar.
+  const androidAR=/Android/i.test(ua)||tabletDesktop;
   mv.addEventListener('click',e=>{
-    if(!tabletDesktop||!cur||!e.target.closest('#arbtn'))return;
-    e.preventDefault();e.stopPropagation();setTour(false);
+    if(!androidAR||!cur||!e.target.closest('#arbtn'))return;
+    e.preventDefault();e.stopPropagation();setTour(false);location.href=$('bWeb').href},true);
+  // Scene Viewer auf Wunsch: model-viewer startet ihn direkt (activateAR geht nicht über den Knopf), im Desktop-Modus per Intent
+  $('svlink').addEventListener('click',e=>{e.preventDefault();if(!cur)return;setTour(false);if(tabletDesktop)openSceneViewer();else mv.activateAR()});
+  function openSceneViewer(){
     const page=location.href.split('#')[0],key=cur.id.replace(/^unterzug-441-?/,'')||'ganz';
     const file=new URL('models/'+fGlb(cur),page).toString();
     const params=new URLSearchParams({mode:'ar_preferred',disable_occlusion:'true',resizable:'false',title:'Unterzug Pos. 441 · '+cur.titel});
     const a=document.createElement('a');
     a.href=`intent://arvr.google.com/scene-viewer/1.2?${params}&file=${encodeURIComponent(file)}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${encodeURIComponent(page+'#'+key+'-svfehlt')}`+';end;';
-    document.body.appendChild(a);a.click();a.remove()},true);
+    document.body.appendChild(a);a.click();a.remove()}
 
   /* ---------- Positionsmarken: antippen zeigt Stückzahl, Ø, Länge und Lage ---------- */
   // Marken je Variante aus varianten.json (Punkt auf einem Stab der Position); in WebXR-AR bleiben sie antippbar
