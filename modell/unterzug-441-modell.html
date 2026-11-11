@@ -153,11 +153,11 @@ const cm=v=>Math.round(v*100);
 
 /* ---------- Geometrie des Bauteils ---------- */
 const X={18:0,17:8.4,16:12.6,15:16.8,14:21.0,13:25.2,12:29.4,11:33.6};
-// Rechter Teil (Stütze G/12, Sprung, Aussparung, Endbereich) so gelegt, dass die unteren Feldstäbe auf G/12 laufen:
-// Pos. 13 (5,60 m) reicht von der Außenfläche G/13 bis 3,5 cm vor die rechte Fläche von G/12, wie Pos. 9 auf G/13.
-// Sprung bündig an der rechten Fläche von G/12, Aussparung 1,05 m davor, Trägerende 25 cm vor Achse 11 (Wandfläche),
-// so bleibt der Endbereich h = 60 cm 2,98 m lang und Pos. 15 (3,00 m) beginnt auf G/12.
-const XG12=X[13]-0.50+0.035+5.60+0.035-0.125, XSTEP=XG12+0.125, XEND=X[11]-0.25, C=0.04;
+// Stütze G/12 (25 cm längs): lichter Abstand zu G/13 am Bauwerk gemessen 5,17 m; die rechte Fläche von G/13 liegt auf Achse 13.
+// Sprung bündig an der rechten Fläche von G/12, Aussparung 1,05 m davor, Trägerende an Achse 11 (Endbereich h = 60 cm 2,98 m).
+// Die unteren Feldstäbe Pos. 13/14 laufen auf G/12 und reichen über G/13 nur bis etwa zur Stützenmitte (dort Stützmoment,
+// untere Stäbe im Druckbereich).
+const XG12=X[13]+5.17+0.125, XSTEP=XG12+0.125, XEND=X[11], C=0.04;
 // Stütze G/13 steht um einen halben Querschnitt Richtung Achse 15 versetzt: Achse 13 an ihrer Seitenfläche (Plan, Lage der Feldstäbe Pos. 9)
 const SX13=X[13]-0.25;
 const YF=-3.2;   // Fußboden: lichte Höhe 2,20 m bis UK Unterzug (am Bauwerk gemessen)
@@ -183,7 +183,7 @@ def(9,{n:11,d:20,lg:8.35,g:'unten',shape:{t:'straight',L:8.35},where:'Feldbewehr
 def(10,{n:2,d:20,lg:6.50,g:'oben',shape:{t:'straight',L:6.5},where:'Stützbewehrung oben über Achse 17 (3,20 | 3,30), 2. Lage'});
 def(11,{n:2,d:20,lg:6.70,g:'oben',shape:{t:'straight',L:6.7},where:'Stützbewehrung oben über Achse 17 (3,30 | 3,40), 2. Lage'});
 def(12,{n:2,d:20,lg:6.10,g:'oben',shape:{t:'straight',L:6.1},where:'Stützbewehrung oben über Achse 17 (3,40 | 2,70), 2. Lage'});
-def(13,{n:4,d:20,lg:5.60,g:'unten',shape:{t:'straight',L:5.6},where:'Feldbewehrung unten, von der Außenfläche G/13 über das Feld bis auf die Stütze G/12 (Stoß mit Pos. 9 über G/13)',note:'Die Lage von G/12 ist so gewählt, dass die Stäbe auf G/12 laufen und 3,5 cm vor ihrer rechten Fläche enden.'});
+def(13,{n:4,d:20,lg:5.60,g:'unten',shape:{t:'straight',L:5.6},where:'Feldbewehrung unten, von der Mitte G/13 über das Feld bis auf die Stütze G/12 (Übergreifung mit Pos. 9 auf G/13)',note:'Endet 3,5 cm vor der rechten Fläche von G/12. Über G/13 nur bis etwa zur Stützenmitte: dort Stützmoment, die unteren Stäbe liegen im Druckbereich.'});
 def(14,{n:2,d:14,lg:5.20,g:'unten',shape:{t:'straight',L:5.2},where:'Feldbewehrung unten, von der Innenfläche G/13 bis auf die Stütze G/12'});
 def(15,{n:5,d:14,lg:3.00,g:'unten',shape:{t:'straight',L:3.0},where:'Untere Bewehrung im Endbereich G/12–11 (h = 60 cm)'});
 def(16,{n:1,d:28,lg:8.50,g:'oben',shape:{t:'straight',L:8.5},where:'Stützbewehrung oben über Achse 17 (4,10 | 4,40), 1. Lage Mitte'});
