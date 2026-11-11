@@ -154,9 +154,8 @@ const cm=v=>Math.round(v*100);
 /* ---------- Geometrie des Bauteils ---------- */
 const X={18:0,17:8.4,16:12.6,15:16.8,14:21.0,13:25.2,12:29.4,11:33.6};
 // Stütze G/12 (25 cm längs): lichter Abstand zu G/13 am Bauwerk gemessen 5,17 m; die rechte Fläche von G/13 liegt auf Achse 13.
-// Querschnittssprung bei 31,15 m: 60 cm hoher Endbereich 2,45 m lang (13 Bügel Pos. 50 mit e ≈ 19 cm, Montagestäbe Pos. 34
-// 2,40 m; Pos. 15 mit 3,00 m beginnt damit auf G/12). Zwischen G/12 und Sprung bleibt eine 53 cm lange Nase in voller Höhe.
-const XG12=X[13]+5.17+0.125, XSTEP=31.15, C=0.04;
+// Der Querschnittssprung liegt bündig an der rechten Fläche von G/12 (Bauwerk und Plan); die Aussparung endet 1,05 m davor.
+const XG12=X[13]+5.17+0.125, XSTEP=XG12+0.125, C=0.04;
 // Stütze G/13 steht um einen halben Querschnitt Richtung Achse 15 versetzt: Achse 13 an ihrer Seitenfläche (Plan, Lage der Feldstäbe Pos. 9)
 const SX13=X[13]-0.25;
 const YF=-3.2;   // Fußboden: lichte Höhe 2,20 m bis UK Unterzug (am Bauwerk gemessen)
