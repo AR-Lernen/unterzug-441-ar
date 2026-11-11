@@ -153,7 +153,10 @@ const cm=v=>Math.round(v*100);
 
 /* ---------- Geometrie des Bauteils ---------- */
 const X={18:0,17:8.4,16:12.6,15:16.8,14:21.0,13:25.2,12:29.4,11:33.6};
-const XG12=31.0, XSTEP=31.15, C=0.04;
+// Stütze G/12 (25 cm längs): lichter Abstand zu G/13 am Bauwerk gemessen 5,17 m; die rechte Fläche von G/13 liegt auf Achse 13.
+// Querschnittssprung bei 31,15 m: 60 cm hoher Endbereich 2,45 m lang (13 Bügel Pos. 50 mit e ≈ 19 cm, Montagestäbe Pos. 34
+// 2,40 m; Pos. 15 mit 3,00 m beginnt damit auf G/12). Zwischen G/12 und Sprung bleibt eine 53 cm lange Nase in voller Höhe.
+const XG12=X[13]+5.17+0.125, XSTEP=31.15, C=0.04;
 // Stütze G/13 steht um einen halben Querschnitt Richtung Achse 15 versetzt: Achse 13 an ihrer Seitenfläche (Plan, Lage der Feldstäbe Pos. 9)
 const SX13=X[13]-0.25;
 const YF=-3.2;   // Fußboden: lichte Höhe 2,20 m bis UK Unterzug (am Bauwerk gemessen)
@@ -179,8 +182,8 @@ def(9,{n:11,d:20,lg:8.35,g:'unten',shape:{t:'straight',L:8.35},where:'Feldbewehr
 def(10,{n:2,d:20,lg:6.50,g:'oben',shape:{t:'straight',L:6.5},where:'Stützbewehrung oben über Achse 17 (3,20 | 3,30), 2. Lage'});
 def(11,{n:2,d:20,lg:6.70,g:'oben',shape:{t:'straight',L:6.7},where:'Stützbewehrung oben über Achse 17 (3,30 | 3,40), 2. Lage'});
 def(12,{n:2,d:20,lg:6.10,g:'oben',shape:{t:'straight',L:6.1},where:'Stützbewehrung oben über Achse 17 (3,40 | 2,70), 2. Lage'});
-def(13,{n:4,d:20,lg:5.60,g:'unten',shape:{t:'straight',L:5.6},where:'Feldbewehrung unten, Feld 13 bis Stütze G/12'});
-def(14,{n:2,d:14,lg:5.20,g:'unten',shape:{t:'straight',L:5.2},where:'Feldbewehrung unten, Feld 13 bis Stütze G/12'});
+def(13,{n:4,d:20,lg:5.60,g:'unten',shape:{t:'straight',L:5.6},where:'Feldbewehrung unten, von der Außenfläche G/13 bis vor die Stütze G/12 (Stoß mit Pos. 9 über G/13)',note:'5,60 m = 0,50 m Stütze G/13 + 5,17 m lichter Abstand (gemessen) − Betondeckung; die Stäbe enden vor G/12, wie am Bauwerk zu sehen.'});
+def(14,{n:2,d:14,lg:5.20,g:'unten',shape:{t:'straight',L:5.2},where:'Feldbewehrung unten, von der Innenfläche G/13 bis vor die Stütze G/12'});
 def(15,{n:5,d:14,lg:3.00,g:'unten',shape:{t:'straight',L:3.0},where:'Untere Bewehrung im Endbereich G/12–11 (h = 60 cm)'});
 def(16,{n:1,d:28,lg:8.50,g:'oben',shape:{t:'straight',L:8.5},where:'Stützbewehrung oben über Achse 17 (4,10 | 4,40), 1. Lage Mitte'});
 def(17,{n:2,d:28,lg:10.10,g:'oben',shape:{t:'straight',L:10.1},where:'Stützbewehrung oben über Achse 17 (4,70 | 5,40), 1. Lage'});
@@ -266,7 +269,7 @@ ys=botGroup(1.0,[{p:9,n:5,x0:cen(X[17],X[15],8.35)}],[{p:7,n:2,x0:cen(X[17],X[15
 for(let i=0;i<7;i++)add(43,X[17]+1.0+i*1.05,ys,0);
 ys=botGroup(1.0,[{p:9,n:6,x0:cen(X[15],X[13],8.35)}],[{p:7,n:2,x0:cen(X[15],X[13],7.0)},{p:8,n:2,x0:cen(X[15],X[13],7.1)}],0.010,0.020);
 for(let i=0;i<7;i++)add(43,X[15]+1.0+i*1.05,ys,0);
-botGroup(1.0,[{p:13,n:4,x0:SX13+0.15},{p:14,n:2,x0:SX13+0.40}],[],0.010,0);
+botGroup(1.0,[{p:13,n:4,x0:XG12-0.125-0.035-5.60},{p:14,n:2,x0:XG12-0.125-0.035-5.20}],[],0.010,0);   // enden 3,5 cm vor der Fläche von G/12
 botGroup(0.6,[{p:15,n:5,x0:33.57-3.0}],[],0.010,0);
 // Bügel
 function distribute(segs,n){const tot=segs.reduce((s,[a,b])=>s+b-a,0),sp=tot/n,out=[];
@@ -324,7 +327,7 @@ for(const y of[-0.36,-0.68])for(const s of[-1,1]){const cnt=(y===-0.68&&s===1)?3
   add(31,x0,y,s*(zo-(i%2)*0.012))}}   // Übergreifungsstoß nebeneinander: jeder zweite Stab um 1 Ø nach innen
 for(const y of[-0.36,-0.68])for(const s of[-1,1])for(let i=0;i<7;i++)add(32,0.3+i*4.1,y,s*zi);
 for(const s of[-1,1]){add(33,33.56-5.2,-0.30,s*zo);add(33,33.56-5.2,-0.30,s*zi)}add(33,33.56-5.2,-0.30,0);   // endet 4 cm vor der Stirnfläche
-for(const z of[-0.07,0,0.07])add(34,31.15,-0.47,z);
+for(const z of[-0.07,0,0.07])add(34,XSTEP,-0.47,z);
 // Pos. 35 je 2 Stäbe über und unter der Aussparung (Öffnung y = -0,40 … -0,80), mittig zur Öffnung
 for(const s of[-1,1]){const x0=(OA+OB)/2-1.0;add(35,x0,-0.345,s*zi);add(35,x0,-0.815,s*zo)}
 // Stützen

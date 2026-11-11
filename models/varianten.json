@@ -12,10 +12,10 @@
    ],
    "glb": "unterzug-441-m50.glb",
    "usdz": "unterzug-441-m50.usdz",
-   "glbBytes": 466720,
-   "usdzBytes": 1268789,
-   "glbV": "8e29d965",
-   "usdzV": "a0b64e41",
+   "glbBytes": 467516,
+   "usdzBytes": 1268782,
+   "glbV": "18d6dfe4",
+   "usdzV": "de8664bd",
    "achsen": [
     {
      "name": "18",
@@ -54,7 +54,7 @@
     },
     {
      "name": "G/12",
-     "x": 0.284,
+     "x": 0.2739,
      "stuetze": true
     },
     {
@@ -90,13 +90,13 @@
     },
     {
      "p": "5",
-     "x": 0.2822,
+     "x": 0.2721,
      "y": 0.0424,
      "z": 0.0043
     },
     {
      "p": "6",
-     "x": 0.2844,
+     "x": 0.2743,
      "y": 0.0416,
      "z": 0
     },
@@ -138,15 +138,15 @@
     },
     {
      "p": "13",
-     "x": 0.222,
+     "x": 0.2147,
      "y": 0.0452,
      "z": -0.0034
     },
     {
      "p": "14",
-     "x": 0.223,
+     "x": 0.2187,
      "y": 0.0451,
-     "z": -0.0008
+     "z": -0.0004
     },
     {
      "p": "15",
@@ -276,7 +276,7 @@
     },
     {
      "p": "36",
-     "x": 0.284,
+     "x": 0.2739,
      "y": 0.0628,
      "z": -0.0028
     },
@@ -397,10 +397,10 @@
    ],
    "glbFt": "unterzug-441-m50-ft.glb",
    "usdzFt": "unterzug-441-m50-ft.usdz",
-   "glbFtBytes": 470704,
-   "usdzFtBytes": 1283634,
-   "glbFtV": "5a2fc763",
-   "usdzFtV": "ccffc33d"
+   "glbFtBytes": 471500,
+   "usdzFtBytes": 1283627,
+   "glbFtV": "c650f89e",
+   "usdzFtV": "ebfdecf3"
   },
   {
    "id": "unterzug-441-m25",
@@ -413,10 +413,10 @@
    ],
    "glb": "unterzug-441-m25.glb",
    "usdz": "unterzug-441-m25.usdz",
-   "glbBytes": 466720,
-   "usdzBytes": 1269791,
-   "glbV": "b6ab63c0",
-   "usdzV": "c1bc89c9",
+   "glbBytes": 467516,
+   "usdzBytes": 1269917,
+   "glbV": "3d5299b4",
+   "usdzV": "315ecce2",
    "achsen": [
     {
      "name": "18",
@@ -455,7 +455,7 @@
     },
     {
      "name": "G/12",
-     "x": 0.568,
+     "x": 0.5478,
      "stuetze": true
     },
     {
@@ -491,13 +491,13 @@
     },
     {
      "p": "5",
-     "x": 0.5645,
+     "x": 0.5443,
      "y": 0.0848,
      "z": 0.0085
     },
     {
      "p": "6",
-     "x": 0.5687,
+     "x": 0.5485,
      "y": 0.0832,
      "z": 0
     },
@@ -539,15 +539,15 @@
     },
     {
      "p": "13",
-     "x": 0.444,
+     "x": 0.4294,
      "y": 0.0904,
      "z": -0.0067
     },
     {
      "p": "14",
-     "x": 0.446,
+     "x": 0.4374,
      "y": 0.0903,
-     "z": -0.0015
+     "z": -0.0008
     },
     {
      "p": "15",
@@ -677,7 +677,7 @@
     },
     {
      "p": "36",
-     "x": 0.568,
+     "x": 0.5478,
      "y": 0.1256,
      "z": -0.0056
     },
@@ -798,10 +798,10 @@
    ],
    "glbFt": "unterzug-441-m25-ft.glb",
    "usdzFt": "unterzug-441-m25-ft.usdz",
-   "glbFtBytes": 470704,
-   "usdzFtBytes": 1283320,
-   "glbFtV": "559ebdce",
-   "usdzFtV": "2407a34b"
+   "glbFtBytes": 471500,
+   "usdzFtBytes": 1283318,
+   "glbFtV": "4be03cf6",
+   "usdzFtV": "7818bdf4"
   },
   {
    "id": "unterzug-441-achse17",
@@ -995,10 +995,10 @@
    ],
    "glb": "unterzug-441-m10.glb",
    "usdz": "unterzug-441-m10.usdz",
-   "glbBytes": 466716,
-   "usdzBytes": 1266469,
-   "glbV": "9becc5bb",
-   "usdzV": "5bcd7765",
+   "glbBytes": 467512,
+   "usdzBytes": 1266467,
+   "glbV": "d9a79b18",
+   "usdzV": "36d71c6e",
    "achsen": [
     {
      "name": "18",
@@ -1037,7 +1037,7 @@
     },
     {
      "name": "G/12",
-     "x": 1.42,
+     "x": 1.3695,
      "stuetze": true
     },
     {
@@ -1073,13 +1073,13 @@
     },
     {
      "p": "5",
-     "x": 1.4112,
+     "x": 1.3607,
      "y": 0.212,
      "z": 0.0213
     },
     {
      "p": "6",
-     "x": 1.4218,
+     "x": 1.3713,
      "y": 0.208,
      "z": 0
     },
@@ -1121,15 +1121,15 @@
     },
     {
      "p": "13",
-     "x": 1.11,
+     "x": 1.0735,
      "y": 0.226,
      "z": -0.0168
     },
     {
      "p": "14",
-     "x": 1.115,
+     "x": 1.0935,
      "y": 0.2257,
-     "z": -0.0038
+     "z": -0.0019
     },
     {
      "p": "15",
@@ -1259,7 +1259,7 @@
     },
     {
      "p": "36",
-     "x": 1.42,
+     "x": 1.3695,
      "y": 0.314,
      "z": -0.0141
     },
@@ -1380,10 +1380,10 @@
    ],
    "glbFt": "unterzug-441-m10-ft.glb",
    "usdzFt": "unterzug-441-m10-ft.usdz",
-   "glbFtBytes": 470700,
-   "usdzFtBytes": 1279712,
-   "glbFtV": "1ced3273",
-   "usdzFtV": "005d676b"
+   "glbFtBytes": 471496,
+   "usdzFtBytes": 1279582,
+   "glbFtV": "b53df5a6",
+   "usdzFtV": "8b40f4a9"
   },
   {
    "id": "unterzug-441-m5",
@@ -1396,10 +1396,10 @@
    ],
    "glb": "unterzug-441-m5.glb",
    "usdz": "unterzug-441-m5.usdz",
-   "glbBytes": 466716,
-   "usdzBytes": 1266197,
-   "glbV": "3840f89c",
-   "usdzV": "5550919d",
+   "glbBytes": 467512,
+   "usdzBytes": 1266195,
+   "glbV": "c941f3d4",
+   "usdzV": "3af6caef",
    "achsen": [
     {
      "name": "18",
@@ -1438,7 +1438,7 @@
     },
     {
      "name": "G/12",
-     "x": 2.84,
+     "x": 2.739,
      "stuetze": true
     },
     {
@@ -1474,13 +1474,13 @@
     },
     {
      "p": "5",
-     "x": 2.8224,
+     "x": 2.7214,
      "y": 0.424,
      "z": 0.0427
     },
     {
      "p": "6",
-     "x": 2.8437,
+     "x": 2.7427,
      "y": 0.416,
      "z": 0
     },
@@ -1522,15 +1522,15 @@
     },
     {
      "p": "13",
-     "x": 2.22,
+     "x": 2.147,
      "y": 0.452,
      "z": -0.0336
     },
     {
      "p": "14",
-     "x": 2.23,
+     "x": 2.187,
      "y": 0.4514,
-     "z": -0.0076
+     "z": -0.0038
     },
     {
      "p": "15",
@@ -1660,7 +1660,7 @@
     },
     {
      "p": "36",
-     "x": 2.84,
+     "x": 2.739,
      "y": 0.628,
      "z": -0.0281
     },
@@ -1781,10 +1781,10 @@
    ],
    "glbFt": "unterzug-441-m5-ft.glb",
    "usdzFt": "unterzug-441-m5-ft.usdz",
-   "glbFtBytes": 470700,
-   "usdzFtBytes": 1279911,
-   "glbFtV": "41ab933a",
-   "usdzFtV": "d34902fa"
+   "glbFtBytes": 471496,
+   "usdzFtBytes": 1279909,
+   "glbFtV": "6b50cbf6",
+   "usdzFtV": "78aaa0b5"
   },
   {
    "id": "unterzug-441",
@@ -1797,10 +1797,10 @@
    ],
    "glb": "unterzug-441.glb",
    "usdz": "unterzug-441.usdz",
-   "glbBytes": 466668,
+   "glbBytes": 467464,
    "usdzBytes": 1259979,
-   "glbV": "0c8cc774",
-   "usdzV": "b19f366d",
+   "glbV": "efd617bb",
+   "usdzV": "1fd25a69",
    "achsen": [
     {
      "name": "18",
@@ -1839,7 +1839,7 @@
     },
     {
      "name": "G/12",
-     "x": 14.2,
+     "x": 13.695,
      "stuetze": true
     },
     {
@@ -1875,13 +1875,13 @@
     },
     {
      "p": "5",
-     "x": 14.1118,
+     "x": 13.6068,
      "y": 2.12,
      "z": 0.2132
     },
     {
      "p": "6",
-     "x": 14.2185,
+     "x": 13.7135,
      "y": 2.08,
      "z": 0
     },
@@ -1923,15 +1923,15 @@
     },
     {
      "p": "13",
-     "x": 11.1,
+     "x": 10.735,
      "y": 2.26,
      "z": -0.168
     },
     {
      "p": "14",
-     "x": 11.15,
+     "x": 10.935,
      "y": 2.257,
-     "z": -0.038
+     "z": -0.019
     },
     {
      "p": "15",
@@ -2061,7 +2061,7 @@
     },
     {
      "p": "36",
-     "x": 14.2,
+     "x": 13.695,
      "y": 3.14,
      "z": -0.1407
     },
@@ -2182,10 +2182,10 @@
    ],
    "glbFt": "unterzug-441-ft.glb",
    "usdzFt": "unterzug-441-ft.usdz",
-   "glbFtBytes": 470648,
+   "glbFtBytes": 471444,
    "usdzFtBytes": 1273628,
-   "glbFtV": "6bf28b93",
-   "usdzFtV": "53be574e"
+   "glbFtV": "6495d2ea",
+   "usdzFtV": "c7d45d23"
   }
  ],
  "positionen": [
@@ -2319,7 +2319,8 @@
    "laenge": 5.6,
    "lageGeschaetzt": false,
    "gruppe": "unten",
-   "lage": "Feldbewehrung unten, Feld 13 bis Stütze G/12",
+   "lage": "Feldbewehrung unten, von der Außenfläche G/13 bis vor die Stütze G/12 (Stoß mit Pos. 9 über G/13)",
+   "hinweis": "5,60 m = 0,50 m Stütze G/13 + 5,17 m lichter Abstand (gemessen) − Betondeckung; die Stäbe enden vor G/12, wie am Bauwerk zu sehen.",
    "imModell": 4
   },
   {
@@ -2329,7 +2330,7 @@
    "laenge": 5.2,
    "lageGeschaetzt": false,
    "gruppe": "unten",
-   "lage": "Feldbewehrung unten, Feld 13 bis Stütze G/12",
+   "lage": "Feldbewehrung unten, von der Innenfläche G/13 bis vor die Stütze G/12",
    "imModell": 2
   },
   {
