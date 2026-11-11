@@ -153,9 +153,11 @@ const cm=v=>Math.round(v*100);
 
 /* ---------- Geometrie des Bauteils ---------- */
 const X={18:0,17:8.4,16:12.6,15:16.8,14:21.0,13:25.2,12:29.4,11:33.6};
-// Stütze G/12 (25 cm längs): lichter Abstand zu G/13 am Bauwerk gemessen 5,17 m; die rechte Fläche von G/13 liegt auf Achse 13.
-// Der Querschnittssprung liegt bündig an der rechten Fläche von G/12 (Bauwerk und Plan); die Aussparung endet 1,05 m davor.
-const XG12=X[13]+5.17+0.125, XSTEP=XG12+0.125, C=0.04;
+// Rechter Teil (Stütze G/12, Sprung, Aussparung, Endbereich) so gelegt, dass die unteren Feldstäbe auf G/12 laufen:
+// Pos. 13 (5,60 m) reicht von der Außenfläche G/13 bis 3,5 cm vor die rechte Fläche von G/12, wie Pos. 9 auf G/13.
+// Sprung bündig an der rechten Fläche von G/12, Aussparung 1,05 m davor, Trägerende 25 cm vor Achse 11 (Wandfläche),
+// so bleibt der Endbereich h = 60 cm 2,98 m lang und Pos. 15 (3,00 m) beginnt auf G/12.
+const XG12=X[13]-0.50+0.035+5.60+0.035-0.125, XSTEP=XG12+0.125, XEND=X[11]-0.25, C=0.04;
 // Stütze G/13 steht um einen halben Querschnitt Richtung Achse 15 versetzt: Achse 13 an ihrer Seitenfläche (Plan, Lage der Feldstäbe Pos. 9)
 const SX13=X[13]-0.25;
 const YF=-3.2;   // Fußboden: lichte Höhe 2,20 m bis UK Unterzug (am Bauwerk gemessen)
@@ -181,8 +183,8 @@ def(9,{n:11,d:20,lg:8.35,g:'unten',shape:{t:'straight',L:8.35},where:'Feldbewehr
 def(10,{n:2,d:20,lg:6.50,g:'oben',shape:{t:'straight',L:6.5},where:'Stützbewehrung oben über Achse 17 (3,20 | 3,30), 2. Lage'});
 def(11,{n:2,d:20,lg:6.70,g:'oben',shape:{t:'straight',L:6.7},where:'Stützbewehrung oben über Achse 17 (3,30 | 3,40), 2. Lage'});
 def(12,{n:2,d:20,lg:6.10,g:'oben',shape:{t:'straight',L:6.1},where:'Stützbewehrung oben über Achse 17 (3,40 | 2,70), 2. Lage'});
-def(13,{n:4,d:20,lg:5.60,g:'unten',shape:{t:'straight',L:5.6},where:'Feldbewehrung unten, von der Außenfläche G/13 bis vor die Stütze G/12 (Stoß mit Pos. 9 über G/13)',note:'5,60 m = 0,50 m Stütze G/13 + 5,17 m lichter Abstand (gemessen) − Betondeckung; die Stäbe enden vor G/12, wie am Bauwerk zu sehen.'});
-def(14,{n:2,d:14,lg:5.20,g:'unten',shape:{t:'straight',L:5.2},where:'Feldbewehrung unten, von der Innenfläche G/13 bis vor die Stütze G/12'});
+def(13,{n:4,d:20,lg:5.60,g:'unten',shape:{t:'straight',L:5.6},where:'Feldbewehrung unten, von der Außenfläche G/13 über das Feld bis auf die Stütze G/12 (Stoß mit Pos. 9 über G/13)',note:'Die Lage von G/12 ist so gewählt, dass die Stäbe auf G/12 laufen und 3,5 cm vor ihrer rechten Fläche enden.'});
+def(14,{n:2,d:14,lg:5.20,g:'unten',shape:{t:'straight',L:5.2},where:'Feldbewehrung unten, von der Innenfläche G/13 bis auf die Stütze G/12'});
 def(15,{n:5,d:14,lg:3.00,g:'unten',shape:{t:'straight',L:3.0},where:'Untere Bewehrung im Endbereich G/12–11 (h = 60 cm)'});
 def(16,{n:1,d:28,lg:8.50,g:'oben',shape:{t:'straight',L:8.5},where:'Stützbewehrung oben über Achse 17 (4,10 | 4,40), 1. Lage Mitte'});
 def(17,{n:2,d:28,lg:10.10,g:'oben',shape:{t:'straight',L:10.1},where:'Stützbewehrung oben über Achse 17 (4,70 | 5,40), 1. Lage'});
@@ -259,7 +261,7 @@ topGroup(X[17],[{p:18,n:2,left:5.70},{p:17,n:2,left:4.70},{p:16,n:1,left:4.10}],
 topGroup(X[15],[{p:22,n:2,left:4.60},{p:23,n:2,left:4.75},{p:21,n:2,left:3.90}],[{p:20,n:2,left:3.00},{p:19,n:2,left:2.70}],0.012);
 topGroup(X[13],[{p:22,n:2,left:5.00},{p:23,n:2,left:5.00},{p:24,n:2,left:4.00}],[{p:25,n:2,left:2.90},{p:26,n:2,left:2.60},{p:27,n:2,left:2.35}],0.012);
 topGroup(0,[{p:37,n:2,x0:0.03},{p:38,n:2,x0:0.03}],[],0.010);
-topGroup(XG12,[{p:28,n:3,x0:33.57-4.0},{p:36,n:4,left:1.5}],[{p:29,n:2,x0:33.57-5.15}],0.010);
+topGroup(XG12,[{p:28,n:3,x0:XEND-0.03-4.0},{p:36,n:4,left:1.5}],[{p:29,n:2,x0:XEND-0.03-5.15}],0.010);
 // unten
 let ys=botGroup(1.0,[{p:41,n:5,x0:0.03}],[{p:39,n:2,x0:0.03},{p:40,n:2,x0:0.03}],0.010,0.025);
 for(let i=0;i<7;i++)add(42,1.0+i*1.05,ys,0);
@@ -268,8 +270,8 @@ ys=botGroup(1.0,[{p:9,n:5,x0:cen(X[17],X[15],8.35)}],[{p:7,n:2,x0:cen(X[17],X[15
 for(let i=0;i<7;i++)add(43,X[17]+1.0+i*1.05,ys,0);
 ys=botGroup(1.0,[{p:9,n:6,x0:cen(X[15],X[13],8.35)}],[{p:7,n:2,x0:cen(X[15],X[13],7.0)},{p:8,n:2,x0:cen(X[15],X[13],7.1)}],0.010,0.020);
 for(let i=0;i<7;i++)add(43,X[15]+1.0+i*1.05,ys,0);
-botGroup(1.0,[{p:13,n:4,x0:XG12-0.125-0.035-5.60},{p:14,n:2,x0:XG12-0.125-0.035-5.20}],[],0.010,0);   // enden 3,5 cm vor der Fläche von G/12
-botGroup(0.6,[{p:15,n:5,x0:33.57-3.0}],[],0.010,0);
+botGroup(1.0,[{p:13,n:4,x0:XG12+0.125-0.035-5.60},{p:14,n:2,x0:XG12+0.125-0.035-5.20}],[],0.010,0);   // laufen auf G/12, enden 3,5 cm vor ihrer rechten Fläche
+botGroup(0.6,[{p:15,n:5,x0:XEND-0.03-3.0}],[],0.010,0);
 // Bügel
 function distribute(segs,n){const tot=segs.reduce((s,[a,b])=>s+b-a,0),sp=tot/n,out=[];
   for(let i=0;i<n;i++){let t=(i+0.5)*sp;for(const[a,b]of segs){if(t<=b-a+1e-9){out.push(a+t);break}t-=b-a}}return out}
@@ -310,13 +312,13 @@ const r44=103-placed[44],r45=79-placed[45];
 distribute([[OB+0.20,XSTEP-0.04]],Math.max(r44,0)).forEach(x=>add(44,x,-C,0));
 distribute([[OB+0.20,XSTEP-0.04]],Math.max(r45,0)).forEach(x=>add(45,x+0.05,-C,0));
 const fitTxt=fit.map(v=>Math.round((v-1)*100));
-distribute([[XSTEP+0.06,33.56]],13).forEach(x=>add(50,x,-C,0));
-distribute([[XSTEP+0.06,33.56]],8).forEach(x=>add(51,x+0.05,-C,0));
+distribute([[XSTEP+0.06,XEND-0.04]],13).forEach(x=>add(50,x,-C,0));
+distribute([[XSTEP+0.06,XEND-0.04]],8).forEach(x=>add(51,x+0.05,-C,0));
 distribute([[XSTEP-1.55,XSTEP-1.05]],6).forEach(x=>add(49,x,-C,0));
 distribute([[XSTEP-1.55,XSTEP-1.05]],6).forEach(x=>add(48,x+0.02,-0.80,0));
 for(const z of[-0.15,-0.05,0.05,0.15])add(52,XSTEP+0.03,-0.08,z);
 distribute([[XSTEP-1.55,XSTEP-1.05]],6).forEach(x=>add(49.5,x+0.03,-C,0));
-for(const z of[-0.12,0.12])add(53,33.57-5.15,-0.07,z);   // Haken 48 cm endet 5 cm über UK Kragarm
+for(const z of[-0.12,0.12])add(53,XEND-0.03-5.15,-0.07,z);   // Haken 48 cm endet 5 cm über UK Kragarm
 for(const z of[-0.15,-0.05,0.05,0.15])add(54,XSTEP-0.05,-0.12,z);
 // Platte & Steg
 for(let i=0;i<164;i++)add(30,0.1+i*0.2,-0.028,0);
@@ -324,8 +326,10 @@ const zo=0.21-0.012-0.006, zi=0.085-0.010-0.006;
 for(const y of[-0.36,-0.68])for(const s of[-1,1]){const cnt=(y===-0.68&&s===1)?3:4;for(let i=0;i<cnt;i++){let x0=0.05+i*7.7;
   if(y<-0.40&&x0<OB&&x0+8.0>OA)x0=OA-0.04-8.0;   // unterer Stab darf nicht durch die Aussparung laufen: endet davor
   add(31,x0,y,s*(zo-(i%2)*0.012))}}   // Übergreifungsstoß nebeneinander: jeder zweite Stab um 1 Ø nach innen
-for(const y of[-0.36,-0.68])for(const s of[-1,1])for(let i=0;i<7;i++)add(32,0.3+i*4.1,y,s*zi);
-for(const s of[-1,1]){add(33,33.56-5.2,-0.30,s*zo);add(33,33.56-5.2,-0.30,s*zi)}add(33,33.56-5.2,-0.30,0);   // endet 4 cm vor der Stirnfläche
+for(const y of[-0.36,-0.68])for(const s of[-1,1])for(let i=0;i<7;i++){let x0=0.3+i*4.1;
+  if(y<-0.40&&x0<OB&&x0+4.0>OA)x0=OA-0.04-4.0;   // unterer Stab nicht durch die Aussparung
+  add(32,x0,y,s*zi)}
+for(const s of[-1,1]){add(33,XEND-0.04-5.2,-0.30,s*zo);add(33,XEND-0.04-5.2,-0.30,s*zi)}add(33,XEND-0.04-5.2,-0.30,0);   // endet 4 cm vor der Stirnfläche
 for(const z of[-0.07,0,0.07])add(34,XSTEP,-0.47,z);
 // Pos. 35 je 2 Stäbe über und unter der Aussparung (Öffnung y = -0,40 … -0,80), mittig zur Öffnung
 for(const s of[-1,1]){const x0=(OA+OB)/2-1.0;add(35,x0,-0.345,s*zi);add(35,x0,-0.815,s*zo)}
@@ -489,7 +493,7 @@ function buildConcrete(){
   const dark=cssv('--viewport').toLowerCase()<'#5';
   conMat=new THREE.MeshStandardMaterial({color:dark?0x9aa3a6:0xb8bcb4,transparent:true,opacity:dark?0.07:0.16,depthWrite:false,roughness:1,metalness:0});
   edgeMat=new THREE.LineBasicMaterial({color:new THREE.Color(cssv('--muted')),transparent:true,opacity:0.55});
-  box(0,OA,-1.0,0,-0.25,0.25);box(OA,OB,-0.40,0,-0.25,0.25);box(OA,OB,-1.0,-0.80,-0.25,0.25);box(OB,XSTEP,-1.0,0,-0.25,0.25);box(XSTEP,33.6,-0.6,0,-0.25,0.25);
+  box(0,OA,-1.0,0,-0.25,0.25);box(OA,OB,-0.40,0,-0.25,0.25);box(OA,OB,-1.0,-0.80,-0.25,0.25);box(OB,XSTEP,-1.0,0,-0.25,0.25);box(XSTEP,XEND,-0.6,0,-0.25,0.25);
   for(const xc of zones)box(xc-0.25,xc+0.25,YF,-1.0,-0.25,0.25);
   box(XG12-0.125,XG12+0.125,YF,-1.0,-0.26,0.26);
   conGroup.visible=showCon;
